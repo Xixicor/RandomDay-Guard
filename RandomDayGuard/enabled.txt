@@ -1,2 +1,0 @@
-﻿RandomDayGuard v0.4.11-alpha complete Saved-folder watchdog build.
-
