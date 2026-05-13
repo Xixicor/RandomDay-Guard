@@ -71,7 +71,7 @@ Expected files:
 |---|---|
 | `forensic_day_summary.json` | Full machine-readable daily summary. |
 | `forensic_day_summary.md` | Human-readable summary for admins. |
-| `final_log.txt` | Plain-language final log for quick review. |
+| `forensic_day_summary.txt` | Plain-language final log for quick review. |
 | `players.tsv` | Player/account table for the day. |
 | `sessions.tsv` | Join/leave/session table. |
 | `ban_recommendations.tsv` | Ban candidates, clean `BannedPlayer=<ID>` lines, and blocked gates. |
@@ -91,7 +91,7 @@ runtime/forensic_days/YYYY-MM-DD/
 If you want the plain-language version only, use:
 
 ```text
-runtime/final_logs/YYYY-MM-DD/forensic_final_log.txt
+runtime/final_logs/YYYY-MM-DD/final_forensic_log.txt
 ```
 
 ---
@@ -159,7 +159,7 @@ Pattern:
 
 ```text
 forensic_day_summary.json.tmp -> forensic_day_summary.json
-final_log.txt.tmp -> final_log.txt
+forensic_day_summary.txt.tmp -> forensic_day_summary.txt
 players.tsv.tmp -> players.tsv
 ```
 
@@ -196,8 +196,7 @@ forensic_rollup = {
     enabled = true,
     write_current_today = true,
     write_daily_folder = true,
-    write_final_log_folder = true,
-    update_interval_seconds = 30,
+        update_interval_seconds = 30,
     rebuild_on_start = true,
     rebuild_after_crash_recovery = true,
     rebuild_after_scan_checkpoint = true,
@@ -228,7 +227,7 @@ runtime/forensic_days/YYYY-MM-DD/
 forensic_day_summary.md
 players.tsv
 ban_recommendations.tsv
-final_log.txt
+forensic_day_summary.txt
 ```
 
 4. Use `evidence_index.json` to open source files when more proof is needed.
@@ -259,7 +258,7 @@ blocked_by
 evidence_files
 ```
 
-In `final_log.txt`:
+In `final_forensic_log.txt`:
 
 ```text
 plain-language summary of who needs review and why

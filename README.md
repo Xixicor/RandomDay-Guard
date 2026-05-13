@@ -448,7 +448,7 @@ Expected daily files:
 |---|---|
 | `forensic_day_summary.json` | Machine-readable daily summary. |
 | `forensic_day_summary.md` | Human-readable daily summary. |
-| `final_log.txt` | Plain-language translation for quick review. |
+| `forensic_day_summary.txt` | Plain-language translation for quick review. |
 | `players.tsv` | Player/account table for the day. |
 | `sessions.tsv` | Join/leave/session table. |
 | `ban_recommendations.tsv` | Clean ban candidates and blocked gates. |

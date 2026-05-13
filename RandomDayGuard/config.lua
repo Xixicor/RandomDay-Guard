@@ -107,7 +107,6 @@ return {
         enabled = true,
         write_current_today = true,
         write_daily_folder = true,
-        write_final_log_folder = true,
         update_interval_seconds = 30,
         rebuild_on_start = true,
         rebuild_after_crash_recovery = true,

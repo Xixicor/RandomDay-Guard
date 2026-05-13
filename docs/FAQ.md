@@ -245,3 +245,13 @@ start new baseline generation
 Only sanitized files.
 
 Do not publicly post raw private logs, Admin.ini, PlayerData, world saves, private IDs, or incident data.
+## What should I upload for quick review?
+
+Zip one of these folders:
+
+```text
+runtime/forensic_days/YYYY-MM-DD/
+runtime/final_logs/YYYY-MM-DD/
+```
+
+The daily summary is a rebuildable index. Keep raw runtime evidence for final verification.

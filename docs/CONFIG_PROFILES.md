@@ -298,3 +298,14 @@ RandomDayGuard/runtime/object_registry.json
 RandomDayGuard/runtime/world_state/current/world_state_latest.json
 Saved/SaveGames/Server/Admin.ini
 ```
+## Forensic Rollup Profile
+
+Keep daily forensic rollups enabled for operator review:
+
+```lua
+forensic_rollup.enabled = true
+forensic_rollup.daily_root = "runtime/forensic_days"
+forensic_rollup.final_log_root = "runtime/final_logs"
+```
+
+These outputs update in place and do not replace raw evidence.

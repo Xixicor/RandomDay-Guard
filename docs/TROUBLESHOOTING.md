@@ -403,3 +403,14 @@ runtime/scan_error.txt if present
 ```
 
 Do not post raw private player IDs, Admin.ini, PlayerData, world saves, or server logs publicly.
+## Forensic Rollup Files Missing
+
+Check:
+
+```text
+runtime/current/forensic_today.txt
+runtime/forensic_days/YYYY-MM-DD/
+runtime/final_logs/YYYY-MM-DD/final_forensic_log.txt
+```
+
+Missing source files should appear as missing/not available in the summary instead of crashing the runtime.

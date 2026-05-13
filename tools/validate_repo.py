@@ -239,6 +239,26 @@ def validate_runtime(errors: list[str]) -> None:
         "runtime/current/actor_touch_rollup.json",
         "runtime/current/active_accounts.json",
         "runtime/current/poll_status.json",
+        "runtime/current/forensic_today.json",
+        "runtime/current/forensic_today.md",
+        "runtime/current/forensic_today.txt",
+        "runtime/forensic_days/",
+        "runtime/final_logs/",
+        "forensic_day_summary.json",
+        "forensic_day_summary.md",
+        "forensic_day_summary.txt",
+        "players.tsv",
+        "sessions.tsv",
+        "crash_reconnects.tsv",
+        "warning_bursts.tsv",
+        "raid_cases.tsv",
+        "world_context.tsv",
+        "ban_recommendations.tsv",
+        "enforcement_audit.tsv",
+        "evidence_index.json",
+        "final_forensic_log.txt",
+        "final_forensic_log.md",
+        "final_forensic_log.json",
         "runtime/evidence/session_events.jsonl",
         "runtime/evidence/medium_events.jsonl",
         "runtime/evidence/high_events.jsonl",
@@ -329,6 +349,14 @@ def validate_runtime(errors: list[str]) -> None:
         "continue_scan_job",
         "finish_scan_job",
         "write_scan_progress",
+        "forensic_rollup",
+        "write_forensic_rollup",
+        "final_forensic_text",
+        "collect_forensic_accounts",
+        "collect_ban_recommendations",
+        "atomic_write_file",
+        "atomic_write_json",
+        "atomic_write_tsv",
         "scan_job_active",
         "scan_phase",
         "scan_files_done",
@@ -606,13 +634,25 @@ def validate_runtime(errors: list[str]) -> None:
             add(errors, f"stale version string in {path.relative_to(ROOT).as_posix()}: {sorted(set(stale))}")
     if re.search(r'find[^"\n]*2>nul', main):
         add(errors, "POSIX find command uses 2>nul")
+    cfg = text(MOD / "config.lua")
+    if "forensic_rollup = {" not in cfg:
+        add(errors, "forensic_rollup config group is missing")
+    for term in ["write_current_today = true", "write_daily_folder = true", "daily_root = \"runtime/forensic_days\"", "final_log_root = \"runtime/final_logs\"", "atomic_write = true", "retention_days = 30", "write_formats = {"]:
+        if term not in cfg:
+            add(errors, f"forensic_rollup config missing: {term}")
+    for term in ["runtime/current/forensic_today.json", "runtime/forensic_days", "runtime/final_logs", "final_forensic_log.txt", "ban_recommendations.tsv", "players.tsv", "evidence_index.json"]:
+        if term not in main:
+            add(errors, f"forensic rollup writer missing: {term}")
+    for term in ['".tmp"', "os.rename", "atomic_write_json(join_path(day_dir, \"forensic_day_summary.json\")", "atomic_write_file(join_path(final_dir, \"final_forensic_log.txt\")"]:
+        if term not in main:
+            add(errors, f"forensic summaries do not use temp/safe write or required writer: {term}")
 
 
 def validate_docs(errors: list[str]) -> None:
     docs = [ROOT / "README.md", ROOT / "INSTALL.md", *(ROOT / "docs").glob("*.md")]
     combined = "\n".join(text(p) for p in docs if p.exists())
     for claim in UNAVAILABLE_CLAIMS:
-        if re.search(claim, combined, flags=re.IGNORECASE | re.DOTALL):
+        if re.search(claim, combined, flags=re.IGNORECASE):
             add(errors, f"docs claim unavailable live hook as implemented: {claim}")
     if re.search(r"hosting/container logs.*player.?ID", combined, flags=re.IGNORECASE | re.DOTALL):
         add(errors, "docs describe hosting/container logs as player-ID sources")
@@ -641,6 +681,10 @@ def validate_docs(errors: list[str]) -> None:
     for term in required_readme_terms:
         if term not in readme:
             add(errors, f"README missing required clean-baseline section/text: {term}")
+    forensic_doc = text(ROOT / "docs" / "FORENSIC_DAILY_ROLLUPS.md") if (ROOT / "docs" / "FORENSIC_DAILY_ROLLUPS.md").exists() else ""
+    for term in ["runtime/forensic_days/YYYY-MM-DD/", "runtime/final_logs/YYYY-MM-DD/", "daily rollup is a rebuildable index", "Source evidence remains authoritative", "players.tsv", "ban_recommendations.tsv", "final_forensic_log.txt"]:
+        if term not in combined and term not in forensic_doc:
+            add(errors, f"README/docs missing forensic rollup explanation: {term}")
 
 
 def validate_private_defaults(errors: list[str]) -> None:

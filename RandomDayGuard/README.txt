@@ -26,7 +26,7 @@ Daily quick forensic package:
 runtime/forensic_days/YYYY-MM-DD/
 
 Plain-language final log:
-runtime/final_logs/YYYY-MM-DD/forensic_final_log.txt
+runtime/final_logs/YYYY-MM-DD/final_forensic_log.txt
 runtime/current/forensic_today.txt
 
 Healthy poll:

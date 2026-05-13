@@ -937,3 +937,16 @@ runtime/enforced_bans.jsonl
 runtime/enforced.txt
 runtime/evidence/
 ```
+## Forensic Daily Rollups
+
+Forensic rollups keep quick-review files bounded by updating the same current-day files:
+
+```text
+runtime/current/forensic_today.json
+runtime/current/forensic_today.md
+runtime/current/forensic_today.txt
+runtime/forensic_days/YYYY-MM-DD/
+runtime/final_logs/YYYY-MM-DD/
+```
+
+They are rebuildable indexes over source evidence, not replacements for raw JSON/JSONL/TSV evidence.

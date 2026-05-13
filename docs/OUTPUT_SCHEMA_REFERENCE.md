@@ -558,3 +558,15 @@ Common examples:
 | `unmapped_presence_only` | Display name or presence without usable account ID. |
 
 Only clean mapped IDs should be eligible for Admin.ini writing by default.
+## Forensic Daily Rollup Schema
+
+Daily review packages are written under:
+
+```text
+runtime/forensic_days/YYYY-MM-DD/
+runtime/final_logs/YYYY-MM-DD/
+```
+
+Key files include `players.tsv`, `sessions.tsv`, `ban_recommendations.tsv`, `evidence_index.json`, and `final_forensic_log.txt`.
+
+The rollup is a rebuildable index. Source evidence remains authoritative.

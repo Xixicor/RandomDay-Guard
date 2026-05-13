@@ -332,7 +332,7 @@ local function load_config()
         scanning={full_scan_on_start=true, reuse_completed_baseline=true, resume_incomplete_scan=true, incremental_refresh_after_baseline=true, force_full_scan=false, partial_output_interval_seconds=30, checkpoint_interval_seconds=15, checkpoint_interval_files=25, baseline_manifest_enabled=true, per_file_entry_cache_enabled=true, changed_file_detection=true, full_scan_max_age_hours=168, aggressive_first_baseline=true, targeted_token_extraction=true, fallback_broad_token_scan=false, deep_backup_scan_enabled=false, incremental_scan_enabled=true, allow_full_find_discovery=true, allow_full_find_discovery_only_in_scan_job=true, recursive_discovery_enabled=true, recursive_discovery_mode="manifest", discovery_files_per_tick=200, discovery_max_runtime_ms=100, startup_scan_files_per_tick=25, startup_scan_max_bytes_per_tick=4194304, startup_scan_max_runtime_ms=100, write_scan_progress=true, max_file_bytes=1048576},
         server_lifecycle={startup_grace_seconds=180, shutdown_grace_seconds=120, post_crash_reconnect_grace_seconds=300, normal_restart_suppression_seconds=300, lifecycle_events_are_context_only=true, close_sessions_on_crash=true, close_sessions_on_graceful_shutdown=true, dedupe_rotated_backup_logs=true},
         retention={detailed_retention_days=7, daily_summary_retention_days=90, weekly_summary_retention_weeks=12, rotate_jsonl_when_bytes_exceed=5242880, max_raw_events_lines=20000, max_low_importance_events_per_day=5000, max_actor_touch_rollups_per_day=10000, max_recent_event_keys=5000, max_warning_reports=30, max_raid_cases=200, compact_json_outputs=true, archive_rotated_runtime_logs=false},
-        forensic_rollup={enabled=true, write_current_today=true, write_daily_folder=true, write_final_log_folder=true, update_interval_seconds=30, rebuild_on_start=true, rebuild_after_crash_recovery=true, rebuild_after_scan_checkpoint=true, rebuild_after_scan_complete=true, rebuild_after_enforcement=true, daily_root="runtime/forensic_days", final_log_root="runtime/final_logs", atomic_write=true, compact_json=true, retention_days=30, include={players=true, sessions=true, crash_reconnects=true, warning_bursts=true, raid_cases=true, scan_state=true, world_context=true, enforcement=true, evidence_index=true}, write_formats={json=true, markdown=true, txt=true, tsv=true}},
+        forensic_rollup={enabled=true, write_current_today=true, write_daily_folder=true, update_interval_seconds=30, rebuild_on_start=true, rebuild_after_crash_recovery=true, rebuild_after_scan_checkpoint=true, rebuild_after_scan_complete=true, rebuild_after_enforcement=true, daily_root="runtime/forensic_days", final_log_root="runtime/final_logs", atomic_write=true, compact_json=true, retention_days=30, include={players=true, sessions=true, crash_reconnects=true, warning_bursts=true, raid_cases=true, scan_state=true, world_context=true, enforcement=true, evidence_index=true}, write_formats={json=true, markdown=true, txt=true, tsv=true}},
         enforcement={auto_ban=false, review_only_mode=true, write_admin_ini=false, request_restart_after_ban=false, require_playerdata_verified=false, require_clean_ban_id=true, preserve_moderators=true, preserve_existing_bans=true, ban_on_threshold=true, trusted_ids={}},
     }
     local ok, cfg = pcall(dofile, join_path(state.mod_root, "config.lua"))
@@ -1552,7 +1552,8 @@ local function atomic_write_tsv(path, header, rows)
     for _,row in ipairs(rows or {}) do
         local vals = {}
         for _,h in ipairs(header) do
-            table.insert(vals, str(row[h] or ""):gsub("[\r\n\t]+", " "))
+            local clean = str(row[h] or ""):gsub("[\r\n\t]+", " ")
+            table.insert(vals, clean)
         end
         table.insert(out, table.concat(vals, "\t"))
     end
@@ -1746,6 +1747,96 @@ local function collect_simple_log_rows(day, path, event_name, max_lines)
     return rows
 end
 
+local function forensic_missing_status(paths)
+    local rows = {}
+    for _,path in ipairs(paths or {}) do
+        table.insert(rows, {path=path, available=file_readable(runtime_path(path)), note=file_readable(runtime_path(path)) and "available" or "missing/not available"})
+    end
+    return rows
+end
+
+local function final_forensic_text(day, summary)
+    local scan = summary.scan_state or {}
+    local health = summary.server_health or {}
+    local out = {}
+    local function add(line) table.insert(out, line or "") end
+    add("RandomDayGuard final forensic log")
+    add("Version: " .. VERSION)
+    add("Date: " .. day)
+    add("Generated at: " .. str(summary.generated_at))
+    add("Boot ID: " .. str(summary.boot_id))
+    add("Epoch ID: " .. str(summary.epoch_id))
+    add("Scan status: phase=" .. str(scan.scan_phase) .. " complete=" .. tostring(scan.scan_complete))
+    add("Baseline status: files_done=" .. str(scan.files_done) .. " total_files=" .. str(scan.total_files) .. " entries_seen=" .. str(scan.entries_seen))
+    add("")
+    add("1. Server health")
+    add("- Watchdog: " .. str(health.scheduler_status))
+    add("- Last poll_id: " .. str(health.poll_id))
+    add("- Poll in flight: " .. tostring(health.poll_in_flight))
+    add("- Poll scheduled: " .. tostring(health.poll_scheduled))
+    add("- Crashes/restarts/unknown gaps: see crash/reconnect timeline below and source lifecycle files.")
+    add("- Scan state: " .. (scan.scan_complete and "complete" or "partial or not complete"))
+    add("")
+    add("2. Player summary")
+    if #(summary.players or {}) == 0 then add("- No account evidence available for this day.") end
+    for _,p in ipairs(summary.players or {}) do
+        add("- " .. str(p.name or p.log_name or p.account_id) .. " account_id=" .. str(p.account_id) .. " ban_id=" .. str(p.ban_id) .. " identity=" .. str(p.identity_confidence) .. " joins=" .. str(p.join_count) .. " leaves=" .. str(p.leave_count) .. " clean_leaves=" .. str(p.clean_leave_count) .. " unclean_disconnects=" .. str(p.unclean_disconnect_count) .. " rapid_reconnects=" .. str(p.rapid_rejoin_count) .. " crash_overlaps=" .. str(p.crash_overlap_count) .. " post_crash_reconnects=" .. str(p.post_crash_reconnect_count) .. " warning_overlaps=" .. str(p.warning_overlap_count) .. " raid_links=" .. str(p.raid_case_count) .. " world_context=" .. str(p.world_context_count) .. " status=" .. str(p.status) .. " recommended_action=" .. str(p.recommended_action))
+    end
+    add("")
+    add("3. Ban candidates")
+    if #(summary.ban_recommendations or {}) == 0 then add("- No ban-eligible accounts in this rollup.") end
+    for _,b in ipairs(summary.ban_recommendations or {}) do
+        add("- " .. str(b.name) .. ": " .. str(b.admin_ini_line))
+        add("  Reason: " .. str(b.reason))
+        add("  Gates passed: " .. str(b.gates_passed))
+        add("  Gates blocked: " .. str(b.blocked_by))
+        add("  Evidence files: " .. str(b.evidence_files))
+    end
+    add("")
+    add("4. Review candidates")
+    local review = 0
+    for _,p in ipairs(summary.players or {}) do
+        if p.status == "REVIEW" or p.recommended_action == "review" or p.recommended_action == "watch" then
+            review = review + 1
+            add("- " .. str(p.name or p.account_id) .. ": " .. str(p.reason) .. ". Missing evidence, if any: clean Login request / ConnectID mapping, repeated account-specific threshold evidence, or completed baseline context.")
+        end
+    end
+    if review == 0 then add("- No review candidates in this rollup.") end
+    add("")
+    add("5. Do-not-ban / insufficient evidence")
+    add("- Unmapped names, lifecycle-only context, backup-log replay, object count alone, one crash, one warning burst, and partial baseline context are insufficient for banning.")
+    add("- Next useful file for unmapped names is a server log Login request with Name, ConnectID, and UniqueId.")
+    add("")
+    add("6. Crash/reconnect timeline")
+    if #(summary.crash_reconnects or {}) == 0 then add("- No crash/reconnect lifecycle rows available.") end
+    for _,r in ipairs(summary.crash_reconnects or {}) do add("- " .. str(r.ts) .. " " .. str(r.detail)) end
+    add("")
+    add("7. Warning bursts")
+    if #(summary.warning_bursts or {}) == 0 then add("- No warning burst rows available.") end
+    for _,r in ipairs(summary.warning_bursts or {}) do add("- " .. str(r.ts) .. " " .. str(r.event) .. " " .. str(r.detail)) end
+    add("")
+    add("8. Raid/cluster context")
+    if #(summary.raid_cases or {}) == 0 then add("- No raid/cluster rows available.") end
+    for _,r in ipairs(summary.raid_cases or {}) do add("- " .. str(r.ts) .. " " .. str(r.detail)) end
+    add("- Grouped accounts still require account-specific evidence before enforcement.")
+    add("")
+    add("9. World/baseline context")
+    add("- scan_complete=" .. tostring(scan.scan_complete) .. " files_done=" .. str(scan.files_done) .. " total_files=" .. str(scan.total_files))
+    add("- Object registry: partial path runtime/object_registry_partial.json, final path runtime/object_registry.json")
+    add("- World state: runtime/world_state/current/world_state_latest.json")
+    if not scan.scan_complete then add("- Limitation: baseline is partial, so world context is provisional.") end
+    add("")
+    add("10. Files used")
+    for _,path in ipairs(summary.evidence_index or {}) do add("- " .. str(path)) end
+    add("")
+    add("11. Limits")
+    add("- Daily summaries are rebuildable indexes. Source evidence remains authoritative.")
+    add("- Indirect context remains context.")
+    add("- No unsupported claims are made about direct duplication, damage, live coordinates, container use, ownership, live ping, memory inspection, or player-caused crashes.")
+    add("- Unmapped names need Login request / ConnectID evidence before they can become ban candidates.")
+    return table.concat(out, "\n") .. "\n"
+end
+
 local function write_forensic_rollup(reason, force)
     local cfg = (state.config or {}).forensic_rollup or {}
     if cfg.enabled == false then return nil end
@@ -1770,11 +1861,15 @@ local function write_forensic_rollup(reason, force)
     local scan_state = forensic_scan_state()
     local evidence_index = {
         "runtime/account_evidence.json", "runtime/account_evidence.tsv", "runtime/evidence/session_events.jsonl", "runtime/session_events.tsv",
-        "runtime/server_lifecycle_events.jsonl", "runtime/warning_events.jsonl", "runtime/raid_cases/index.jsonl", "runtime/world_state/current/world_state_latest.json",
-        "runtime/scan_progress.json", "runtime/scan_checkpoint.json", "runtime/enforced_bans.jsonl",
+        "runtime/server_lifecycle_events.jsonl", "runtime/server_epochs.jsonl", "runtime/evidence/lifecycle_events.jsonl",
+        "runtime/evidence/crash_reconnect_events.jsonl", "runtime/evidence/live_defense_events.jsonl", "runtime/warning_events.jsonl",
+        "runtime/evidence/critical_events.jsonl", "runtime/evidence/high_events.jsonl", "runtime/evidence/medium_events.jsonl",
+        "runtime/raid_cases/index.jsonl", "runtime/world_state/current/world_state_latest.json", "runtime/world_state/sessions/",
+        "runtime/scan_progress.json", "runtime/scan_checkpoint.json", "runtime/scan_complete.json", "runtime/object_registry_partial.json",
+        "runtime/object_registry.json", "runtime/object_registry_counts.tsv", "runtime/enforced_bans.jsonl", "runtime/enforced.txt", "runtime/ban_queue.json",
     }
     local server_health = {poll_id=state.poll_id or 0, scheduler_status=state.scheduler_status, poll_in_flight=state.poll_in_flight == true, poll_scheduled=state.poll_scheduled == true, epoch_id=state.current_epoch and state.current_epoch.epoch_id or nil, lifecycle_class=state.current_epoch and state.current_epoch.lifecycle_class or nil}
-    local summary = {version=VERSION, date=day, generated_at=now(), generation_count=state.forensic_rollup_generation, reason=reason or "scheduled", boot_id=state.boot_id, epoch_id=state.current_epoch and state.current_epoch.epoch_id or nil, server_health=server_health, scan_state=scan_state, players=players, sessions=sessions, crash_reconnects=lifecycle, warning_bursts=warnings, raid_cases=raid, world_context={{date=day, scan_complete=tostring(scan_state.scan_complete), scan_phase=scan_state.scan_phase, files_done=scan_state.files_done, total_files=scan_state.total_files, entries_seen=scan_state.entries_seen, path="runtime/world_state/current/world_state_latest.json"}}, ban_recommendations=bans, enforcement_audit=enforced, evidence_index=evidence_index, limitations={"Daily forensic summaries are rebuildable indexes; source evidence remains authoritative.", "Context signals are not direct proof unless logs/Saved files expose that fact."}}
+    local summary = {version=VERSION, date=day, generated_at=now(), generation_count=state.forensic_rollup_generation, reason=reason or "scheduled", boot_id=state.boot_id, epoch_id=state.current_epoch and state.current_epoch.epoch_id or nil, server_health=server_health, scan_state=scan_state, players=players, sessions=sessions, crash_reconnects=lifecycle, warning_bursts=warnings, raid_cases=raid, world_context={{date=day, scan_complete=tostring(scan_state.scan_complete), scan_phase=scan_state.scan_phase, files_done=scan_state.files_done, total_files=scan_state.total_files, entries_seen=scan_state.entries_seen, path="runtime/world_state/current/world_state_latest.json"}}, ban_recommendations=bans, enforcement_audit=enforced, evidence_index=evidence_index, evidence_availability=forensic_missing_status(evidence_index), limitations={"Daily forensic summaries are rebuildable indexes; source evidence remains authoritative.", "Context signals are not direct proof unless logs/Saved files expose that fact."}}
     local md = {}
     table.insert(md, "# RandomDayGuard Daily Forensic Summary — " .. day)
     table.insert(md, "")
@@ -1824,10 +1919,10 @@ local function write_forensic_rollup(reason, force)
     table.insert(md, "- The daily summary is a rebuildable index, not the only source of truth.")
     table.insert(md, "- World context and actor save-touch context support review but are not direct proof by themselves.")
     local markdown = table.concat(md, "\n") .. "\n"
-    local txt = markdown:gsub("#", ""):gsub("|", " ")
+    local txt = final_forensic_text(day, summary)
     atomic_write_json(join_path(day_dir, "forensic_day_summary.json"), summary)
     atomic_write_file(join_path(day_dir, "forensic_day_summary.md"), markdown)
-    atomic_write_file(join_path(day_dir, "final_log.txt"), txt)
+    atomic_write_file(join_path(day_dir, "forensic_day_summary.txt"), txt)
     atomic_write_tsv(join_path(day_dir, "players.tsv"), {"date","account_id","ban_id","name","identity_confidence","playerdata_verified","first_seen","last_seen","join_count","leave_count","clean_leave_count","unclean_disconnect_count","rapid_rejoin_count","crash_overlap_count","post_crash_reconnect_count","warning_overlap_count","raid_case_count","world_context_count","score","status","recommended_action","ban_eligible","already_enforced","admin_ini_line","reason","evidence_files"}, players)
     atomic_write_tsv(join_path(day_dir, "sessions.tsv"), {"date","ts","event","session_id","account_id","ban_id","name","detail"}, sessions)
     atomic_write_tsv(join_path(day_dir, "ban_recommendations.tsv"), {"date","account_id","ban_id","name","status","recommended_action","reason","admin_ini_line","gates_passed","blocked_by","evidence_files"}, bans)
@@ -1842,12 +1937,9 @@ local function write_forensic_rollup(reason, force)
         atomic_write_file(runtime_path("runtime/current/forensic_today.md"), markdown)
         atomic_write_file(runtime_path("runtime/current/forensic_today.txt"), txt)
     end
-    if cfg.write_final_log_folder ~= false then
-        atomic_write_file(join_path(final_dir, "forensic_final_log.txt"), txt)
-        atomic_write_json(join_path(final_dir, "forensic_final_data.json"), summary)
-        atomic_write_tsv(join_path(final_dir, "players.tsv"), {"date","account_id","ban_id","name","identity_confidence","playerdata_verified","first_seen","last_seen","join_count","leave_count","clean_leave_count","unclean_disconnect_count","rapid_rejoin_count","crash_overlap_count","post_crash_reconnect_count","warning_overlap_count","raid_case_count","world_context_count","score","status","recommended_action","ban_eligible","already_enforced","admin_ini_line","reason","evidence_files"}, players)
-        atomic_write_tsv(join_path(final_dir, "ban_recommendations.tsv"), {"date","account_id","ban_id","name","status","recommended_action","reason","admin_ini_line","gates_passed","blocked_by","evidence_files"}, bans)
-    end
+    atomic_write_file(join_path(final_dir, "final_forensic_log.txt"), txt)
+    atomic_write_file(join_path(final_dir, "final_forensic_log.md"), markdown)
+    atomic_write_json(join_path(final_dir, "final_forensic_log.json"), summary)
     return summary
 end
 
@@ -2647,6 +2739,7 @@ local function start()
     start_poll_loop()
     write_startup_status({phase="watchdog_started"})
     write_startup_status({phase="ready_degraded", scan_pending=true})
+    if ((state.config or {}).forensic_rollup or {}).rebuild_on_start ~= false then pcall(function() write_forensic_rollup("startup", true) end) end
     log_event({event="RANDOMDAYGUARD_READY_DEGRADED", version=VERSION, scan_pending=true})
 end
 

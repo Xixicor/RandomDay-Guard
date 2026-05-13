@@ -729,3 +729,13 @@ sticky backups
 ```
 
 This does not guarantee every exploit will be caught. It gives administrators a stronger, recoverable evidence workflow when crashes, reconnect patterns, suspicious clusters, and world-state anomalies need to be reviewed.
+## Forensic Rollup View
+
+Daily forensic packages summarize review signals in:
+
+```text
+runtime/forensic_days/YYYY-MM-DD/
+runtime/final_logs/YYYY-MM-DD/
+```
+
+Grouped accounts, crash overlap, and warning overlap remain context until account-specific evidence passes configured gates.

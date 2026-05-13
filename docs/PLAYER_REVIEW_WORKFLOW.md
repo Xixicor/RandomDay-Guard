@@ -368,3 +368,14 @@ runtime/enforced_bans.jsonl if enforcement happened
 ```
 
 Do not publish raw PlayerData, Admin.ini, server logs, or private account IDs without sanitization.
+## Daily Package Review
+
+For quick review, start with:
+
+```text
+runtime/forensic_days/YYYY-MM-DD/players.tsv
+runtime/forensic_days/YYYY-MM-DD/ban_recommendations.tsv
+runtime/final_logs/YYYY-MM-DD/final_forensic_log.txt
+```
+
+Use `evidence_index.json` to return to authoritative source files before taking action.

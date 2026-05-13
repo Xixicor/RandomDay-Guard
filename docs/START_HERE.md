@@ -237,3 +237,13 @@ runtime/evidence/session_events.jsonl
 ```
 
 Do not send private server logs, PlayerData, world saves, or Admin.ini publicly unless you have sanitized them.
+## Quick Daily Review Package
+
+After the server has run, use either daily folder for quick review:
+
+```text
+runtime/forensic_days/YYYY-MM-DD/
+runtime/final_logs/YYYY-MM-DD/
+```
+
+`runtime/current/forensic_today.txt` is the current-day shortcut. The daily summary is a rebuildable index; source runtime evidence remains authoritative.
