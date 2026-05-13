@@ -1,4 +1,4 @@
-﻿# Admin.ini enforcement
+# Admin.ini enforcement
 
 Use this page before allowing RandomDayGuard to write bans.
 

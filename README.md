@@ -1,4 +1,4 @@
-﻿# RandomDayGuard
+# RandomDayGuard
 
 The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
 
@@ -11,9 +11,6 @@ Use this README as the operator path: install it, set the first few options, che
 ---
 
 ## What You Get
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 | Feature | What it helps with |
 |---|---|
 | Live defense | Tracks joins, leaves, reconnects, crashes, and suspicious churn immediately. |
@@ -35,9 +32,6 @@ write_admin_ini = false
 ---
 
 ## Documentation Map
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 Use `docs/` as the operator manual. Start with the file that matches what you are doing.
 
 | Need | Read this |
@@ -66,9 +60,6 @@ runtime/forensic_days/YYYY-MM-DD/
 That folder is designed to contain the translated daily summary, player table, ban recommendation table, and evidence index.
 
 ## Fast Install
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 1. Stop the server.
 2. Delete the old `RandomDayGuard` folder if one exists.
 3. Extract the ZIP into:
@@ -102,13 +93,7 @@ Replacing files while the server is running does not guarantee UE4SS reloads the
 ---
 
 ## The First Three Settings To Check
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ### 1. `SavedRoot.txt`
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 `SavedRoot.txt` should point to the server's `AbioticFactor/Saved` folder.
 
 Correct examples:
@@ -127,9 +112,6 @@ Saved/SaveGames/Server/Worlds/<WorldName>
 Reason: RandomDayGuard needs access to logs, `Admin.ini`, Worlds, PlayerData, and Backups. Pointing directly at the world folder hides the rest of the evidence.
 
 ### 2. Enforcement defaults
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 Keep these while testing:
 
 ```lua
@@ -141,9 +123,6 @@ write_admin_ini = false
 This means RandomDayGuard records evidence and recommendations but does not edit `Admin.ini` yet.
 
 ### 3. Whitelist / trusted IDs
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 Add server owners and trusted moderators before enabling enforcement:
 
 ```lua
@@ -157,9 +136,6 @@ Trusted IDs can still appear in evidence, but they should be protected from auto
 ---
 
 ## Configuration Guide
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 | Config area | Set this when... | Important options |
 |---|---|---|
 | `saved` | The guard cannot find the server Saved folder or you need to tune what file families are scanned. | `root_candidates`, `direct_known_files`, `scan_world_saves`, `scan_player_data`, `scan_backups` |
@@ -180,13 +156,7 @@ The daily rollup is a rebuildable index. Source evidence remains authoritative; 
 ---
 
 ## Recommended Config Profiles
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ### Safe first install
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ```lua
 review_only_mode = true
 auto_ban = false
@@ -200,9 +170,6 @@ reuse_completed_baseline = true
 Use this when you are installing for the first time and want evidence only.
 
 ### Live defense only
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ```lua
 log_tail.enabled = true
 scanning.full_scan_on_start = false
@@ -212,9 +179,6 @@ review_only_mode = true
 Use this when you want session/crash/reconnect tracking immediately but want to delay heavy scanning.
 
 ### Full baseline mode
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ```lua
 scanning.full_scan_on_start = true
 scanning.resume_incomplete_scan = true
@@ -225,9 +189,6 @@ scanning.incremental_refresh_after_baseline = true
 Use this when you want the world/object baseline and changed-file refresh. The first scan can take time; the point is to build reusable context.
 
 ### Enforcement testing
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ```lua
 review_only_mode = true
 auto_ban = false
@@ -237,9 +198,6 @@ write_admin_ini = false
 Use this when you want to see who would be reviewed or recommended without changing `Admin.ini`.
 
 ### Enforcement enabled
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ```lua
 review_only_mode = false
 auto_ban = true
@@ -254,13 +212,7 @@ Use this only after trusted IDs are configured, session mapping is confirmed, wa
 ---
 
 ## How The Guard Decides Things
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ### Normal session
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ```text
 Player logs in.
 Player enters.
@@ -277,9 +229,6 @@ No ban.
 ```
 
 ### Fast reconnect loop
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ```text
 join -> leave -> join -> leave -> join
 ```
@@ -294,9 +243,6 @@ Churn alone does not ban by default.
 ```
 
 ### Crash-return pattern
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ```text
 Player is active.
 Server crashes or restarts.
@@ -313,9 +259,6 @@ One crash alone is not enough.
 ```
 
 ### World actor save touch
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ```text
 Server log references UpdateActorToWorldSave and a deployed object class.
 ```
@@ -331,9 +274,6 @@ Not treated as direct proof by itself.
 ---
 
 ## Output Files And What To Check
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 | File | What it tells you |
 |---|---|
 | `runtime/runtime_version.json` | Confirms the loaded version. |
@@ -366,9 +306,6 @@ If `poll_id` increases and `poll_in_flight` returns `false`, the watchdog loop i
 ---
 
 ## First Run Checklist
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 - [ ] Server stopped before install.
 - [ ] ZIP extracted into `ue4ss/Mods/RandomDayGuard`.
 - [ ] `mods.txt` contains `RandomDayGuard : 1`.
@@ -385,9 +322,6 @@ The daily rollup is a rebuildable index. Source evidence remains authoritative; 
 ---
 
 ## Single World Save Folder
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 RandomDayGuard supports a single active world folder. It discovers the world under:
 
 ```text
@@ -418,39 +352,21 @@ RandomDayGuard needs the wider `Saved/` root so it can see logs, `Admin.ini`, wo
 ---
 
 ## If The World Folder Changes
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 ### Renamed same world
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 RandomDayGuard should reuse cached evidence where fingerprints match and rescan paths whose cache no longer matches.
 
 ### Restored backup or different world
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 RandomDayGuard should preserve the old baseline and start a new baseline generation.
 
 ### Partial scan existed before the change
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 RandomDayGuard should mark the old checkpoint stale, preserve the partial evidence, and start a new baseline for the current world.
 
 ### Completed baseline existed before the change
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 RandomDayGuard should load the old baseline for visibility, mark it as previous-world context, and build a new baseline safely.
 
 ---
 
 ## Ban ID Guide
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 Display name is not the ban ID.
 
 Best source:
@@ -475,9 +391,6 @@ Never write a display name, URL, reason, comment, or raw suffix into `Admin.ini`
 ---
 
 ## Daily Forensic Rollups And Final Logs
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 RandomDayGuard also maintains a quick-review package for each day. This is the folder to upload when you want a fast forensic analysis without manually collecting every raw JSON and JSONL file.
 
 Daily folder:
@@ -528,9 +441,6 @@ runtime/forensic_days/YYYY-MM-DD.zip
 The plain-language translator writes what happened in normal operator terms: who needs review, who is ban-eligible, which gates blocked a ban, what the scan state was, and which files support the conclusion.
 
 ## Memory Economy And Output Logs
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 RandomDayGuard separates output so it can run for long periods without turning every poll into a new giant file.
 
 | Output type | Example | Behavior |
@@ -568,9 +478,6 @@ docs/MEMORY_ECONOMY_AND_OUTPUTS.md
 ---
 
 ## Evidence Standards
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 RandomDayGuard is evidence-first. It records what the server exposes through logs and Saved files.
 
 Some facts require direct evidence. For example, the guard should not label a player as duplicating items, damaging objects, opening a container, or using exact coordinates unless readable server evidence actually exposes that fact.
@@ -580,16 +487,10 @@ When evidence is indirect, RandomDayGuard stores it as context. Context can supp
 ---
 
 ## Relationship To RandomDay Mod
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 RandomDay Mod runs the rotating server experience. RandomDayGuard watches the server evidence layer and helps administrators review abuse, crashes, reconnects, world context, and enforcement decisions.
 
 ---
 
 ## Disclaimer
-
-The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
-
 RandomDayGuard is an independent community server-administration utility. It is not affiliated with or endorsed by Deep Field Games, Playstack, UE4SS, AMP, Hostinger, or any platform provider.
 

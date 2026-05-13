@@ -1,4 +1,4 @@
-﻿# Docs style guide
+# Docs style guide
 
 Use this guide when adding or editing RandomDayGuard docs.
 
@@ -107,7 +107,7 @@ real server names
 real world names
 real private account IDs
 real private label
-raw player evidence
+raw player records
 ```
 
 Use placeholders:
