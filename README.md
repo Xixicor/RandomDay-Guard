@@ -1,5 +1,7 @@
 # RandomDayGuard
 
+License: RandomDayGuard is source-available for private testing, review, and server-administration use. Redistribution, repackaging, resale, and public modified releases require separate written permission.
+
 The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
 
 RandomDayGuard is a separately installable guard addon for AMP / Hostinger / Abiotic Factor dedicated servers running the RandomDay Mod.
