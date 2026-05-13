@@ -1,4 +1,4 @@
-# Docs style guide
+﻿# Docs style guide
 
 Use this guide when adding or editing RandomDayGuard docs.
 
@@ -106,7 +106,7 @@ Never include:
 real server names
 real world names
 real private account IDs
-real incident names
+real private label
 raw player evidence
 ```
 
@@ -119,3 +119,4 @@ Use placeholders:
 <BanID>
 <PlayerName>
 ```
+

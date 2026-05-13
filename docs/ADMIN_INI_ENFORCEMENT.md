@@ -1,4 +1,4 @@
-# Admin.ini enforcement
+﻿# Admin.ini enforcement
 
 Use this page before allowing RandomDayGuard to write bans.
 
@@ -54,7 +54,7 @@ BannedPlayer=ExamplePlayer
 Also wrong:
 
 ```text
-BannedPlayer=<ID>_+_|<suffix>
+BannedPlayer=<ID>
 ```
 
 ## Enforcement gates
@@ -99,3 +99,4 @@ runtime/ban_queue.json
 
 * [`BAN_ID_MAPPING.md`](BAN_ID_MAPPING.md)
 * [`PLAYER_REVIEW_WORKFLOW.md`](PLAYER_REVIEW_WORKFLOW.md)
+
