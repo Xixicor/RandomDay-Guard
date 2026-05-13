@@ -1,26 +1,29 @@
 # RandomDayGuard
 
-**RandomDayGuard** is a separately installable guard addon for **Abiotic Factor dedicated servers** running the **RandomDay Mod**.
+**RandomDayGuard** is a separately installable **AMP / Hostinger / Abiotic Factor dedicated-server guard addon** for the **RandomDay Mod**.
 
-RandomDay Mod changes the server experience. RandomDayGuard watches the server evidence layer: logs, `Admin.ini`, PlayerData, world saves, backups, sessions, crashes, and reconnect behavior.
-
-It is meant for AMP, Hostinger VPS, Wine, and Windows dedicated-server layouts.
+RandomDay Mod changes the server experience. RandomDayGuard watches the server evidence layer: logs, `Admin.ini`, PlayerData, world saves, backups, sessions, crashes, reconnects, and baseline changes.
 
 ---
 
-## What You Get
+## Start Here: The Order That Matters
 
-| Feature | What it helps with |
-|---|---|
-| Live defense | Tracks joins, leaves, reconnects, crashes, and suspicious session churn immediately. |
-| Identity mapping | Maps player names to account IDs and clean ban IDs from server login evidence. |
-| World baseline | Builds object/class/world context from Saved files. |
-| Resume scan | Keeps scan progress through crashes and restarts. |
-| Changed-file refresh | Avoids rescanning everything after a full baseline exists. |
-| Evidence reports | Writes admin-readable runtime files for review. |
-| Optional Admin.ini enforcement | Writes clean `BannedPlayer=<ID>` lines only when explicitly enabled. |
+Use this order on a fresh install.
 
-Default mode is evidence and review only:
+| Step | Do this | Why it matters |
+|---:|---|---|
+| 1 | Install the ZIP into `ue4ss/Mods/RandomDayGuard/`. | UE4SS must load the mod from the right folder. |
+| 2 | Enable `RandomDayGuard : 1` in `mods.txt`. | UE4SS will not run the guard unless it is enabled. |
+| 3 | Set `SavedRoot.txt` only if auto-detection fails. | The guard needs the whole `AbioticFactor/Saved` folder. |
+| 4 | Keep enforcement disabled. | First boot should collect evidence, not write bans. |
+| 5 | Add trusted admin IDs. | Prevents accidental action against owners/moderators later. |
+| 6 | Start the server. | The live guard begins from the active log. |
+| 7 | Check `poll_status.json`. | Confirms the watchdog loop is alive. |
+| 8 | Let the baseline scan run. | Builds world/object context in the background. |
+| 9 | Review output files. | Confirm identity mapping and reports match your server. |
+| 10 | Enable enforcement only after validation. | Admin.ini writing should be the last step, not the first. |
+
+Recommended first-run enforcement settings:
 
 ```lua
 review_only_mode = true
@@ -30,11 +33,126 @@ write_admin_ini = false
 
 ---
 
-## Fast Install
+## Quick Navigation
+
+| I need to... | Go to |
+|---|---|
+| Install the mod | [Install in five minutes](#install-in-five-minutes) |
+| Know what to configure first | [First configuration pass](#first-configuration-pass) |
+| Confirm it is running | [Health checks](#health-checks) |
+| Understand the first long scan | [The first baseline scan](#the-first-baseline-scan) |
+| Know what each output file means | [Output file index](#output-file-index) |
+| Choose safe settings | [Configuration presets](#configuration-presets) |
+| Enable Admin.ini writing later | [Enforcement path](#enforcement-path) |
+| Handle a world folder change | [World folder changes](#world-folder-changes) |
+| Map names to ban IDs safely | [Ban ID mapping](#ban-id-mapping) |
+| Understand evidence limits | [Evidence standards](#evidence-standards) |
+
+More detailed docs:
+
+```text
+docs/INDEX.md
+docs/CONFIG_REFERENCE.md
+docs/HOSTINGER_AMP_INSTALL.md
+docs/WORLD_SAVE_FOLDER_CHANGES.md
+docs/BAN_ID_MAPPING.md
+```
+
+---
+
+## What You Get
+
+| Feature | What it does | When it starts |
+|---|---|---|
+| Live defense | Tracks joins, leaves, reconnects, crashes, and churn from the active log. | Immediately after boot. |
+| Identity mapping | Maps player names to account IDs and clean ban IDs from login evidence. | As soon as login lines appear. |
+| Session evidence | Stores who joined, when they left, whether the leave was clean, and which epoch they were in. | During live polling. |
+| Crash/reconnect context | Links active sessions to crashes/restarts and post-crash returns. | During live polling. |
+| Baseline scan | Builds object/class/world context from Saved files. | After the active log is caught up. |
+| Scan checkpoint | Saves long-scan progress so restarts do not waste completed work. | During scanning. |
+| Changed-file refresh | Reuses completed baseline data and scans only changed files where possible. | After a completed baseline exists. |
+| Evidence reports | Writes JSON/JSONL/TSV/text outputs for admin review. | Throughout runtime. |
+| Optional enforcement | Writes clean `BannedPlayer=<ID>` lines to `Admin.ini`. | Only if explicitly enabled. |
+
+---
+
+## What The First Hour Looks Like
+
+### Right after server start
+
+You should see runtime files appear.
+
+Check:
+
+```text
+runtime/runtime_version.json
+runtime/current/poll_status.json
+runtime/current/live_defense_state.json
+```
+
+Expected behavior:
+
+```text
+poll_id increases
+scheduler_status = running
+poll_in_flight returns to false between polls
+```
+
+### When a player joins
+
+The active log is tailed. If the server writes a login line, RandomDayGuard records the identity mapping.
+
+Typical flow:
+
+```text
+Login request -> name + ConnectID + UniqueId
+Join line      -> session starts
+Leave line     -> session closes cleanly
+```
+
+### While the first scan runs
+
+The baseline scan may take time on a large server. That is normal.
+
+Check:
+
+```text
+runtime/scan_progress.json
+runtime/scan_checkpoint.json
+runtime/world_state/current/world_state_latest.json
+```
+
+A partial world state is useful, but it should be marked as partial:
+
+```json
+{
+  "scan_complete": false,
+  "generated_from_partial_scan": true
+}
+```
+
+### After the baseline finishes
+
+Completed outputs should appear:
+
+```text
+runtime/scan_complete.json
+runtime/object_registry.json
+runtime/object_registry_counts.tsv
+runtime/baselines/file_manifest.tsv
+runtime/baselines/last_completed_baseline.json
+runtime/world_state/current/world_state_latest.json
+```
+
+Later boots should load the completed baseline first, then scan changed files.
+
+---
+
+## Install In Five Minutes
 
 1. Stop the server.
-2. Delete the old `RandomDayGuard` folder from `ue4ss/Mods/`.
-3. Extract `RandomDayGuard_v0.4.11-alpha.zip` into:
+2. Delete any old `RandomDayGuard` folder from `ue4ss/Mods/`.
+3. Extract the release ZIP into:
 
    ```text
    AbioticFactor/Binaries/Win64/ue4ss/Mods/
@@ -46,44 +164,55 @@ write_admin_ini = false
    AbioticFactor/Binaries/Win64/ue4ss/Mods/RandomDayGuard/
    ```
 
-5. Enable the mod in `mods.txt`:
+5. Confirm these files exist:
+
+   ```text
+   RandomDayGuard/enabled.txt
+   RandomDayGuard/config.lua
+   RandomDayGuard/SavedRoot.txt
+   RandomDayGuard/Scripts/main.lua
+   RandomDayGuard/scripts/main.lua
+   ```
+
+6. Enable it in `mods.txt`:
 
    ```text
    RandomDayGuard : 1
    ```
 
-6. Set `SavedRoot.txt` if auto-detection does not find the server `Saved/` folder.
 7. Start the server.
 8. Check `runtime/current/poll_status.json`.
 
-Replacing files while the server is running does not guarantee UE4SS reloads the Lua code. Stop the server, replace the folder, verify files, then start the server.
+Do not rely on replacing files while the server is already running. UE4SS may keep the old Lua code loaded until restart.
 
 ---
 
-## The First Three Settings To Check
+## First Configuration Pass
+
+Most admins only need to check these first.
 
 ### 1. `SavedRoot.txt`
 
-`SavedRoot.txt` should point to the server's `AbioticFactor/Saved` folder.
+Set this only if auto-detection cannot find the server `Saved/` folder.
 
-Correct examples:
+Correct:
 
 ```text
 /AMP/<server>/AbioticFactor/Saved
 Z:/AMP/<server>/AbioticFactor/Saved
 ```
 
-Wrong example:
+Wrong:
 
 ```text
 Saved/SaveGames/Server/Worlds/<WorldName>
 ```
 
-Reason: RandomDayGuard needs logs, `Admin.ini`, world folders, PlayerData, and backups. Pointing directly at a world folder hides the rest of the evidence.
+Why: RandomDayGuard needs logs, `Admin.ini`, world saves, PlayerData, and backups. Pointing directly at the world folder hides most of the evidence.
 
-### 2. Enforcement defaults
+### 2. Review-only enforcement
 
-Keep these until you have confirmed the reports and identity mapping on your server:
+Keep this until you trust the output:
 
 ```lua
 review_only_mode = true
@@ -91,11 +220,11 @@ auto_ban = false
 write_admin_ini = false
 ```
 
-This means RandomDayGuard records evidence and recommendations, but does not edit `Admin.ini`.
+Result: the guard records evidence and recommendations but does not edit `Admin.ini`.
 
 ### 3. Trusted IDs
 
-Before enabling enforcement, add server owners and trusted moderators:
+Add owners and moderators before enabling enforcement:
 
 ```lua
 whitelist = {
@@ -103,42 +232,39 @@ whitelist = {
 }
 ```
 
-Trusted IDs can still appear in evidence, but they should not be automatically punished.
+Trusted IDs can still appear in evidence. The point is to block automatic punishment later.
 
----
+### 4. Log tail mode
 
-## Configuration Guide
+Recommended live-server defaults:
 
-Most settings live in:
-
-```text
-RandomDayGuard/config.lua
+```lua
+start_at_end_on_first_run = true
+tail_backup_logs = false
+register_backup_logs = true
 ```
 
-| Config area | Set this when... | Important options |
-|---|---|---|
-| `saved` | The guard cannot find the server `Saved/` folder, or you want to control what file families are scanned. | `root_candidates`, `direct_known_files`, `scan_world_saves`, `scan_player_data`, `scan_backups` |
-| `log_tail` | You want live joins, leaves, crashes, and reconnect tracking. | `enabled`, `start_at_end_on_first_run`, `tail_backup_logs`, `max_lines_per_poll` |
-| `runtime` | You need to adjust how often the watchdog polls. | `poll_interval_ms`, `max_poll_runtime_ms`, `max_events_per_poll` |
-| `scanning` | You want baseline, resume, and changed-file behavior. | `full_scan_on_start`, `resume_incomplete_scan`, `reuse_completed_baseline`, `incremental_refresh_after_baseline` |
-| `logging` | You want to control low-importance event volume. | `low_importance_mode`, `write_low_importance_raw_events`, `max_actor_touch_events_per_session` |
-| `retention` | You want to control file growth and history length. | `detailed_retention_days`, `rotate_jsonl_when_bytes_exceed`, `keep_evidence_forever` |
-| `crash_correlation` | You want repeated crash/reconnect review. | `active_before_failure_minutes`, `repeated_failure_review_count`, `repeated_failure_ban_count` |
-| `join_leave` | You want churn and join-wave tracking. | `join_wave_window_minutes`, `join_wave_min_accounts`, `churn_alone_never_bans` |
-| `warning_bursts` | You want review signals from repeated server warnings. | `actor_channel_failure`, `update_actor_to_worldsave`, `deployable_save_warning` |
-| `object_registry` | You want class/object/world-token context. | `enabled`, `scan_patterns`, `new_class_enforcement` |
-| `world_state` | You want boot/current/session world snapshots. | `write_boot_state`, `write_current_state`, `write_session_join_state` |
-| `enforcement` | You want Admin.ini writing. | `review_only_mode`, `auto_ban`, `write_admin_ini`, `require_clean_ban_id` |
-| `admin_ini` | You want safe Admin.ini backup/write behavior. | `backup_before_write`, `prevent_duplicates`, `preserve_external_changes`, `atomic_write` |
-| `amp` | You want AMP restart marker files after bans. | `request_restart_after_ban`, `restart_marker_file`, `max_restarts_per_hour` |
+Result: new live events are tracked, but old backup logs are not treated as fresh player activity.
+
+### 5. Baseline scan behavior
+
+Recommended for normal use:
+
+```lua
+reuse_completed_baseline = true
+resume_incomplete_scan = true
+incremental_refresh_after_baseline = true
+```
+
+Result: the first scan can be long, but restarts should not throw away progress, and later runs should reuse baseline data.
 
 ---
 
-## Recommended Config Profiles
+## Configuration Presets
 
 ### Safe first install
 
-Use this when installing for the first time:
+Use this first.
 
 ```lua
 review_only_mode = true
@@ -150,11 +276,17 @@ resume_incomplete_scan = true
 reuse_completed_baseline = true
 ```
 
-Result: evidence is recorded, but no ban lines are written.
+Expected result:
 
-### Live defense only
+```text
+Evidence is collected.
+No Admin.ini ban lines are written.
+The baseline scan can run in the background.
+```
 
-Use this if you want session/crash/reconnect tracking first and want to delay heavy scanning:
+### Live defense first, heavy scan later
+
+Use when you want session/crash/reconnect tracking before running a broad baseline.
 
 ```lua
 log_tail.enabled = true
@@ -162,11 +294,16 @@ scanning.full_scan_on_start = false
 review_only_mode = true
 ```
 
-Result: live-defense files update from logs, but the world baseline does not start automatically.
+Expected result:
+
+```text
+Live session evidence works.
+World/object baseline waits until you enable scanning.
+```
 
 ### Full baseline mode
 
-Use this when you want the object/world baseline and future changed-file refresh:
+Use when you are ready to build object/world context.
 
 ```lua
 scanning.full_scan_on_start = true
@@ -175,11 +312,17 @@ scanning.reuse_completed_baseline = true
 scanning.incremental_refresh_after_baseline = true
 ```
 
-Result: the first scan may take time, but progress is saved and later refreshes can reuse baseline data.
+Expected result:
 
-### Enforcement testing
+```text
+First scan may take time.
+Progress and checkpoint files are written.
+Later boots can reuse completed baseline data.
+```
 
-Use this when you want to see who would be reviewed without changing `Admin.ini`:
+### Enforcement dry run
+
+Use when you want to see who would be reviewed without changing the server ban list.
 
 ```lua
 review_only_mode = true
@@ -187,11 +330,16 @@ auto_ban = false
 write_admin_ini = false
 ```
 
-Result: evidence and recommendations are written, but `Admin.ini` is untouched.
+Expected result:
+
+```text
+Reports and scores are written.
+Admin.ini is untouched.
+```
 
 ### Enforcement enabled
 
-Use this only after trusted IDs are configured, session mapping is confirmed, reports look correct, and `Admin.ini` backups are working:
+Use only after testing.
 
 ```lua
 review_only_mode = false
@@ -202,11 +350,127 @@ preserve_existing_bans = true
 preserve_moderators = true
 ```
 
-Result: if all configured gates pass, RandomDayGuard may write clean ban lines to `Admin.ini`.
+Before enabling this, confirm:
+
+- trusted IDs are configured
+- identity mapping works
+- reports look correct
+- `Admin.ini` backup behavior works
+- the server owner accepts automatic ban writing
 
 ---
 
-## How The Guard Decides Things
+## Configuration Index
+
+| Goal | Config area | Key options |
+|---|---|---|
+| Find the right server files | `saved` | `root_candidates`, `direct_known_files`, `scan_world_saves`, `scan_player_data`, `scan_backups` |
+| Track joins/leaves/crashes | `log_tail`, `join_leave`, `crash_correlation` | `enabled`, `start_at_end_on_first_run`, `join_wave_window_minutes`, `repeated_failure_review_count` |
+| Keep the loop responsive | `runtime`, `log_tail`, `scanning` | `poll_interval_ms`, `max_bytes_per_poll`, `startup_scan_files_per_tick` |
+| Build world context | `scanning`, `object_registry`, `world_state` | `full_scan_on_start`, `scan_patterns`, `write_current_state` |
+| Avoid rescanning everything | `scanning` | `reuse_completed_baseline`, `resume_incomplete_scan`, `incremental_refresh_after_baseline` |
+| Control file growth | `retention`, `logging` | `detailed_retention_days`, `rotate_jsonl_when_bytes_exceed`, `low_importance_mode` |
+| Review suspicious behavior | `warning_bursts`, `raid_detection`, `accumulation` | warning thresholds, raid case thresholds, delta thresholds |
+| Write bans | `enforcement`, `admin_ini` | `auto_ban`, `write_admin_ini`, `require_clean_ban_id`, `atomic_write` |
+| Request AMP restart | `amp` | `request_restart_after_ban`, `restart_marker_file`, `max_restarts_per_hour` |
+
+---
+
+## Health Checks
+
+### Good poll status
+
+```json
+{
+  "scheduler_status": "running",
+  "poll_scheduled": true,
+  "poll_in_flight": false
+}
+```
+
+Good signs:
+
+```text
+poll_id increases
+poll_in_flight returns to false
+log_backlog_pending becomes false when unread bytes are zero
+scan_progress.json appears after scan starts
+```
+
+### Good scan status
+
+```json
+{
+  "active": true,
+  "phase": "scanning",
+  "files_done": 141,
+  "total_files": 1767,
+  "entries_seen": 2888
+}
+```
+
+Meaning:
+
+```text
+The scan is running.
+The baseline is not finished yet.
+Live defense can still operate.
+```
+
+### Good completed baseline
+
+```json
+{
+  "scan_complete": true,
+  "baseline_loaded": true
+}
+```
+
+Meaning:
+
+```text
+World/object baseline exists.
+Future boots should load it before scanning changed files.
+```
+
+---
+
+## Output File Index
+
+| File | First question it answers |
+|---|---|
+| `runtime/runtime_version.json` | Which version actually loaded? |
+| `runtime/startup_status.json` | Did startup reach the expected phase? |
+| `runtime/current/poll_status.json` | Is the watchdog loop alive? |
+| `runtime/current/live_defense_state.json` | What does the live guard currently know? |
+| `runtime/current/session_state.json` | Who is active or recently active? |
+| `runtime/evidence/session_events.jsonl` | What login/join/leave events happened? |
+| `runtime/evidence/live_defense_events.jsonl` | What churn or review events were recorded? |
+| `runtime/evidence/crash_reconnect_events.jsonl` | Who overlapped crashes or returned after restart? |
+| `runtime/scan_progress.json` | Where is the baseline scan right now? |
+| `runtime/scan_checkpoint.json` | Where should an interrupted scan resume? |
+| `runtime/object_registry_partial.json` | What classes/objects are known so far? |
+| `runtime/object_registry.json` | What classes/objects were found after completion? |
+| `runtime/world_state/current/world_state_latest.json` | What world context is currently available? |
+| `runtime/baselines/file_manifest.tsv` | Which files were scanned and how are changes detected? |
+| `runtime/enforced_bans.jsonl` | What bans did the guard write, if enforcement is enabled? |
+
+---
+
+## How Decisions Are Built
+
+RandomDayGuard does not jump from one event to a ban. It builds a chain.
+
+```text
+log line
+-> identity mapping
+-> session event
+-> live-defense counters
+-> baseline/world context if available
+-> review score
+-> enforcement gates
+-> Admin.ini write only if enabled
+```
 
 ### Normal session
 
@@ -219,7 +483,7 @@ Player leaves cleanly.
 Result:
 
 ```text
-Evidence recorded.
+Evidence stored.
 Status remains INFO.
 No warning.
 No ban.
@@ -239,7 +503,7 @@ session_churn_score increases
 may become REVIEW
 ```
 
-Churn by itself does not ban by default:
+Safety:
 
 ```lua
 churn_alone_never_bans = true
@@ -262,7 +526,7 @@ post-crash return counters increase
 may become REVIEW or BAN-ELIGIBLE if repeated and account-specific
 ```
 
-One crash alone is not enough:
+Safety:
 
 ```lua
 single_crash_never_bans = true
@@ -271,65 +535,103 @@ single_crash_never_bans = true
 ### World actor save touch
 
 ```text
-Server log references UpdateActorToWorldSave and a deployed container class.
+Server evidence references UpdateActorToWorldSave and a deployed container class.
 ```
 
 Result:
 
 ```text
-Recorded as context.
-Useful when correlated with mapped sessions, crashes, warnings, or baseline deltas.
-Not direct proof of theft, duplication, damage, or container use by itself.
+Stored as world context.
+Useful when correlated with sessions, crashes, warnings, or baseline deltas.
+Not direct proof by itself.
 ```
 
 ---
 
-## Output Files And What To Check
+## The First Baseline Scan
 
-| File | What it tells you |
-|---|---|
-| `runtime/runtime_version.json` | Confirms the loaded version. |
-| `runtime/current/poll_status.json` | Shows whether the watchdog loop is alive. |
-| `runtime/current/live_defense_state.json` | Shows live session/crash/churn tracking. |
-| `runtime/evidence/session_events.jsonl` | Login, join, leave, and session events. |
-| `runtime/evidence/live_defense_events.jsonl` | Churn, reconnect, and review signals. |
-| `runtime/evidence/crash_reconnect_events.jsonl` | Crash/restart continuity and post-crash returns. |
-| `runtime/scan_progress.json` | Current scan phase and file progress. |
-| `runtime/scan_checkpoint.json` | Resume point after crash/restart. |
-| `runtime/object_registry_partial.json` | Partial object/class registry while scanning. |
-| `runtime/object_registry.json` | Final object/class registry after baseline completion. |
-| `runtime/world_state/current/world_state_latest.json` | Current world-state summary. |
-| `runtime/baselines/file_manifest.tsv` | Changed-file tracking after baseline. |
-| `runtime/enforced_bans.jsonl` | Audit trail for bans written by the guard. |
+The first scan builds the world/object context used for better review.
 
-Healthy poll status looks like this:
+It reads:
 
-```json
-{
-  "scheduler_status": "running",
-  "poll_scheduled": true,
-  "poll_in_flight": false
-}
+```text
+Saved/SaveGames/Server/Worlds/**/*.sav
+Saved/SaveGames/Server/Worlds/**/PlayerData/*.sav
+Saved/SaveGames/Server/Backups/**
+Saved/SaveGames/Server/Admin.ini
+Saved/Logs/*.log
 ```
 
-If `poll_id` keeps increasing and `poll_in_flight` returns to `false`, the watchdog loop is alive.
+It looks for visible strings such as:
+
+```text
+/Game/...
+/Script/...
+*_C
+Deployed_...
+Container_...
+Item_...
+PowerSocket...
+LootSpillBag...
+```
+
+The first scan may be slow. That is acceptable when:
+
+```text
+polling continues
+live defense continues
+scan_progress.json updates
+scan_checkpoint.json updates
+partial world_state_latest.json appears
+```
 
 ---
 
-## First Run Checklist
+## Checkpoint And Resume
 
-- [ ] Server stopped before install.
-- [ ] ZIP extracted into `ue4ss/Mods/RandomDayGuard`.
-- [ ] `mods.txt` contains `RandomDayGuard : 1`.
-- [ ] `SavedRoot.txt` points to `Saved/` or is blank for auto-detection.
-- [ ] `runtime/runtime_version.json` exists.
-- [ ] `runtime/current/poll_status.json` shows `scheduler_status="running"`.
-- [ ] `poll_id` increases.
-- [ ] `poll_in_flight` returns to `false`.
-- [ ] `runtime/current/live_defense_state.json` exists.
-- [ ] `runtime/scan_progress.json` exists after scan starts.
-- [ ] `runtime/world_state/current/world_state_latest.json` appears.
-- [ ] Enforcement remains disabled until reports are verified.
+A crash during scan should not waste the work already done.
+
+Example:
+
+```text
+Before crash:
+files_done = 141
+total_files = 1767
+
+After restart:
+resume near file 141 or reuse cached file entries
+```
+
+If a checkpoint is stale because the world changed, the old partial evidence should be preserved and a new baseline generation should start.
+
+---
+
+## Changed-File Refresh
+
+After a completed baseline exists, the guard should avoid reading every file again.
+
+A file is rescanned when:
+
+- it is new
+- it was removed
+- size changed
+- modified time changed
+- quick fingerprint changed
+
+A file can be reused when:
+
+```text
+size unchanged
+mtime unchanged where available
+fingerprint unchanged
+```
+
+Result:
+
+```text
+First scan builds the expensive baseline.
+Later scans focus on changed files.
+```
 
 ---
 
@@ -350,37 +652,67 @@ WorldSave_*.sav
 PlayerData/Player_*.sav
 ```
 
-Admin setup should be:
+Correct setup:
 
 ```text
-SavedRoot.txt -> Saved/
+SavedRoot.txt -> AbioticFactor/Saved
 ```
 
-Do not put `<WorldName>` into public defaults. RandomDayGuard discovers world folders under `Saved/`.
+Do not set:
+
+```text
+SavedRoot.txt -> Saved/SaveGames/Server/Worlds/<WorldName>
+```
+
+The guard discovers world folders under the Saved root.
 
 ---
 
-## If The World Folder Changes
+## World Folder Changes
 
-### Renamed same world
+### Same world, renamed folder
 
-RandomDayGuard should reuse cached evidence where fingerprints match and rescan mismatched paths.
+Expected behavior:
+
+```text
+reuse cached evidence where fingerprints match
+rescan files whose paths no longer match
+preserve previous evidence
+```
 
 ### Restored backup or different world
 
-RandomDayGuard should preserve the old baseline and start a new baseline generation.
+Expected behavior:
+
+```text
+preserve old completed baseline
+start a new baseline generation
+replace final baseline only after the new scan completes
+```
 
 ### Partial scan existed before the change
 
-RandomDayGuard should mark the old checkpoint stale and preserve the partial evidence.
+Expected behavior:
+
+```text
+mark the old checkpoint stale
+preserve partial evidence
+start a new baseline for the new world
+```
 
 ### Completed baseline existed before the change
 
-RandomDayGuard should load the old baseline for visibility, then build a new baseline safely.
+Expected behavior:
+
+```text
+load the old baseline for visibility
+mark it as previous-world context
+build the new baseline safely
+```
 
 ---
 
-## Ban ID Guide
+## Ban ID Mapping
 
 Display name is not the ban ID.
 
@@ -405,15 +737,34 @@ If `ConnectID` is:
 BannedPlayer=2535422284688820
 ```
 
-Never use a display name as the ban value, and do not use the full suffixed `ConnectID`. Use only the clean numeric prefix.
+Never write:
+
+```ini
+BannedPlayer=ExamplePlayer
+BannedPlayer=2535422284688820_+_|0002d07b...
+```
+
+Use only the clean numeric prefix.
 
 ---
 
-## Admin.ini Enforcement
+## Enforcement Path
 
-When enforcement is disabled, RandomDayGuard writes evidence only.
+Admin.ini writing requires all gates to pass.
 
-When enforcement is enabled and all gates pass, `Admin.ini` receives only:
+```text
+auto_ban == true
+write_admin_ini == true
+review_only_mode == false
+ban_id is clean numeric
+account identity is mapped
+threshold is met
+account is not trusted
+account is not a moderator
+account-specific evidence exists
+```
+
+When enforcement writes to `Admin.ini`, it writes only:
 
 ```ini
 BannedPlayer=<ID>
@@ -436,9 +787,43 @@ runtime/warnings/
 
 RandomDayGuard is evidence-first. It records what the server exposes through logs and Saved files.
 
-Some facts require direct evidence. For example, the guard should not label a player as duplicating items, damaging objects, opening a container, or using exact coordinates unless readable server evidence actually exposes that fact.
+If a fact is direct, the output should record the source.
 
-When evidence is indirect, RandomDayGuard stores it as context. Context can support review, but it is not the same as direct proof.
+If a fact is indirect, the output should store it as context.
+
+Context can support review. Context is not the same as direct proof.
+
+Examples:
+
+| Evidence | How to treat it |
+|---|---|
+| Login request with `ConnectID` | Strong identity source. |
+| Join line matched to recent login | Good session mapping. |
+| PlayerData file only | Confirms an ID exists; may not prove display name. |
+| World actor save touch | World context. Not direct player action by itself. |
+| One crash overlap | Context. Not enough by itself. |
+| Repeated same-account crash return | Stronger review signal. |
+
+---
+
+## First-Run Checklist
+
+- [ ] Server stopped before install.
+- [ ] ZIP extracted into `ue4ss/Mods/RandomDayGuard`.
+- [ ] `mods.txt` contains `RandomDayGuard : 1`.
+- [ ] `SavedRoot.txt` points to `Saved/` or is blank for auto-detection.
+- [ ] `review_only_mode=true`.
+- [ ] `auto_ban=false`.
+- [ ] `write_admin_ini=false`.
+- [ ] Trusted IDs are configured before enforcement testing.
+- [ ] `runtime/runtime_version.json` exists.
+- [ ] `runtime/current/poll_status.json` shows `scheduler_status="running"`.
+- [ ] `poll_id` increases.
+- [ ] `poll_in_flight` returns to `false`.
+- [ ] `runtime/current/live_defense_state.json` exists.
+- [ ] `runtime/scan_progress.json` appears after scan starts.
+- [ ] `runtime/world_state/current/world_state_latest.json` appears.
+- [ ] Enforcement remains disabled until reports are verified.
 
 ---
 
