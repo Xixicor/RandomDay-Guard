@@ -1,0 +1,23 @@
+{
+  "version": "v0.4.11-alpha",
+  "events": [
+    {"id": "ADMIN_INI_STATE_CHECK", "source": "Saved/SaveGames/Server/Admin.ini", "description": "Reads existing clean ban lines and preserves external changes.", "does_not_prove": "A player caused any server warning."},
+    {"id": "SAVED_SCAN_START", "source": "Saved folder", "description": "A Saved-folder scan started."},
+    {"id": "SAVED_SCAN_COMPLETE", "source": "Saved folder", "description": "A Saved-folder scan completed with readable file counts."},
+    {"id": "OBJECT_REGISTRY_UPDATE", "source": "Saved folder content", "description": "Visible object, item, class, map, and script strings were counted."},
+    {"id": "NEW_CLASS_DISCOVERED", "source": "Saved folder content", "description": "A new visible class string was registered as informational by default.", "does_not_prove": "The class is malicious."},
+    {"id": "CLASS_DELTA_DETECTED", "source": "Saved folder content", "description": "Class counts changed between scans.", "does_not_prove": "A specific player created the objects."},
+    {"id": "PLAYER_LOGIN_IDENTITY", "source": "Saved/Logs/*.log", "description": "A log-observable account identity or name was seen."},
+    {"id": "PLAYER_JOIN_STATE", "source": "Saved/Logs/*.log", "description": "A log-observable player join was seen."},
+    {"id": "PLAYER_LEAVE_STATE", "source": "Saved/Logs/*.log", "description": "A log-observable player leave was seen."},
+    {"id": "DEPLOYABLE_WARNING_BURST", "source": "Saved/Logs/*.log", "description": "DeployableSaveWarning activity was observed."},
+    {"id": "ACTOR_CHANNEL_FAILURE_BURST", "source": "Saved/Logs/*.log", "description": "ActorChannelFailure activity was observed."},
+    {"id": "WORLD_ACTOR_SAVE_TOUCH", "source": "Saved/Logs/*.log", "description": "UpdateActorToWorldSave world actor save-touch context was observed.", "does_not_prove": "Player action, object ownership, damage, duplication, or container use."},
+    {"id": "SERVER_FAILURE_EVENT", "source": "Saved/Logs/*.log", "description": "Crash, fatal, restart, shutdown, exit, or server failure text was observed.", "does_not_prove": "Any one account caused the failure."},
+    {"id": "HIGH_RISK_OBJECT_STRING", "source": "Saved folder content or logs", "description": "A configured high-risk class string was visible.", "does_not_prove": "Malicious intent or ownership."},
+    {"id": "RAID_CASE_CREATED", "source": "Correlated log and session evidence", "description": "Multiple accounts were correlated around warning or failure windows.", "does_not_prove": "Every account in the case is ban eligible."},
+    {"id": "RAID_CASE_ACCOUNT_LINK", "source": "Correlated log and session evidence", "description": "An account was linked to a raid case for review."},
+    {"id": "BAN_APPLIED", "source": "Configured enforcement", "description": "A clean BannedPlayer=<ID> line was written after account-specific thresholds were met."},
+    {"id": "AMP_RESTART_REQUESTED", "source": "Configured enforcement", "description": "A restart marker was written; the mod does not restart the server process directly."}
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "version": "v0.4.11-alpha",
+  "categories": [
+    {"id": "deployed", "patterns": ["Deployed_*"]},
+    {"id": "container", "patterns": ["Container_*"]},
+    {"id": "item", "patterns": ["Item_*"]},
+    {"id": "resource_node", "patterns": ["ResourceNode_*"]},
+    {"id": "npc_spawn", "patterns": ["NPCSpawn_*"]},
+    {"id": "power", "patterns": ["PowerSocket*", "PlugStrip*", "Plugboard*", "Battery*"]},
+    {"id": "transport", "patterns": ["Teleporter*", "Bridge*"]},
+    {"id": "defense", "patterns": ["Barricade*"]},
+    {"id": "furniture", "patterns": ["Furniture*"]},
+    {"id": "food", "patterns": ["Food*"]},
+    {"id": "equipment", "patterns": ["Weapon*", "Tool*", "Armor*"]},
+    {"id": "pets", "patterns": ["PetBed*", "PestWheel*"]},
+    {"id": "loot", "patterns": ["LootSpillBag*"]},
+    {"id": "maps", "patterns": ["/Game/Maps/*"]},
+    {"id": "game_paths", "patterns": ["/Game/*"]},
+    {"id": "script_paths", "patterns": ["/Script/*"]},
+    {"id": "level", "patterns": ["PersistentLevel*"]},
+    {"id": "generated_class", "patterns": ["*_C"]}
+  ]
+}
