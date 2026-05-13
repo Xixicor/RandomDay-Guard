@@ -1,95 +1,53 @@
-# Start Here
+# Start here
 
-This is the operator path for a first install or a clean reinstall.
+Use this page for the first install, first boot, or clean reinstall.
 
-Use this guide when you want to get RandomDayGuard running without reading the whole repository first.
+## At a glance
 
----
+| Item | Value |
+|---|---|
+| Mod folder | `RandomDayGuard/` |
+| Runtime | UE4SS Lua |
+| Install target | `AbioticFactor/Binaries/Win64/ue4ss/Mods/RandomDayGuard/` |
+| Default mode | Review only |
+| First health file | `runtime/current/poll_status.json` |
+| First player file | `runtime/account_evidence.json` |
+| First quick-review folder | `runtime/forensic_days/YYYY-MM-DD/` |
 
-## 1. What RandomDayGuard Does
+## 1. Install
 
-RandomDayGuard watches the dedicated-server evidence layer.
+1. Stop the server.
+2. Delete the old `RandomDayGuard` folder if one exists.
+3. Extract the release ZIP into:
 
-It reads:
+   ```text
+   AbioticFactor/Binaries/Win64/ue4ss/Mods/
+   ```
 
-```text
-Saved/Logs/*.log
-Saved/SaveGames/Server/Admin.ini
-Saved/SaveGames/Server/Worlds/**/*.sav
-Saved/SaveGames/Server/Worlds/**/PlayerData/*.sav
-Saved/SaveGames/Server/Backups/**
-```
+4. Confirm this final path exists:
 
-It writes runtime evidence under:
+   ```text
+   AbioticFactor/Binaries/Win64/ue4ss/Mods/RandomDayGuard/Scripts/main.lua
+   ```
 
-```text
-RandomDayGuard/runtime/
-```
+5. Enable the mod in `mods.txt`:
 
-The two immediate goals are:
+   ```text
+   RandomDayGuard : 1
+   ```
 
-```text
-1. Live defense from logs, sessions, crashes, and reconnects.
-2. World/context baseline from Saved files.
-```
+6. Start the server.
 
-Live defense starts first. The baseline scan can take longer.
+Do not replace files while the server is running and assume UE4SS reloaded them. Stop, replace, verify, then start.
 
----
+## 2. Set the Saved folder
 
-## 2. Install
-
-Stop the server before replacing files.
-
-Install path:
-
-```text
-AbioticFactor/Binaries/Win64/ue4ss/Mods/RandomDayGuard/
-```
-
-Required files:
-
-```text
-RandomDayGuard/enabled.txt
-RandomDayGuard/config.lua
-RandomDayGuard/SavedRoot.txt
-RandomDayGuard/Scripts/main.lua
-RandomDayGuard/scripts/main.lua
-RandomDayGuard/data/detection_events.json
-RandomDayGuard/data/warning_types.json
-RandomDayGuard/data/object_categories.json
-```
-
-Enable in `mods.txt`:
-
-```text
-RandomDayGuard : 1
-```
-
-Both script paths are included for host compatibility:
-
-```text
-Scripts/main.lua
-scripts/main.lua
-```
-
-They must be identical.
-
----
-
-## 3. Configure SavedRoot.txt
-
-`SavedRoot.txt` should point to the server `Saved/` folder.
+Set `RandomDayGuard/SavedRoot.txt` only if auto-detection fails.
 
 Correct:
 
 ```text
 /AMP/<server>/AbioticFactor/Saved
-```
-
-or:
-
-```text
 Z:/AMP/<server>/AbioticFactor/Saved
 ```
 
@@ -99,19 +57,11 @@ Wrong:
 Saved/SaveGames/Server/Worlds/<WorldName>
 ```
 
-Reason:
+`SavedRoot.txt` must point at `Saved/` because the guard needs logs, `Admin.ini`, world files, PlayerData, and backups.
 
-```text
-RandomDayGuard needs Logs, Admin.ini, Worlds, PlayerData, and Backups.
-```
+## 3. Keep the first run safe
 
-Pointing directly to a world folder hides important evidence.
-
----
-
-## 4. Keep First Install Safe
-
-Use review-first mode until output is confirmed.
+Use review mode first:
 
 ```lua
 review_only_mode = true
@@ -119,33 +69,19 @@ auto_ban = false
 write_admin_ini = false
 ```
 
-This means:
+This records evidence without editing `Admin.ini`.
+
+## 4. Check that it loaded
+
+Open:
 
 ```text
-Evidence is recorded.
-Review signals can be produced.
-Admin.ini is not changed by the guard.
+runtime/runtime_version.json
+runtime/startup_status.json
+runtime/current/poll_status.json
 ```
 
-Before enabling enforcement, configure trusted IDs and confirm the evidence output is correct.
-
----
-
-## 5. First Boot Checks
-
-After starting the server, check these files.
-
-| File | Expected result |
-|---|---|
-| `runtime/runtime_version.json` | Shows the loaded version. |
-| `runtime/current/poll_status.json` | Shows the watchdog loop status. |
-| `runtime/current/session_state.json` | Appears after session state starts. |
-| `runtime/account_evidence.json` | Appears after account/session evidence is written. |
-| `runtime/evidence/session_events.jsonl` | Records login/join/leave/session events. |
-| `runtime/scan_progress.json` | Appears when the scan starts. |
-| `runtime/world_state/current/world_state_latest.json` | Appears when world-state output exists. |
-
-Healthy `poll_status.json` should include:
+Healthy poll state:
 
 ```json
 {
@@ -157,38 +93,28 @@ Healthy `poll_status.json` should include:
 
 `poll_id` should increase over time.
 
----
+## 5. Test one join and leave
 
-## 6. First Join/Leave Test
+1. Join with a test account.
+2. Leave cleanly.
+3. Open:
 
-Use a non-production test account.
-
-1. Start the server.
-2. Join with the test account.
-3. Leave cleanly.
-4. Open:
-
-```text
-runtime/evidence/session_events.jsonl
-runtime/session_events.tsv
-runtime/account_evidence.json
-runtime/current/session_state.json
-```
+   ```text
+   runtime/evidence/session_events.jsonl
+   runtime/session_events.tsv
+   runtime/account_evidence.json
+   runtime/current/session_state.json
+   ```
 
 Expected result:
 
 ```text
 SESSION_JOIN appears.
 SESSION_LEAVE appears.
-Account ID and ban ID are mapped if the server log exposed ConnectID.
-Status remains INFO for normal behavior.
+Normal session remains INFO.
 ```
 
----
-
-## 7. First Scan Expectations
-
-The first broad scan may take time.
+## 6. Watch the first scan
 
 Open:
 
@@ -198,7 +124,7 @@ runtime/scan_checkpoint.json
 runtime/world_state/current/world_state_latest.json
 ```
 
-During scan, `world_state_latest.json` may say:
+A partial scan is normal:
 
 ```json
 {
@@ -207,43 +133,35 @@ During scan, `world_state_latest.json` may say:
 }
 ```
 
-That is valid. It means partial world context exists but the completed baseline is not ready yet.
-
-After completion, check:
+After the scan completes, check:
 
 ```text
 runtime/scan_complete.json
 runtime/object_registry.json
-runtime/object_registry_counts.tsv
-runtime/baselines/last_completed_baseline.json
 runtime/baselines/file_manifest.tsv
+runtime/baselines/last_completed_baseline.json
 ```
 
----
+## 7. Create a sticky backup
 
-## 8. What To Send For Support
-
-If asking for help, send these files first:
+After a completed baseline, back up:
 
 ```text
-runtime/runtime_version.json
-runtime/startup_status.json
-runtime/current/poll_status.json
-runtime/saved_path_probe.json
-runtime/scan_progress.json
-runtime/scan_checkpoint.json
-runtime/account_evidence.json
-runtime/evidence/session_events.jsonl
+RandomDayGuard/config.lua
+RandomDayGuard/SavedRoot.txt
+RandomDayGuard/runtime/baselines/
+RandomDayGuard/runtime/object_registry.json
+RandomDayGuard/runtime/world_state/current/world_state_latest.json
+Saved/SaveGames/Server/Admin.ini
 ```
 
-Do not send private server logs, PlayerData, world saves, or Admin.ini publicly unless you have sanitized them.
-## Quick Daily Review Package
+This gives you a known-good recovery point.
 
-After the server has run, use either daily folder for quick review:
+## Next docs
 
-```text
-runtime/forensic_days/YYYY-MM-DD/
-runtime/final_logs/YYYY-MM-DD/
-```
-
-`runtime/current/forensic_today.txt` is the current-day shortcut. The daily summary is a rebuildable index; source runtime evidence remains authoritative.
+| Next task | Read |
+|---|---|
+| Pick config profile | [`CONFIG_PROFILES.md`](CONFIG_PROFILES.md) |
+| Understand outputs | [`MEMORY_ECONOMY_AND_OUTPUTS.md`](MEMORY_ECONOMY_AND_OUTPUTS.md) |
+| Daily quick upload | [`FORENSIC_DAILY_ROLLUPS.md`](FORENSIC_DAILY_ROLLUPS.md) |
+| Troubleshooting | [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md) |

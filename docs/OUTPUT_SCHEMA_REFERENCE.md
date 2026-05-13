@@ -1,145 +1,85 @@
-# Output Schema Reference
+# Output schema reference
 
-This document explains the most important RandomDayGuard runtime files and fields.
+Use this page when you need to know what a field means.
 
-Field availability may vary by version and by what evidence the server exposes.
+## Quick field groups
 
----
+| File | Main question |
+|---|---|
+| `poll_status.json` | Is the watchdog alive? |
+| `account_evidence.json` | Who is this account? |
+| `session_events.jsonl` | What happened in session order? |
+| `scan_progress.json` | What is the scan doing? |
+| `world_state_latest.json` | Is world context partial or complete? |
+| `players.tsv` | Who should be reviewed today? |
+| `ban_recommendations.tsv` | Which clean ban lines are candidates? |
+| `final_forensic_log.txt` | What happened in plain language? |
 
 ## `runtime/current/poll_status.json`
-
-Purpose:
-
-```text
-Shows whether the watchdog loop is alive and what phase it is in.
-```
 
 Important fields:
 
 | Field | Meaning |
 |---|---|
-| `version` | Loaded RandomDayGuard version. |
-| `boot_id` | Current boot identifier. |
-| `epoch_id` | Current server epoch identifier. |
-| `scheduler_status` | Should be `running` when the loop is active. |
-| `poll_id` | Increases every completed poll. |
-| `poll_in_flight` | Should return to `false` between polls. |
-| `poll_scheduled` | Should be `true` between polls. |
-| `active_log_caught_up` | Whether the active log tail has no unread backlog. |
-| `active_log_unread_bytes` | Unread bytes remaining in the active log. |
-| `log_backlog_pending` | Whether startup scan should wait for log backlog. |
-| `scan_job_active` | Whether a scan job is currently running. |
-| `scan_phase` | Current scan phase, such as discovery or scanning. |
-| `scan_files_done` | Number of files processed by the scan. |
-| `scan_total_files` | Total files currently known to the scan. |
+| `version` | Loaded guard version |
+| `boot_id` | Current boot ID |
+| `epoch_id` | Current server epoch |
+| `scheduler_status` | Should be `running` |
+| `poll_id` | Increases as the loop completes |
+| `poll_in_flight` | Should return `false` between polls |
+| `poll_scheduled` | Should be `true` between polls |
+| `active_log_caught_up` | Active log has no unread backlog |
+| `active_log_unread_bytes` | Bytes still unread |
+| `log_backlog_pending` | Whether scan should wait |
+| `scan_job_active` | Whether scan is active |
+| `scan_phase` | Current scan phase |
 
-Healthy example:
+Healthy:
 
 ```json
 {
   "scheduler_status": "running",
-  "poll_id": 25,
-  "poll_in_flight": false,
   "poll_scheduled": true,
-  "active_log_caught_up": true,
-  "active_log_unread_bytes": 0,
-  "log_backlog_pending": false
+  "poll_in_flight": false
 }
 ```
 
-Problem signs:
-
-| Symptom | Meaning |
-|---|---|
-| `poll_id` does not increase | Poll loop may be blocked. |
-| `poll_in_flight` stays `true` | A callback may not have returned. |
-| `log_backlog_pending=true` with unread bytes 0 | Backlog gate bug or stale state. |
-| `scan_job_active=false` forever | Scan gate did not open or scan disabled. |
-
----
-
-## `runtime/runtime_version.json`
-
-Purpose:
-
-```text
-Confirms what version loaded on the server.
-```
-
-Important fields:
-
-| Field | Meaning |
-|---|---|
-| `version` | Expected `v0.4.11-alpha`. |
-| `boot_id` | Runtime boot identity. |
-| `loaded_at` or `ts` | When the mod wrote the file. |
-
-Use it to verify the server actually loaded the new build after replacing files.
-
----
-
 ## `runtime/account_evidence.json`
 
-Purpose:
-
-```text
-Current account/player profile summary.
-```
-
 Important fields:
 
 | Field | Meaning |
 |---|---|
-| `account_id` | Clean mapped account ID used internally. |
-| `ban_id` | Clean numeric ID used for Admin.ini when enforcement is enabled. |
-| `name` / `log_name` | Name observed in readable server evidence. |
-| `connect_id_raw` | Raw ConnectID before suffix cleanup. |
-| `unique_id` | Platform/network identity string if visible. |
-| `identity_source` | Source used for mapping, such as Login request. |
-| `identity_confidence` | Confidence in the mapping. |
-| `playerdata_verified` | Whether matching `Player_<ID>.sav` was found. |
-| `playerdata_file` | Matching PlayerData path if found. |
-| `first_seen` | First time account was seen by the guard. |
-| `last_seen` | Last time account was seen by the guard. |
-| `join_count` | Number of joined sessions recorded. |
-| `leave_count` | Number of clean/observed leaves recorded. |
-| `status` | Review status, such as INFO or REVIEW. |
-| `score` | Current review/enforcement score if implemented. |
-
-Use this file first when reviewing one player.
-
----
-
-## `runtime/account_evidence.tsv`
-
-Purpose:
-
-```text
-Spreadsheet-friendly account profile table.
-```
-
-Use it for:
-
-```text
-quick filtering
-counting REVIEW accounts
-comparing account IDs
-exporting to a spreadsheet
-```
-
-Common columns should mirror `account_evidence.json`.
-
----
+| `account_id` | Clean account ID used by the guard |
+| `ban_id` | Clean ID candidate for Admin.ini |
+| `name` | Display/log name when known |
+| `connect_id_raw` | Raw server identity value |
+| `unique_id` | Platform/network identity if visible |
+| `identity_source` | Source used for mapping |
+| `identity_confidence` | Strength of mapping |
+| `playerdata_verified` | Matching PlayerData found |
+| `first_seen` | First recorded time |
+| `last_seen` | Last recorded time |
+| `status` | INFO, WATCH, REVIEW, BAN-ELIGIBLE, AUTO-BANNED |
+| `score` | Review/enforcement score if implemented |
 
 ## `runtime/evidence/session_events.jsonl`
 
-Purpose:
+One JSON object per event.
 
-```text
-Structured session timeline.
-```
+Common fields:
 
-JSONL means one JSON object per line.
+| Field | Meaning |
+|---|---|
+| `ts` | Event timestamp |
+| `type` | Event type |
+| `account_id` | Mapped account or placeholder |
+| `ban_id` | Clean ban ID when known |
+| `name` | Name in evidence |
+| `session_id` | Session identifier |
+| `epoch_id` | Server epoch |
+| `leave_reason` | Why session ended |
+| `clean_leave` | Whether leave was clean |
 
 Common event types:
 
@@ -152,138 +92,47 @@ SESSION_LEAVE
 SESSION_LIFECYCLE_CLOSE
 ```
 
-Common fields:
-
-| Field | Meaning |
-|---|---|
-| `ts` | Event timestamp. |
-| `type` | Event type. |
-| `account_id` | Mapped account ID or unmapped placeholder. |
-| `ban_id` | Clean ban ID if known. |
-| `name` | Display/log name. |
-| `session_id` | Session identifier. |
-| `epoch_id` | Server epoch. |
-| `leave_reason` | Why a session ended, if applicable. |
-| `clean_leave` | Whether leave was clean. |
-
-Use this for timeline reconstruction.
-
----
-
-## `runtime/session_events.tsv`
-
-Purpose:
-
-```text
-Human-readable session timeline.
-```
-
-Use it for quick review with grep, Excel, LibreOffice, or Google Sheets.
-
-Expected rows may include:
-
-```text
-JOIN
-LEAVE
-LIFECYCLE_CLOSE
-```
-
----
-
 ## `runtime/scan_progress.json`
 
-Purpose:
-
-```text
-Shows current baseline scan progress.
-```
-
 Important fields:
 
 | Field | Meaning |
 |---|---|
-| `scan_generation_id` | Current scan generation. |
-| `active` | Whether scan job is active. |
-| `complete` | Whether scan is complete. |
-| `phase` | Current phase. |
-| `files_done` | Files completed. |
-| `total_files` | Total files known. |
-| `entries_seen` | Tokens/entries extracted. |
-| `readable_files_seen` | Files readable during discovery/scan. |
-| `current_file` | File currently being processed. |
-| `budget_exhausted` | Whether the scan paused due to per-tick budget. |
-
-Common phases:
-
-```text
-discover_direct_known
-discover_recursive
-scanning
-complete
-failed
-```
-
----
-
-## `runtime/scan_checkpoint.json`
-
-Purpose:
-
-```text
-Resume point for interrupted scans.
-```
-
-Important fields:
-
-| Field | Meaning |
-|---|---|
-| `scan_generation_id` | Scan generation to resume. |
-| `phase` | Phase to continue. |
-| `file_index` | Where to resume in the manifest. |
-| `files_done` | Completed file count. |
-| `total_files` | Known total file count. |
-| `manifest_path` | File list used by the scan. |
-| `counts_path` | Sidecar counts file if used. |
-| `map_paths_path` | Sidecar map paths file if used. |
-| `complete` | Should be false during an incomplete scan. |
-
-Use this after crashes/restarts to verify the scan did not restart from zero.
-
----
+| `scan_generation_id` | Current scan generation |
+| `active` | Scan running |
+| `complete` | Scan complete |
+| `phase` | Discovery, scanning, complete, failed |
+| `files_done` | Files processed |
+| `total_files` | Files known |
+| `entries_seen` | Tokens/entries found |
+| `current_file` | File currently being processed |
+| `budget_exhausted` | Scan paused due to budget |
 
 ## `runtime/world_state/current/world_state_latest.json`
 
-Purpose:
-
-```text
-Latest world-state summary.
-```
-
 Important fields:
 
 | Field | Meaning |
 |---|---|
-| `scan_complete` | Whether world state comes from completed baseline. |
-| `generated_from_partial_scan` | Whether output is partial. |
-| `files_done` | Files scanned when this was written. |
-| `total_files` | Files expected. |
-| `entries_seen` | Extracted entries/tokens. |
-| `object_registry_summary` | High-level object registry summary. |
-| `active_sessions_summary` | Current session context if included. |
-| `scan_generation_id` | Scan generation used. |
+| `scan_complete` | Completed baseline or not |
+| `generated_from_partial_scan` | Partial context |
+| `files_done` | Files scanned when written |
+| `total_files` | Total known files |
+| `entries_seen` | Extracted token count |
+| `object_registry_summary` | Registry summary |
+| `active_sessions_summary` | Active session context |
+| `scan_generation_id` | Source scan generation |
 
-Partial example:
+Partial:
 
 ```json
 {
   "scan_complete": false,
-  "generated_from_partial_scan": true,
-  "files_done": 141,
-  "total_files": 1767
+  "generated_from_partial_scan": true
 }
 ```
 
-Complete example:
+Complete:
 
 ```json
 {
@@ -292,281 +141,80 @@ Complete example:
 }
 ```
 
----
+## Daily rollup files
 
-## `runtime/object_registry_partial.json`
+### `players.tsv`
 
-Purpose:
+Use for quick daily account review.
 
-```text
-Object/class registry built so far during an incomplete scan.
-```
-
-Use it when:
+Key columns:
 
 ```text
-full scan is still running
-admin needs partial world context
-scan_complete.json does not exist yet
+account_id
+ban_id
+name
+identity_confidence
+join_count
+leave_count
+unclean_disconnect_count
+rapid_rejoin_count
+crash_overlap_count
+post_crash_reconnect_count
+warning_overlap_count
+status
+recommended_action
+admin_ini_line
 ```
 
----
+### `ban_recommendations.tsv`
 
-## `runtime/object_registry.json`
+Use for clean candidate ban lines.
 
-Purpose:
+Key columns:
 
 ```text
-Final object/class registry after completed baseline scan.
+account_id
+ban_id
+name
+status
+reason
+admin_ini_line
+gates_passed
+blocked_by
+evidence_files
 ```
 
-It may include tokens such as:
+### `final_forensic_log.txt`
+
+Use for plain-language review.
+
+It should include:
 
 ```text
-/Game/...
-/Script/...
-*_C
-Deployed_...
-Container_...
-PowerSocket...
-LootSpillBag...
+Server health
+Scan state
+Players to review
+Ban candidates
+Do-not-ban / insufficient evidence
+Crash/reconnect timeline
+Warning bursts
+Raid/cluster context
+World/baseline context
+Files used
+Limits
 ```
 
-The object registry is context. It is not a ban reason by itself.
-
----
-
-## `runtime/object_registry_counts.tsv`
-
-Purpose:
-
-```text
-Spreadsheet-friendly object/class token counts.
-```
-
-Use it to compare class counts across runs or identify new categories.
-
----
-
-## `runtime/baselines/file_manifest.tsv`
-
-Purpose:
-
-```text
-Tracks files included in the completed baseline and supports changed-file refresh.
-```
-
-Important columns:
-
-| Column | Meaning |
-|---|---|
-| `path` | Full or relative path. |
-| `relpath` | Path relative to Saved root. |
-| `size` | File size. |
-| `mtime_or_unknown` | Modified time if available. |
-| `fingerprint` | Quick fingerprint. |
-| `scan_priority` | Scan bucket. |
-| `file_type` | World save, PlayerData, log, backup, etc. |
-| `entries_cache_path` | Per-file cached entries. |
-| `included_in_registry` | Whether file contributed to registry. |
-| `entries_found` | Number of tokens found. |
-| `error` | Read/scan error if any. |
-
----
-
-## `runtime/baselines/last_completed_baseline.json`
-
-Purpose:
-
-```text
-Summary of the last completed full baseline.
-```
-
-Important fields:
-
-| Field | Meaning |
-|---|---|
-| `scan_generation_id` | Completed scan ID. |
-| `completed_ts` | Completion time. |
-| `saved_root` | Saved root used. |
-| `total_files` | Files discovered. |
-| `scanned_files` | Files scanned. |
-| `entries_seen` | Entries/tokens extracted. |
-| `object_registry_path` | Final registry path. |
-| `world_state_latest_path` | World state path. |
-| `file_manifest_path` | Manifest path. |
-
-Use this to verify later boots can load the previous baseline.
-
----
-
-## `runtime/warning_events.jsonl`
-
-Purpose:
-
-```text
-Structured warning/failure/anomaly events.
-```
-
-Common event classes:
-
-```text
-DeployableSaveWarning
-ActorChannelFailure
-UpdateActorToWorldSave
-ServerMove timestamp warnings
-high-risk class references
-map/path references
-```
-
-A warning event is context unless correlated with account/session evidence and thresholds.
-
----
-
-## `runtime/warnings/warning_<period>.txt`
-
-Purpose:
-
-```text
-Admin-readable warning report.
-```
-
-Should group information by:
-
-```text
-player
-session
-warning/failure window
-decision status
-world-state paths
-evidence explanation
-```
-
-Use this for manual review.
-
----
-
-## `runtime/raid_cases/index.jsonl` and `runtime/raid_cases/RAID-*.json`
-
-Purpose:
-
-```text
-Multi-account case grouping.
-```
-
-A raid case may link accounts by:
-
-```text
-same join wave
-same warning burst
-same failure window
-same post-crash reconnect window
-account rotation pattern
-```
-
-Important rule:
-
-```text
-A raid case does not automatically make every account guilty.
-```
-
-Each enforced account still needs account-specific evidence.
-
----
-
-## `runtime/enforced_bans.jsonl`
-
-Purpose:
-
-```text
-Audit trail for bans written by RandomDayGuard.
-```
-
-Common fields:
-
-| Field | Meaning |
-|---|---|
-| `ts` | Enforcement time. |
-| `account_id` | Account ID. |
-| `ban_id` | Clean Admin.ini ID. |
-| `reason` | Reason summary. |
-| `confidence` | Confidence or decision level. |
-| `admin_ini_written` | Whether write succeeded. |
-
----
-
-## `runtime/enforced.txt`
-
-Purpose:
-
-```text
-Human-readable enforcement summary.
-```
-
-Use with `enforced_bans.jsonl`.
-
----
-
-## `runtime/ban_queue.json`
-
-Purpose:
-
-```text
-Pending bans that should survive interruption.
-```
-
-Used only when enforcement is enabled.
-
----
-
-## `runtime/request_restart.flag` and `runtime/restart_reason.json`
-
-Purpose:
-
-```text
-AMP restart marker files.
-```
-
-RandomDayGuard should not kill the server process. It can write marker files for an external AMP/operator workflow.
-
----
-
-## Status Values
-
-Common status meanings:
+## Status values
 
 | Status | Meaning |
 |---|---|
-| `INFO` | Normal evidence, no review threshold. |
-| `WATCH` | Worth watching, below review threshold. |
-| `REVIEW` | Admin should inspect evidence. |
-| `BAN-ELIGIBLE` | Thresholds met, but enforcement gates may still block writing. |
-| `AUTO-BANNED` | Enforcement was enabled and a ban was written. |
+| `INFO` | Normal or low-context evidence |
+| `WATCH` | Worth watching |
+| `REVIEW` | Admin should inspect |
+| `BAN-ELIGIBLE` | Thresholds reached; write gates still apply |
+| `AUTO-BANNED` | Enforcement was enabled and write succeeded |
 
----
+## Related docs
 
-## Identity Confidence Values
-
-Common examples:
-
-| Confidence | Meaning |
-|---|---|
-| `direct_login_request` | Strong login identity source. |
-| `mapped_presence_after_login` | Join/leave resolved through recent login. |
-| `mapped_known_name` | Name mapped from known identity cache. |
-| `playerdata_only` | ID exists in PlayerData, display name may be unknown. |
-| `unmapped_presence_only` | Display name or presence without usable account ID. |
-
-Only clean mapped IDs should be eligible for Admin.ini writing by default.
-## Forensic Daily Rollup Schema
-
-Daily review packages are written under:
-
-```text
-runtime/forensic_days/YYYY-MM-DD/
-runtime/final_logs/YYYY-MM-DD/
-```
-
-Key files include `players.tsv`, `sessions.tsv`, `ban_recommendations.tsv`, `evidence_index.json`, and `final_forensic_log.txt`.
-
-The rollup is a rebuildable index. Source evidence remains authoritative.
+* [`FORENSIC_DAILY_ROLLUPS.md`](FORENSIC_DAILY_ROLLUPS.md)
+* [`PLAYER_REVIEW_WORKFLOW.md`](PLAYER_REVIEW_WORKFLOW.md)

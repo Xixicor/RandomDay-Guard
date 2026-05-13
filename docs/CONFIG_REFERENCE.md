@@ -1,180 +1,350 @@
-# Configuration Reference
+# Config reference
 
-This file explains the important `config.lua` areas in operator terms. Defaults are public-safe and review-first.
+This is the quick operator reference for the major config areas.
 
-## First settings most admins should check
+For presets, use [`CONFIG_PROFILES.md`](CONFIG_PROFILES.md).
 
-### `SavedRoot.txt`
+## Reading this page
 
-Use `SavedRoot.txt` when automatic path detection cannot find the server's `AbioticFactor/Saved` folder.
-
-Correct:
+Each config area answers:
 
 ```text
-/AMP/<server>/AbioticFactor/Saved
-Z:/AMP/<server>/AbioticFactor/Saved
+What it controls
+When it runs
+What to check
+What can go wrong
 ```
 
-Do not point it to the world folder. RandomDayGuard needs logs, `Admin.ini`, Worlds, PlayerData, and Backups.
+## Top-level safety
 
-### Enforcement defaults
+| Option | Default | Meaning |
+|---|---:|---|
+| `enabled` | `true` | Master switch for the guard |
+| `review_only_mode` | `true` | Record/recommend only |
+| `auto_ban` | `false` | Do not automatically ban by default |
+| `write_admin_ini` | `false` | Do not write Admin.ini by default |
 
-Keep these while testing:
+Keep these safe until the server owner has reviewed output.
 
-```lua
-review_only_mode = true
-auto_ban = false
-write_admin_ini = false
+## `saved`
+
+Controls how the guard finds the server `Saved/` folder and which file families it can scan.
+
+Use when:
+
+```text
+Saved root auto-detection fails.
+World folder changed.
+Hostinger/AMP path is unusual.
 ```
 
-This records evidence without editing `Admin.ini`.
+Check:
 
-### Trusted IDs
-
-Add server owners and trusted moderators before enabling enforcement:
-
-```lua
-whitelist = {
-    ["<trusted_account_id>"] = true,
-}
+```text
+runtime/saved_path_probe.json
+RandomDayGuard/SavedRoot.txt
 ```
 
-## Config areas
+Rule:
 
-| Area | Set this when... | Important options |
+```text
+SavedRoot.txt -> AbioticFactor/Saved
+not -> Worlds/<WorldName>
+```
+
+## `log_tail`
+
+Controls live log reading.
+
+Useful options:
+
+| Option | Safe value | Why |
 |---|---|---|
-| `saved` | Saved root detection or scan file families need adjustment. | `root_candidates`, `direct_known_files`, `scan_world_saves`, `scan_player_data`, `scan_backups` |
-| `log_tail` | You want live session/crash/reconnect tracking. | `enabled`, `start_at_end_on_first_run`, `tail_backup_logs`, `max_lines_per_poll`, `max_bytes_per_poll` |
-| `runtime` | You want to tune the poll loop. | `poll_interval_ms`, `max_poll_runtime_ms`, `max_events_per_poll` |
-| `scanning` | You want baseline scan, resume, and changed-file refresh. | `full_scan_on_start`, `resume_incomplete_scan`, `reuse_completed_baseline`, `incremental_refresh_after_baseline` |
-| `logging` | You want to reduce low-importance output volume. | `low_importance_mode`, `write_low_importance_raw_events`, `max_actor_touch_events_per_session` |
-| `retention` | You want to control disk growth and history length. | `detailed_retention_days`, `rotate_jsonl_when_bytes_exceed`, `keep_evidence_forever` |
-| `forensic_rollup` | You want one quick daily folder for forensic review and plain-language final logs. | `enabled`, `update_interval_seconds`, `daily_root`, `final_log_root`, `atomic_write` |
-| `crash_correlation` | You want repeated crash/reconnect review. | `active_before_failure_minutes`, `repeated_failure_review_count`, `repeated_failure_ban_count` |
-| `join_leave` | You want churn and join-wave tracking. | `join_wave_window_minutes`, `join_wave_min_accounts`, `churn_alone_never_bans` |
-| `warning_bursts` | You want warning-burst review context. | `actor_channel_failure`, `update_actor_to_worldsave`, `deployable_save_warning` |
-| `object_registry` | You want class/object/world-token context. | `enabled`, `scan_patterns`, `new_class_enforcement` |
-| `world_state` | You want boot/current/session world snapshots. | `write_boot_state`, `write_current_state`, `write_session_join_state` |
-| `enforcement` | You want Admin.ini writing. | `review_only_mode`, `auto_ban`, `write_admin_ini`, `require_clean_ban_id` |
-| `admin_ini` | You want safe Admin.ini backup/write behavior. | `backup_before_write`, `prevent_duplicates`, `preserve_external_changes`, `atomic_write` |
-| `amp` | You want AMP restart marker files after bans. | `request_restart_after_ban`, `restart_marker_file`, `max_restarts_per_hour` |
+| `enabled` | `true` | Needed for live defense |
+| `start_at_end_on_first_run` | `true` | Avoids old logs as live events |
+| `tail_backup_logs` | `false` | Backup logs are history, not live |
+| `max_lines_per_poll` | bounded | Keeps poll loop responsive |
 
-## Useful profiles
+Check:
 
-### Safe first install
+```text
+runtime/log_offsets.tsv
+runtime/evidence/session_events.jsonl
+runtime/current/poll_status.json
+```
+
+## `runtime`
+
+Controls polling and budgets.
+
+Main health rule:
+
+```text
+poll_id increases
+poll_in_flight returns false
+poll_scheduled is true
+```
+
+Check:
+
+```text
+runtime/current/poll_status.json
+```
+
+If `poll_id` stops, something is blocking the loop.
+
+## `scanning`
+
+Controls baseline scan, checkpointing, and changed-file refresh.
+
+Use when:
+
+```text
+building first world baseline
+resuming after crash
+refreshing changed files later
+```
+
+Check:
+
+```text
+runtime/scan_progress.json
+runtime/scan_checkpoint.json
+runtime/scan_complete.json
+runtime/baselines/file_manifest.tsv
+```
+
+Important settings:
 
 ```lua
-review_only_mode = true
-auto_ban = false
-write_admin_ini = false
-start_at_end_on_first_run = true
-tail_backup_logs = false
 resume_incomplete_scan = true
 reuse_completed_baseline = true
+incremental_refresh_after_baseline = true
+changed_file_detection = true
 ```
 
-Use this until you confirm session evidence, scan progress, and report output.
+## `forensic_rollup`
 
-### Live defense only
+Controls the quick daily upload package and final plain-language logs.
 
-```lua
-log_tail.enabled = true
-scanning.full_scan_on_start = false
-review_only_mode = true
-```
-
-This keeps session/crash/reconnect tracking active while delaying the heavier world scan.
-
-### Full baseline mode
-
-```lua
-scanning.full_scan_on_start = true
-scanning.resume_incomplete_scan = true
-scanning.reuse_completed_baseline = true
-scanning.incremental_refresh_after_baseline = true
-```
-
-This builds object/world context. First scan may take time; later refreshes should use baseline information.
-
-### Enforcement enabled
-
-```lua
-review_only_mode = false
-auto_ban = true
-write_admin_ini = true
-require_clean_ban_id = true
-preserve_existing_bans = true
-preserve_moderators = true
-```
-
-Use only after trusted IDs are configured and reports are verified.
-
-### Daily forensic rollup
-
-```lua
-forensic_rollup = {
-    enabled = true,
-    write_current_today = true,
-    write_daily_folder = true,
-        update_interval_seconds = 30,
-    daily_root = "runtime/forensic_days",
-    final_log_root = "runtime/final_logs",
-    atomic_write = true,
-}
-```
-
-This writes an updated daily review package under:
+Outputs:
 
 ```text
+runtime/current/forensic_today.json
+runtime/current/forensic_today.md
+runtime/current/forensic_today.txt
 runtime/forensic_days/YYYY-MM-DD/
 runtime/final_logs/YYYY-MM-DD/
-runtime/current/forensic_today.txt
 ```
 
-Use it when you want to upload one folder for a fast forensic check. Source evidence remains authoritative.
-
-## Gate behavior
-
-### Active log gate
-
-The startup scan should begin only after the active log is caught up.
+Use when:
 
 ```text
-active_log_unread_bytes == 0
-active_log_caught_up == true
-log_backlog_pending == false
+You want one daily folder that summarizes what happened.
+You want a plain-language TXT to upload for quick analysis.
 ```
 
-If unread bytes are zero and backlog is still true, that is a bug.
-
-### Auto-ban gate
-
-Admin.ini writing requires all of these:
+Check:
 
 ```text
+runtime/forensic_days/YYYY-MM-DD/forensic_day_summary.json
+runtime/forensic_days/YYYY-MM-DD/players.tsv
+runtime/forensic_days/YYYY-MM-DD/ban_recommendations.tsv
+runtime/final_logs/YYYY-MM-DD/final_forensic_log.txt
+```
+
+Rule:
+
+```text
+Daily summaries are rebuildable indexes.
+Source evidence remains authoritative.
+```
+
+## `logging`
+
+Controls event volume and low-importance aggregation.
+
+Use when:
+
+```text
+actor-touch events are noisy
+raw event files grow too quickly
+```
+
+Safe pattern:
+
+```lua
+low_importance_mode = "aggregate"
+write_low_importance_raw_events = false
+```
+
+## `retention`
+
+Controls how long files are kept and when JSONL logs rotate.
+
+Use when:
+
+```text
+disk usage grows too fast
+you need more audit history
+you need shorter live-history windows
+```
+
+Important options:
+
+```text
+detailed_retention_days
+rotate_jsonl_when_bytes_exceed
+max_raw_events_lines
+keep_enforced_forever
+keep_evidence_forever
+```
+
+## `warning_bursts`
+
+Controls warning-window detection.
+
+Examples:
+
+```text
+ActorChannelFailure
+DeployableSaveWarning
+UpdateActorToWorldSave
+ServerMove warnings
+```
+
+Rule:
+
+```text
+Warnings are context until correlated with mapped sessions and thresholds.
+```
+
+## `crash_correlation`
+
+Controls repeated crash/reconnect review.
+
+Safe defaults:
+
+```lua
+single_crash_never_bans = true
+require_same_account = true
+```
+
+Useful counters:
+
+```text
+server_crash_overlap_count
+post_crash_reconnect_count
+unclean_disconnect_count
+```
+
+## `join_leave`
+
+Controls churn and join-wave tracking.
+
+Safe default:
+
+```lua
+churn_alone_never_bans = true
+```
+
+Use for:
+
+```text
+rapid reconnect loops
+join waves
+short-session patterns
+```
+
+## `raid_detection`
+
+Groups accounts active in related windows.
+
+Rule:
+
+```text
+A raid case groups accounts for review.
+It does not make every account guilty.
+```
+
+Each enforced account still needs account-specific evidence.
+
+## `object_registry`
+
+Controls object/class token extraction from readable Saved evidence.
+
+Outputs:
+
+```text
+runtime/object_registry_partial.json
+runtime/object_registry.json
+runtime/object_registry_counts.tsv
+```
+
+Rule:
+
+```text
+Object/class context is not a ban reason by itself.
+```
+
+## `world_state`
+
+Controls boot/current/session world-state snapshots.
+
+Outputs:
+
+```text
+runtime/world_state/current/world_state_latest.json
+runtime/world_state/sessions/<date>/<session_id>_<account_id>/
+```
+
+Use for session review and world context.
+
+## `enforcement`
+
+Controls recommendations and actual Admin.ini writes.
+
+Required gates for writing:
+
+```text
+review_only_mode == false
 auto_ban == true
 write_admin_ini == true
-review_only_mode == false
 ban_id is clean numeric
-identity is mapped
+account identity is mapped
+not trusted
+not moderator
 threshold is met
-account is not trusted/moderator
-account-specific evidence exists
 ```
 
-Default mode does not write bans.
+## `admin_ini`
 
-## Output checks
+Controls safe file writes.
 
-| File | Meaning |
-|---|---|
-| `runtime/current/poll_status.json` | Watchdog health and scan gate state. |
-| `runtime/current/live_defense_state.json` | Session/crash/churn review state. |
-| `runtime/scan_progress.json` | Current scan phase and file progress. |
-| `runtime/scan_checkpoint.json` | Resume point for interrupted scans. |
-| `runtime/world_state/current/world_state_latest.json` | Partial or completed world-state summary. |
-| `runtime/baselines/file_manifest.tsv` | Changed-file refresh manifest after baseline. |
+Rules:
 
-## Evidence standard
+```text
+Back up before writing.
+Preserve existing bans.
+Preserve moderators.
+Write clean BannedPlayer=<ID> only.
+```
 
-RandomDayGuard records what the server exposes through logs and Saved files. Indirect signals are review context. Direct claims require direct readable evidence.
+## `amp`
+
+Writes restart marker files if configured.
+
+Outputs:
+
+```text
+runtime/request_restart.flag
+runtime/restart_reason.json
+```
+
+The guard should not kill the server process directly.
+
+## Related docs
+
+* [`CONFIG_PROFILES.md`](CONFIG_PROFILES.md)
+* [`OUTPUT_SCHEMA_REFERENCE.md`](OUTPUT_SCHEMA_REFERENCE.md)
+* [`ADMIN_INI_ENFORCEMENT.md`](ADMIN_INI_ENFORCEMENT.md)

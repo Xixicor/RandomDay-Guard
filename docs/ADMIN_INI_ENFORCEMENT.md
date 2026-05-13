@@ -1,105 +1,21 @@
-# Admin.ini Enforcement
+# Admin.ini enforcement
 
-This guide explains how RandomDayGuard should write bans safely.
+Use this page before allowing RandomDayGuard to write bans.
 
-Admin.ini is an enforcement target, not an evidence report.
+## Core rule
 
----
-
-## Core Rule
-
-Admin.ini ban lines must be clean:
+`Admin.ini` must receive clean ban lines only:
 
 ```ini
 BannedPlayer=<ID>
 ```
 
-No comments.  
 No names.  
+No comments.  
 No reasons.  
 No suffixes.
 
-Reasons belong in:
-
-```text
-runtime/enforced.txt
-runtime/enforced_bans.jsonl
-runtime/evidence/
-runtime/warnings/
-```
-
----
-
-## Display Name Is Not A Ban ID
-
-Do not write:
-
-```ini
-BannedPlayer=ExamplePlayer
-```
-
-A display name from Discord, Hostinger activity, or chat presence is not enough.
-
-Strongest source:
-
-```text
-Server log Login request line containing:
-Name=
-ConnectID=
-UniqueId=
-```
-
----
-
-## Clean ID Extraction
-
-If the server log shows:
-
-```text
-ConnectID=2535422284688820_+_|0002d07b...
-```
-
-Use only:
-
-```ini
-BannedPlayer=2535422284688820
-```
-
-Do not paste:
-
-```text
-_+_|0002d07b...
-```
-
-into Admin.ini.
-
----
-
-## PlayerData Verification
-
-A PlayerData file can confirm an ID exists:
-
-```text
-Player_2535422284688820.sav
-```
-
-But PlayerData alone often does not prove the display name.
-
-Use PlayerData as:
-
-```text
-ID existence support
-save-state context
-restricted-area or world-context evidence if readable
-```
-
-Do not claim a display name from PlayerData unless another source maps it.
-
----
-
-## Safe Defaults
-
-Public defaults should be:
+## Safe defaults
 
 ```lua
 review_only_mode = true
@@ -110,19 +26,40 @@ preserve_existing_bans = true
 preserve_moderators = true
 ```
 
-This means:
+## Ban ID source
+
+Best source:
 
 ```text
-Evidence is collected.
-Recommendations can be produced.
-Admin.ini is not modified until explicitly enabled.
+Login request
+Name=<player>
+ConnectID=<raw_id>
+UniqueId=<platform_id>
 ```
 
----
+If the raw connection ID contains a suffix, use only the clean leading numeric ID.
 
-## Enforcement Gates
+Correct:
 
-RandomDayGuard should write Admin.ini only when all required gates pass:
+```ini
+BannedPlayer=2535422284688820
+```
+
+Wrong:
+
+```ini
+BannedPlayer=ExamplePlayer
+```
+
+Also wrong:
+
+```text
+BannedPlayer=<ID>_+_|<suffix>
+```
+
+## Enforcement gates
+
+All gates must pass:
 
 ```text
 review_only_mode == false
@@ -130,119 +67,35 @@ auto_ban == true
 write_admin_ini == true
 ban_id is clean numeric
 identity is mapped
+not trusted
+not moderator
 threshold is met
 account-specific evidence exists
-ID is not trusted
-ID is not moderator
-existing bans are preserved
-moderators are preserved
 ```
 
 If any gate fails, write evidence only.
 
----
-
-## Admin.ini Structure
-
-Recommended structure:
-
-```ini
-[Moderators]
-Moderator=<trusted_id>
-
-[BannedPlayers]
-BannedPlayer=<ban_id>
-```
-
-Rules:
-
-```text
-Keep one [Moderators] section.
-Keep one [BannedPlayers] section.
-Deduplicate IDs.
-Do not remove old bans unless intentionally reviewing them.
-Never add trusted/moderator IDs to bans.
-```
-
----
-
-## Backup Before Write
-
-Before modifying Admin.ini, RandomDayGuard should create a backup.
-
-Expected backup area:
-
-```text
-runtime/backups/
-```
-
-Expected evidence:
-
-```text
-runtime/enforced_bans.jsonl
-runtime/enforced.txt
-runtime/evidence/
-```
-
-If write fails, expected failure evidence may include:
-
-```text
-runtime/evidence/enforcement_failed_<timestamp>.json
-```
-
----
-
-## Manual Rollback
-
-If a bad ban is written:
-
-1. Stop the server.
-2. Open the correct server Admin.ini.
-3. Restore from the latest backup in `runtime/backups/`.
-4. Remove the incorrect `BannedPlayer=<ID>` line if needed.
-5. Start the server.
-6. Reopen Admin.ini after restart to confirm it persisted.
-7. Preserve `enforced_bans.jsonl` for audit.
-
----
-
-## Enforcement Testing Before Live Use
-
-Use review-only first:
-
-```lua
-review_only_mode = true
-auto_ban = false
-write_admin_ini = false
-```
-
-Then review:
+## Files to check
 
 ```text
 runtime/account_evidence.json
-runtime/warnings/
-runtime/evidence/
+runtime/forensic_days/YYYY-MM-DD/ban_recommendations.tsv
+runtime/final_logs/YYYY-MM-DD/final_forensic_log.txt
 runtime/enforced_bans.jsonl
+runtime/enforced.txt
+runtime/ban_queue.json
 ```
 
-If recommendations are correct and trusted IDs are configured, then decide whether to enable writing.
+## Rollback
 
----
+1. Stop the server.
+2. Restore the latest Admin.ini backup from `runtime/backups/`.
+3. Remove the incorrect `BannedPlayer=<ID>` line if needed.
+4. Start the server.
+5. Reopen Admin.ini and confirm the line persisted or was removed.
+6. Preserve `enforced_bans.jsonl` for audit.
 
-## What Not To Ban From Alone
+## Related docs
 
-These are not enough by themselves:
-
-```text
-one crash
-one warning burst
-lag
-high ping
-object count alone
-many deployed objects in normal context
-display name only
-PlayerData ID with no supporting reason
-raid case membership without account-specific evidence
-```
-
-Ban eligibility requires repeated or account-specific configured evidence.
+* [`BAN_ID_MAPPING.md`](BAN_ID_MAPPING.md)
+* [`PLAYER_REVIEW_WORKFLOW.md`](PLAYER_REVIEW_WORKFLOW.md)

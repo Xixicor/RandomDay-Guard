@@ -1,12 +1,16 @@
-# Validation and Release
+# Validation and release
 
-This guide explains how to validate RandomDayGuard and build the release ZIP.
+Use this page before committing or publishing a release ZIP.
 
----
+## Version target
 
-## Version Consistency
+Expected version:
 
-All of these must agree:
+```text
+v0.4.11-alpha
+```
+
+Check:
 
 ```text
 VERSION
@@ -18,17 +22,7 @@ RandomDayGuard/scripts/main.lua
 releases/v0.4.11-alpha/RELEASE_NOTES.md
 ```
 
-Expected:
-
-```text
-v0.4.11-alpha
-```
-
----
-
-## Lua Parse Checks
-
-Run:
+## Lua parse check
 
 ```powershell
 C:\Users\User 774XxoE7\AppData\Local\Programs\Lua\bin\luac.exe -p RandomDayGuard\Scripts\main.lua
@@ -37,143 +31,81 @@ C:\Users\User 774XxoE7\AppData\Local\Programs\Lua\bin\luac.exe -p RandomDayGuard
 
 Both must pass.
 
----
-
-## Repository Validation
-
-Run:
+## Validate repo
 
 ```powershell
 python tools\validate_repo.py
 ```
 
-This should fail if:
-
-```text
-versions disagree
-README sections are missing
-unsafe Admin.ini examples exist
-private names/IDs are present
-runtime artifacts are packaged
-Scripts/main.lua and scripts/main.lua differ
-unsupported claims appear in docs
-```
-
----
-
-## Build Release ZIP
-
-Run:
+## Build release
 
 ```powershell
 python tools\build_release_zip.py
 ```
 
-Expected output:
+Expected:
 
 ```text
 releases/v0.4.11-alpha/RandomDayGuard_v0.4.11-alpha.zip
 releases/v0.4.11-alpha/CHECKSUMS.sha256
 ```
 
----
-
-## Validate Again
-
-Run:
+## Validate again
 
 ```powershell
 python tools\validate_repo.py
 ```
 
-Validation after build is required because release files and checksums may change.
-
----
-
 ## Inspect ZIP
 
-Check that the ZIP contains:
+Required:
 
 ```text
 RandomDayGuard/enabled.txt
 RandomDayGuard/config.lua
 RandomDayGuard/SavedRoot.txt
-RandomDayGuard/BUILD_MARKER.txt
-RandomDayGuard/MANIFEST.json
-RandomDayGuard/README.txt
 RandomDayGuard/Scripts/main.lua
 RandomDayGuard/scripts/main.lua
-RandomDayGuard/data/detection_events.json
-RandomDayGuard/data/warning_types.json
-RandomDayGuard/data/object_categories.json
+RandomDayGuard/data/*.json
 RandomDayGuard/runtime/**/.gitkeep
 ```
 
-Check that the ZIP does not contain:
+Must not include:
 
 ```text
-runtime/generated json/jsonl/tsv/txt files
-server logs
+generated runtime files
+forensic_days/YYYY-MM-DD/*
+final_logs/YYYY-MM-DD/*
 Admin.ini from a real server
+server logs
 PlayerData
 world saves
 private evidence
-old release folders
 ```
 
----
-
-## Git Checks
-
-Before commit:
-
-```powershell
-git status
-git diff --stat
-```
-
-Commit message example:
-
-```text
-Update operator documentation and validation
-```
-
----
-
-## GitHub Actions Failure Checklist
-
-If GitHub validation fails:
-
-1. Read the exact validator message.
-2. Fix the named README/doc/code issue.
-3. Run local validation.
-4. Rebuild if release assets changed.
-5. Validate again.
-6. Push.
-
-Common failures:
+## Common validation failures
 
 | Failure | Fix |
 |---|---|
-| Missing README section | Add exact required heading. |
-| Unsafe BannedPlayer example | Use only `BannedPlayer=<ID>`, no suffix/name. |
-| Version mismatch | Update all version markers. |
-| Runtime artifact in ZIP | Fix build exclusions. |
-| Private name hit | Replace with placeholders. |
-| Script path missing | Ensure both Scripts and scripts exist. |
+| Version mismatch | Update all markers |
+| Scripts mismatch | Copy canonical script to both paths |
+| Unsafe ban example | Use only `BannedPlayer=<ID>` |
+| Runtime artifact packaged | Fix build exclusions |
+| Docs claim unsupported feature | Adjust docs or implement behavior |
 
----
+## Final release checklist
 
-## Release Checklist
-
-- [ ] `luac -p` passes for both script paths.
-- [ ] `python tools/validate_repo.py` passes.
-- [ ] `python tools/build_release_zip.py` passes.
-- [ ] Post-build validation passes.
-- [ ] ZIP has both Lua entrypoints.
-- [ ] ZIP has runtime `.gitkeep` placeholders only.
-- [ ] ZIP has no generated runtime files.
-- [ ] Checksum updated.
-- [ ] README and docs match current behavior.
-- [ ] No private data is included.
+- [ ] Lua parse passes for both script paths.
+- [ ] Validator passes before build.
+- [ ] Build script succeeds.
+- [ ] Validator passes after build.
+- [ ] ZIP contains both script paths.
+- [ ] ZIP excludes generated runtime data.
+- [ ] Checksum is updated.
+- [ ] No private IDs or names are present.
 - [ ] GitHub Actions passes.
+
+## Related docs
+
+* [`DOCS_STYLE_GUIDE.md`](DOCS_STYLE_GUIDE.md)
+* [`TROUBLESHOOTING.md`](TROUBLESHOOTING.md)

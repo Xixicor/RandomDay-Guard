@@ -1,63 +1,33 @@
 # Troubleshooting
 
-Use this guide when RandomDayGuard does not load, does not write files, does not scan, or does not map players.
+Use this page when the guard does not load, does not scan, or does not write expected files.
 
----
-
-## Mod Does Not Load
-
-Symptoms:
-
-```text
-No runtime folder.
-No runtime_version.json.
-No startup_status.json.
-```
+## No runtime files
 
 Check:
 
 ```text
-mods.txt contains: RandomDayGuard : 1
+mods.txt contains RandomDayGuard : 1
 RandomDayGuard/enabled.txt exists
 RandomDayGuard/Scripts/main.lua exists
 RandomDayGuard/scripts/main.lua exists
-config.lua exists
 ```
 
-Verify installed path:
+Correct install path:
 
 ```text
 AbioticFactor/Binaries/Win64/ue4ss/Mods/RandomDayGuard/
 ```
 
-Do not install as:
+Wrong nested path:
 
 ```text
 Mods/RandomDayGuard/RandomDayGuard/Scripts/main.lua
 ```
 
----
+## Wrong version loaded
 
-## Wrong Version Loaded
-
-Symptoms:
-
-```text
-runtime_version.json shows old version.
-README says new version but runtime does not.
-```
-
-Fix:
-
-```text
-Stop server.
-Delete old RandomDayGuard folder.
-Extract ZIP again.
-Verify Scripts/main.lua and scripts/main.lua.
-Start server.
-```
-
-Terminal checks:
+Check:
 
 ```sh
 grep -n "local VERSION" RandomDayGuard/Scripts/main.lua
@@ -65,157 +35,74 @@ grep -n "local VERSION" RandomDayGuard/scripts/main.lua
 cat RandomDayGuard/BUILD_MARKER.txt
 ```
 
----
-
-## Saved Folder Not Found
-
-Symptoms:
-
-```text
-saved_path_probe.json shows failed candidates.
-No Admin.ini found.
-No Logs found.
-No World saves found.
-```
-
 Fix:
 
 ```text
-Edit SavedRoot.txt.
-Point it to AbioticFactor/Saved.
-Do not point it to Worlds/<WorldName>.
+Stop server.
+Delete old RandomDayGuard folder.
+Extract release again.
+Start server.
 ```
 
-Correct:
+## Saved folder not found
+
+Open:
+
+```text
+runtime/saved_path_probe.json
+```
+
+Fix `SavedRoot.txt`:
 
 ```text
 /AMP/<server>/AbioticFactor/Saved
 ```
 
-Wrong:
+Do not point to `Worlds/<WorldName>`.
 
-```text
-/AMP/<server>/AbioticFactor/Saved/SaveGames/Server/Worlds/<WorldName>
-```
+## Poll loop stuck
 
----
-
-## Poll Loop Stuck
-
-Symptoms:
-
-```text
-poll_id stops increasing
-poll_in_flight stays true
-scheduler_status not running
-poll_error.txt exists
-```
-
-Check:
+Open:
 
 ```text
 runtime/current/poll_status.json
 runtime/poll_error.txt
-runtime/logs/current.jsonl
 ```
 
-Likely causes:
+Problem signs:
 
 ```text
-blocking scan work in poll path
-large file read in live path
-Lua error in event processing
-bad Saved path causing repeated failures
+poll_id does not increase
+poll_in_flight stays true
+scheduler_status is not running
 ```
 
----
+## Scan does not start
 
-## Scan Does Not Start
-
-Symptoms:
-
-```text
-scan_progress.json missing
-scan_job_active=false
-scan_phase missing
-```
-
-Check:
+Open:
 
 ```text
 runtime/current/poll_status.json
+```
+
+Check:
+
+```text
 active_log_caught_up
 active_log_unread_bytes
 log_backlog_pending
-startup_scan_gate
 ```
 
-Expected gate:
+Startup scan should wait until active log backlog is clear.
 
-```text
-active_log_caught_up=true
-active_log_unread_bytes=0
-log_backlog_pending=false
-poll_id > 1
-```
+## Scan restarts after every crash
 
-If active log is duplicated, check:
-
-```text
-active_log_duplicate_count
-active_log_unique_count
-active_log_files
-```
-
----
-
-## Scan Starts But Never Completes
-
-Symptoms:
-
-```text
-scan_progress.json exists
-phase stays the same for a long time
-files_done does not increase
-```
-
-Check:
-
-```text
-current_file
-budget_exhausted
-errors
-scan_checkpoint.json
-```
-
-Interpretation:
-
-```text
-budget_exhausted=true can be normal if progress continues.
-files_done stuck means scan is blocked or erroring.
-```
-
-If the server restarts, check that `scan_checkpoint.json` resumes near the prior file index.
-
----
-
-## Scan Restarts From Zero After Crash
-
-Symptoms:
-
-```text
-files_done was high before crash
-after restart files_done returns to 0
-```
-
-Check:
+Open:
 
 ```text
 runtime/scan_checkpoint.json
-runtime/scan_manifest.tsv
-runtime/baselines/in_progress_scan.json
-saved_root identity
-world folder identity
+runtime/scan_progress.json
+runtime/baselines/file_manifest.tsv
 ```
 
 Likely causes:
@@ -228,25 +115,12 @@ world folder changed
 checkpoint marked stale
 ```
 
-If the world folder changed, starting a new baseline may be correct.
+## Player is unmapped
 
----
-
-## Player Is Unmapped
-
-Symptoms:
-
-```text
-account_id = unmapped_name:<name>
-ban_id missing
-identity_confidence = unmapped_presence_only
-```
-
-Check:
+Open:
 
 ```text
 runtime/evidence/session_events.jsonl
-runtime/logs/current.jsonl
 Saved/Logs/AbioticFactor.log
 ```
 
@@ -254,51 +128,14 @@ Look for:
 
 ```text
 Login request
-Name=<player>
+Name=
 ConnectID=
 UniqueId=
 ```
 
-If the name appears only in chat/presence lines, there may be no clean ban ID yet.
+If no ConnectID exists, do not treat the display name as enforceable.
 
----
-
-## Wrong Name / Same-Poll Mapping Issue
-
-Symptoms:
-
-```text
-Login request and join happened close together.
-Session still became unmapped.
-```
-
-Expected behavior:
-
-```text
-Join events should be re-resolved before evidence append/apply.
-```
-
-Check:
-
-```text
-PLAYER_LOGIN_IDENTITY
-PLAYER_JOIN_STATE
-SESSION_JOIN
-identity_confidence
-```
-
-If this fails, preserve the runtime evidence and report it as an identity mapping bug.
-
----
-
-## Admin.ini Did Not Change
-
-Symptoms:
-
-```text
-Expected ban not written.
-Admin.ini unchanged.
-```
+## Admin.ini did not change
 
 Check config:
 
@@ -306,7 +143,6 @@ Check config:
 review_only_mode = false
 auto_ban = true
 write_admin_ini = true
-require_clean_ban_id = true
 ```
 
 Check gates:
@@ -319,98 +155,32 @@ threshold met
 account-specific evidence exists
 ```
 
-Check files:
-
-```text
-runtime/ban_queue.json
-runtime/enforced_bans.jsonl
-runtime/enforced.txt
-runtime/evidence/enforcement_failed_<timestamp>.json
-runtime/backups/
-```
-
----
-
-## Admin.ini Change Did Not Persist
-
-Symptoms:
-
-```text
-Ban appears, then disappears after restart.
-```
-
-Likely causes:
-
-```text
-wrong Admin.ini path
-server rewrote file
-file edited while server running
-missing [BannedPlayers] section
-permission issue
-```
-
-Fix:
-
-```text
-Stop server.
-Back up Admin.ini.
-Edit correct Saved/SaveGames/Server/Admin.ini.
-Start server.
-Reopen file after restart to verify persistence.
-```
-
----
-
-## GitHub Validation Failed
-
-Common validator failures:
-
-| Failure | Meaning |
-|---|---|
-| README missing section | README headings do not match validator expectations. |
-| Unsafe BannedPlayer example | Docs show suffix or name after `BannedPlayer=`. |
-| Runtime artifact in ZIP | Release ZIP includes generated files instead of `.gitkeep`. |
-| Scripts mismatch | `Scripts/main.lua` and `scripts/main.lua` differ. |
-| Version mismatch | VERSION/config/build marker/release notes disagree. |
-| Private name hit | Docs/config contain private server/player/world strings. |
-
-Fix the specific file and rerun:
-
-```sh
-python tools/validate_repo.py
-python tools/build_release_zip.py
-python tools/validate_repo.py
-```
-
----
-
-## What To Collect Before Asking For Help
-
-Collect sanitized copies of:
-
-```text
-runtime/runtime_version.json
-runtime/startup_status.json
-runtime/current/poll_status.json
-runtime/saved_path_probe.json
-runtime/scan_progress.json
-runtime/scan_checkpoint.json
-runtime/account_evidence.json
-runtime/evidence/session_events.jsonl
-runtime/poll_error.txt if present
-runtime/startup_error.txt if present
-runtime/scan_error.txt if present
-```
-
-Do not post raw private player IDs, Admin.ini, PlayerData, world saves, or server logs publicly.
-## Forensic Rollup Files Missing
+## Daily rollup missing
 
 Check:
 
 ```text
-runtime/current/forensic_today.txt
+forensic_rollup.enabled = true
+runtime/current/forensic_today.json
 runtime/forensic_days/YYYY-MM-DD/
-runtime/final_logs/YYYY-MM-DD/final_forensic_log.txt
+runtime/final_logs/YYYY-MM-DD/
 ```
 
-Missing source files should appear as missing/not available in the summary instead of crashing the runtime.
+If missing, check startup/poll errors and whether the feature is enabled.
+
+## GitHub validation failed
+
+Common reasons:
+
+| Error | Fix |
+|---|---|
+| README section missing | Restore exact required heading |
+| Unsafe `BannedPlayer=` example | Use only `BannedPlayer=<ID>` |
+| Runtime artifact in ZIP | Build script must exclude generated files |
+| Script paths differ | Make `scripts/main.lua` match `Scripts/main.lua` |
+| Version mismatch | Set all markers to `v0.4.11-alpha` |
+
+## Related docs
+
+* [`VALIDATION_AND_RELEASE.md`](VALIDATION_AND_RELEASE.md)
+* [`START_HERE.md`](START_HERE.md)

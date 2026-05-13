@@ -1,22 +1,23 @@
-# Player Review Workflow
+# Player review workflow
 
-This guide explains how to review one player or account using RandomDayGuard output.
+Use this page when reviewing one player or account.
 
-Goal:
+## Quick path
 
 ```text
-Start from a name/account.
-Trace identity.
-Trace sessions.
-Check crash/reconnect behavior.
-Check warnings.
-Check world context.
-Decide INFO, WATCH, REVIEW, BAN-ELIGIBLE, or no action.
+1. Open account_evidence.json
+2. Check identity confidence and ban_id
+3. Open session_events.jsonl
+4. Check joins/leaves/unclean closes
+5. Open lifecycle events
+6. Check crash/reconnect overlap
+7. Open warning events
+8. Check warning overlap
+9. Open world/session context if needed
+10. Decide INFO / WATCH / REVIEW / BAN-ELIGIBLE
 ```
 
----
-
-## 1. Start With Account Evidence
+## 1. Start with the account
 
 Open:
 
@@ -25,15 +26,12 @@ runtime/account_evidence.json
 runtime/account_evidence.tsv
 ```
 
-Look for:
+Check:
 
 ```text
 account_id
 ban_id
 name
-log_name
-connect_id_raw
-unique_id
 identity_source
 identity_confidence
 playerdata_verified
@@ -43,36 +41,15 @@ first_seen
 last_seen
 ```
 
-Questions:
+Do not enforce from a display name only.
 
-```text
-Is the account mapped?
-Is ban_id clean numeric?
-Was PlayerData found?
-Is identity_confidence high enough?
-Is status INFO, WATCH, REVIEW, BAN-ELIGIBLE, or AUTO-BANNED?
-```
-
-If the account is only a display name with no `ConnectID`, do not treat it as enforceable.
-
----
-
-## 2. Open the Session Timeline
+## 2. Check the session timeline
 
 Open:
 
 ```text
 runtime/evidence/session_events.jsonl
 runtime/session_events.tsv
-```
-
-Filter by:
-
-```text
-account_id
-ban_id
-name
-session_id
 ```
 
 Look for:
@@ -81,296 +58,75 @@ Look for:
 SESSION_JOIN
 SESSION_LEAVE
 SESSION_LIFECYCLE_CLOSE
-PLAYER_LOGIN_IDENTITY
-PLAYER_JOIN_STATE
-PLAYER_LEAVE_STATE
-```
-
-Questions:
-
-```text
-How many joins?
-How many leaves?
-Did the player leave cleanly?
-Did sessions close because of crash/restart?
-Did the account rapidly reconnect?
-```
-
----
-
-## 3. Check Crash / Restart Context
-
-Open:
-
-```text
-runtime/server_lifecycle_events.jsonl
-runtime/evidence/lifecycle_events.jsonl
-runtime/server_epochs.jsonl
-runtime/current_server_epoch.json
-```
-
-Look for:
-
-```text
-suspected_crash
-restart_or_boot
-graceful_shutdown
-unknown_gap
+clean_leave
+leave_reason
+session_id
 epoch_id
 ```
 
 Questions:
 
 ```text
-Was the account active before a crash?
-Did the account return quickly after restart?
-Does this repeat across epochs?
-Were other accounts active too?
+Did the player leave cleanly?
+Did sessions close during crash/restart?
+Did the account reconnect quickly?
 ```
 
-One crash overlap is context. Repeated same-account overlap is stronger.
-
----
-
-## 4. Check Warning Events
+## 3. Check crash context
 
 Open:
 
 ```text
-runtime/warning_events.jsonl
-runtime/evidence/medium_events.jsonl
-runtime/evidence/high_events.jsonl
-runtime/evidence/critical_events.jsonl
-runtime/warnings/warning_<period>.txt
-```
-
-Look for:
-
-```text
-ActorChannelFailure
-DeployableSaveWarning
-UpdateActorToWorldSave
-ServerMove timestamp warnings
-high-risk class references
-map/path references
+runtime/server_lifecycle_events.jsonl
+runtime/server_epochs.jsonl
+runtime/evidence/crash_reconnect_events.jsonl
 ```
 
 Questions:
 
 ```text
-Did warnings happen during this account's session?
-Are warnings isolated or repeated?
-Are warnings tied to one account or many accounts?
-Did warnings overlap crash/reconnect windows?
+Was the account active before a crash?
+Did it return after restart?
+Does that repeat?
 ```
 
-Warning bursts are context until correlated.
+One crash is context. Repeated same-account patterns matter more.
 
----
+## 4. Check warnings
 
-## 5. Check World / Baseline Context
+Open:
+
+```text
+runtime/warning_events.jsonl
+runtime/evidence/high_events.jsonl
+runtime/evidence/critical_events.jsonl
+runtime/warnings/
+```
+
+Questions:
+
+```text
+Did warnings happen during the session?
+Were warnings repeated?
+Were they tied to the same mapped account?
+```
+
+## 5. Check world context
 
 Open:
 
 ```text
 runtime/world_state/current/world_state_latest.json
-runtime/object_registry_partial.json
+runtime/world_state/sessions/<date>/<session_id>_<account_id>/
 runtime/object_registry.json
 runtime/object_registry_counts.tsv
-runtime/baselines/file_manifest.tsv
 ```
 
-If reviewing one session, open:
+Use this for context, not unsupported accusations.
 
-```text
-runtime/world_state/sessions/<date>/<session_id>_<account_id>/
-```
-
-Look for:
-
-```text
-world_state_join.json
-world_state_latest.json
-world_state_leave.json
-world_state_diff.json
-```
-
-Questions:
-
-```text
-Was the world baseline partial or complete?
-What object/class context existed?
-Did PlayerData or world evidence expose map/path context?
-Did class/object deltas overlap the session?
-```
-
-Remember:
-
-```text
-World context supports review.
-It is not automatically direct proof of player action.
-```
-
----
-
-## 6. Check Raid / Multi-Account Context
+## 6. Check daily rollup
 
 Open:
-
-```text
-runtime/raid_cases/index.jsonl
-runtime/raid_cases/RAID-*.json
-```
-
-Questions:
-
-```text
-Was this account part of a join wave?
-Was it active during the same warning/failure window as other accounts?
-Is it a central account or only nearby in time?
-Does it have account-specific evidence?
-```
-
-Do not ban all accounts in a raid case by default.
-
----
-
-## 7. Check Enforcement Gates
-
-Before any Admin.ini write, confirm:
-
-```text
-auto_ban == true
-write_admin_ini == true
-review_only_mode == false
-ban_id is clean numeric
-account identity is mapped
-trusted/moderator IDs are preserved
-account-specific threshold is met
-```
-
-If any gate fails, record recommendation only.
-
----
-
-## 8. Decision Template
-
-Use this format for review notes.
-
-```text
-Account:
-  <account_id>
-
-Ban ID:
-  <ban_id>
-
-Identity source:
-  <Login request / PlayerData / mapped presence / unknown>
-
-Identity confidence:
-  <confidence>
-
-Sessions reviewed:
-  <session IDs>
-
-Crash/restart overlap:
-  <none / one-time / repeated>
-
-Reconnect pattern:
-  <none / rapid / post-crash / repeated>
-
-Warning context:
-  <none / isolated / repeated / session-correlated>
-
-World context:
-  <none / partial baseline / completed baseline / PlayerData / object registry>
-
-Raid context:
-  <none / case ID / central account / supporting account>
-
-Decision:
-  INFO / WATCH / REVIEW / BAN-ELIGIBLE / AUTO-BANNED
-
-Reason:
-  <short evidence-based reason>
-
-Limits:
-  <what this does not prove>
-```
-
----
-
-## 9. Common Review Outcomes
-
-### INFO
-
-Use when:
-
-```text
-normal join/leave
-clean session
-no repeated warning/crash context
-```
-
-### WATCH
-
-Use when:
-
-```text
-minor reconnects
-unclean disconnect once
-weak warning context
-identity still being built
-```
-
-### REVIEW
-
-Use when:
-
-```text
-repeated reconnects
-repeated crash overlap
-warning bursts overlap mapped sessions
-world context needs manual inspection
-```
-
-### BAN-ELIGIBLE
-
-Use when:
-
-```text
-account-specific thresholds are met
-ban_id is clean
-trusted/moderator checks pass
-evidence is repeated and correlated
-```
-
-### AUTO-BANNED
-
-Only when enforcement is explicitly enabled and Admin.ini write succeeded.
-
----
-
-## 10. Files To Attach To A Review Bundle
-
-Use sanitized copies.
-
-```text
-runtime/account_evidence.json
-runtime/account_evidence.tsv
-runtime/evidence/session_events.jsonl
-runtime/session_events.tsv
-runtime/server_lifecycle_events.jsonl
-runtime/warning_events.jsonl
-runtime/warnings/warning_<period>.txt
-runtime/world_state/sessions/<date>/<session_id>_<account_id>/
-runtime/enforced_bans.jsonl if enforcement happened
-```
-
-Do not publish raw PlayerData, Admin.ini, server logs, or private account IDs without sanitization.
-## Daily Package Review
-
-For quick review, start with:
 
 ```text
 runtime/forensic_days/YYYY-MM-DD/players.tsv
@@ -378,4 +134,38 @@ runtime/forensic_days/YYYY-MM-DD/ban_recommendations.tsv
 runtime/final_logs/YYYY-MM-DD/final_forensic_log.txt
 ```
 
-Use `evidence_index.json` to return to authoritative source files before taking action.
+These files give the quick daily view.
+
+## 7. Make a decision
+
+| Decision | Use when |
+|---|---|
+| INFO | Normal session, no meaningful pattern |
+| WATCH | Weak signal, one-off issue, or incomplete mapping |
+| REVIEW | Repeated suspicious pattern or correlated context |
+| BAN-ELIGIBLE | Thresholds and account-specific evidence are met |
+| AUTO-BANNED | Enforcement enabled and Admin.ini write succeeded |
+
+## Review note template
+
+```text
+Account:
+Ban ID:
+Name:
+Identity confidence:
+Sessions reviewed:
+Crash/reconnect pattern:
+Warning context:
+World context:
+Raid/cluster context:
+Decision:
+Reason:
+Limits:
+Files used:
+```
+
+## Related docs
+
+* [`FORENSIC_DAILY_ROLLUPS.md`](FORENSIC_DAILY_ROLLUPS.md)
+* [`DETECTION_SIGNALS.md`](DETECTION_SIGNALS.md)
+* [`ADMIN_INI_ENFORCEMENT.md`](ADMIN_INI_ENFORCEMENT.md)

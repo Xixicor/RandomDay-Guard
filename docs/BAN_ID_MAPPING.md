@@ -1,28 +1,93 @@
-# Ban ID Mapping
+# Ban ID mapping
 
-Display name is not a ban ID.
+Use this page when converting a player name into a safe `Admin.ini` ban line.
 
-Primary mapping source:
+## Core rule
 
-```text
-LogNet: Login request: ?Name=<PlayerName>?ConnectID=<BanID>_+_|<Suffix> UniqueId=<Platform>:<Value>
-```
+A display name is not a ban ID.
 
-RandomDayGuard preserves:
-
-- display name as context
-- raw `ConnectID`
-- `UniqueId`
-- clean ban ID extracted from the leading numeric prefix
-
-For Admin.ini, use only:
+`Admin.ini` uses:
 
 ```ini
-BannedPlayer=<BanID>
+BannedPlayer=<raw numeric player ID>
 ```
 
-Do not paste suffixes, names, reasons, URLs, or inline comments into `Admin.ini`.
+## Evidence hierarchy
 
-PlayerData filenames can confirm an ID exists in a world save, but they usually do not prove a display name. Host panels, activity feeds, and container logs are timing/name context only, not ban-ID authority.
+| Rank | Source | Use |
+|---:|---|---|
+| 1 | Server log `Login request` | Best name-to-ID mapping |
+| 2 | `Player_<ID>.sav` | Confirms ID exists |
+| 3 | Existing `Admin.ini` | Existing bans/moderators |
+| 4 | Discord / Hostinger activity | Time/name context only |
+| 5 | UE4SS focus/player lines | Presence/context only |
+| 6 | AMP/system logs | Host lifecycle context |
 
-Existing moderators and bans must be preserved. Trusted IDs belong in private server config, not public defaults.
+## Extract the clean ID
+
+Raw example:
+
+```text
+ConnectID=2535422284688820_+_|0002d07b...
+```
+
+Clean `Admin.ini` value:
+
+```ini
+BannedPlayer=2535422284688820
+```
+
+Do not paste `_+_|...`.
+
+## Verify with PlayerData
+
+Check for:
+
+```text
+Saved/SaveGames/Server/Worlds/<WorldName>/PlayerData/Player_<ID>.sav
+```
+
+Meaning:
+
+```text
+The ID exists in the world save.
+```
+
+Limitation:
+
+```text
+PlayerData may not prove the display name unless another source maps it.
+```
+
+## When not to ban
+
+Do not assign a ban ID when:
+
+```text
+the name only appears in Discord
+the name only appears in Hostinger activity
+UE4SS shows a name but no ConnectID
+only AMP container logs exist
+the ID is trusted or moderator
+```
+
+## Evidence table template
+
+```text
+display_name:
+server_time:
+log_file:
+line_number:
+log_name:
+connect_id_raw:
+ban_id:
+unique_id:
+playerdata_file:
+decision:
+notes:
+```
+
+## Related docs
+
+* [`ADMIN_INI_ENFORCEMENT.md`](ADMIN_INI_ENFORCEMENT.md)
+* [`PLAYER_REVIEW_WORKFLOW.md`](PLAYER_REVIEW_WORKFLOW.md)
