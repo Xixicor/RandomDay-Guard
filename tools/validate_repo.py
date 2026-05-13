@@ -622,14 +622,19 @@ def validate_docs(errors: list[str]) -> None:
         add(errors, "CHANGELOG mentions obsolete alpha attempt history")
     readme = text(ROOT / "README.md")
     required_readme_terms = [
-        "separately installable AMP / Hostinger / Abiotic Factor dedicated-server guard addon",
-        "Layer 1: Immediate Live Defense",
-        "Layer 2: Baseline Scan and World Assessment",
-        "First Full Scan, Checkpoint, and Resume",
-        "Single-World Save Folder Support",
-        "If The Active World Folder Changes",
-        "Evidence Boundary",
-        "RandomDay Mod controls rotating gameplay conditions",
+        "separately installable guard addon",
+        "Fast Install",
+        "The First Three Settings To Check",
+        "Configuration Guide",
+        "Recommended Config Profiles",
+        "How The Guard Decides Things",
+        "Output Files And What To Check",
+        "First Run Checklist",
+        "Single World Save Folder",
+        "If The World Folder Changes",
+        "Ban ID Guide",
+        "Evidence Standards",
+        "RandomDay Mod changes the server experience",
     ]
     for term in required_readme_terms:
         if term not in readme:
