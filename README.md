@@ -27,8 +27,46 @@ review_only_mode = true
 auto_ban = false
 write_admin_ini = false
 ```
-
 ---
+
+## Documentation Map
+
+Use the docs folder as the operator manual. Start with the file that matches the job you are doing.
+
+| Need | Read this |
+|---|---|
+| First install or first boot | `docs/START_HERE.md` |
+| Pick safe config presets | `docs/CONFIG_PROFILES.md` |
+| Understand every config area | `docs/CONFIG_REFERENCE.md` |
+| Know where output logs are and what grows | `docs/MEMORY_ECONOMY_AND_OUTPUTS.md` |
+| Understand exact output fields | `docs/OUTPUT_SCHEMA_REFERENCE.md` |
+| Review one player/account | `docs/PLAYER_REVIEW_WORKFLOW.md` |
+| Review crash abuse, bad-actor patterns, and recovery strategy | `docs/BAD_ACTOR_PATTERNS_AND_RESILIENCE.md` |
+| Understand each detection signal | `docs/DETECTION_SIGNALS.md` |
+| Understand safe Admin.ini writing | `docs/ADMIN_INI_ENFORCEMENT.md` |
+| Troubleshoot loading, scan, mapping, or validation problems | `docs/TROUBLESHOOTING.md` |
+| See realistic server timelines | `docs/EXAMPLE_RUNS.md` |
+| Validate and build the release ZIP | `docs/VALIDATION_AND_RELEASE.md` |
+| Quick answers | `docs/FAQ.md` |
+| Handle world-folder changes | `docs/WORLD_SAVE_FOLDER_CHANGES.md` |
+| Understand evidence standards | `docs/EVIDENCE_BOUNDARY.md` |
+| Day-to-day admin operations | `docs/OPERATIONS_PLAYBOOK.md` |
+
+Recommended reading order for a new server owner:
+
+```text
+1. START_HERE.md
+2. CONFIG_PROFILES.md
+3. MEMORY_ECONOMY_AND_OUTPUTS.md
+4. PLAYER_REVIEW_WORKFLOW.md
+5. TROUBLESHOOTING.md
+6. ADMIN_INI_ENFORCEMENT.md
+7. BAD_ACTOR_PATTERNS_AND_RESILIENCE.md
+8. FAQ.md
+```
+
+The README stays short on purpose. The detailed explanations live in `docs/` so operators can jump directly to the task they need.
+
 
 ## Fast Install
 
@@ -424,6 +462,19 @@ docs/MEMORY_ECONOMY_AND_OUTPUTS.md
 ```
 
 ---
+
+## Related Deep-Dive Docs
+
+For the next layer of detail:
+
+```text
+docs/OUTPUT_SCHEMA_REFERENCE.md        exact fields inside runtime files
+docs/PLAYER_REVIEW_WORKFLOW.md         how to review one suspicious account
+docs/BAD_ACTOR_PATTERNS_AND_RESILIENCE.md  crash abuse, bad-actor patterns, sticky backups
+docs/ADMIN_INI_ENFORCEMENT.md          safe ban writing and rollback
+docs/TROUBLESHOOTING.md                common failure modes
+```
+
 
 ## Evidence Standards
 

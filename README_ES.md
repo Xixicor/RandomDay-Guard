@@ -36,8 +36,46 @@ write_admin_ini = false
 ```
 
 Eso significa: **registra evidencia y recomendaciones, pero no toca `Admin.ini` todavía**.
-
 ---
+
+## Mapa de documentación
+
+Usa la carpeta `docs/` como manual de operador. Abre el archivo que corresponde al trabajo que quieres hacer.
+
+| Necesitas... | Lee esto |
+|---|---|
+| Primera instalación o primer arranque | `docs/START_HERE.md` |
+| Elegir perfiles de configuración seguros | `docs/CONFIG_PROFILES.md` |
+| Entender cada área de config | `docs/CONFIG_REFERENCE.md` |
+| Saber dónde están los logs/output y qué archivos crecen | `docs/MEMORY_ECONOMY_AND_OUTPUTS.md` |
+| Entender los campos exactos de cada output | `docs/OUTPUT_SCHEMA_REFERENCE.md` |
+| Revisar un jugador/cuenta paso por paso | `docs/PLAYER_REVIEW_WORKFLOW.md` |
+| Revisar crash abuse, patrones de bad actors y recuperación | `docs/BAD_ACTOR_PATTERNS_AND_RESILIENCE.md` |
+| Entender cada señal de detección | `docs/DETECTION_SIGNALS.md` |
+| Entender escritura segura de `Admin.ini` | `docs/ADMIN_INI_ENFORCEMENT.md` |
+| Resolver problemas de carga, scan, mapping o validación | `docs/TROUBLESHOOTING.md` |
+| Ver ejemplos realistas de corridas del servidor | `docs/EXAMPLE_RUNS.md` |
+| Validar y construir el ZIP de release | `docs/VALIDATION_AND_RELEASE.md` |
+| Respuestas rápidas | `docs/FAQ.md` |
+| Manejar cambios de carpeta de mundo | `docs/WORLD_SAVE_FOLDER_CHANGES.md` |
+| Entender estándar de evidencia | `docs/EVIDENCE_BOUNDARY.md` |
+| Operación diaria del admin | `docs/OPERATIONS_PLAYBOOK.md` |
+
+Orden recomendado para un admin nuevo:
+
+```text
+1. START_HERE.md
+2. CONFIG_PROFILES.md
+3. MEMORY_ECONOMY_AND_OUTPUTS.md
+4. PLAYER_REVIEW_WORKFLOW.md
+5. TROUBLESHOOTING.md
+6. ADMIN_INI_ENFORCEMENT.md
+7. BAD_ACTOR_PATTERNS_AND_RESILIENCE.md
+8. FAQ.md
+```
+
+El README queda corto a propósito. Los detalles viven en `docs/` para que el operador pueda saltar directo al tema que necesita.
+
 
 ## Instalación rápida
 
@@ -461,6 +499,19 @@ BannedPlayer=ExamplePlayer
 Tampoco pegues el sufijo `_+_|...`.
 
 ---
+
+## Docs de detalle
+
+Para la siguiente capa de explicación:
+
+```text
+docs/OUTPUT_SCHEMA_REFERENCE.md        campos exactos dentro de los archivos runtime
+docs/PLAYER_REVIEW_WORKFLOW.md         cómo revisar una cuenta sospechosa
+docs/BAD_ACTOR_PATTERNS_AND_RESILIENCE.md  crash abuse, patrones de bad actors, sticky backups
+docs/ADMIN_INI_ENFORCEMENT.md          escritura segura de bans y rollback
+docs/TROUBLESHOOTING.md                problemas comunes
+```
+
 
 ## Estándar de evidencia
 
