@@ -60,6 +60,8 @@ REQUIRED_ZIP = [
     "RandomDayGuard/runtime/baselines/.gitkeep",
     "RandomDayGuard/runtime/current/.gitkeep",
     "RandomDayGuard/runtime/days/.gitkeep",
+    "RandomDayGuard/runtime/forensic_days/.gitkeep",
+    "RandomDayGuard/runtime/final_logs/.gitkeep",
     "RandomDayGuard/runtime/evidence/.gitkeep",
     "RandomDayGuard/runtime/epochs/.gitkeep",
     "RandomDayGuard/runtime/logs/.gitkeep",

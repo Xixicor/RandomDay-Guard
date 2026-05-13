@@ -33,6 +33,8 @@ RUNTIME_KEEP_DIRS = [
     "runtime/baselines",
     "runtime/current",
     "runtime/days",
+    "runtime/forensic_days",
+    "runtime/final_logs",
     "runtime/evidence",
     "runtime/epochs",
     "runtime/logs",

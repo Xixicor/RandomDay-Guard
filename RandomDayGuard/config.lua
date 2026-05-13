@@ -103,6 +103,42 @@ return {
         carry_open_cases_forward = true,
     },
 
+    forensic_rollup = {
+        enabled = true,
+        write_current_today = true,
+        write_daily_folder = true,
+        write_final_log_folder = true,
+        update_interval_seconds = 30,
+        rebuild_on_start = true,
+        rebuild_after_crash_recovery = true,
+        rebuild_after_scan_checkpoint = true,
+        rebuild_after_scan_complete = true,
+        rebuild_after_enforcement = true,
+        daily_root = "runtime/forensic_days",
+        final_log_root = "runtime/final_logs",
+        atomic_write = true,
+        compact_json = true,
+        retention_days = 30,
+        include = {
+            players = true,
+            sessions = true,
+            crash_reconnects = true,
+            warning_bursts = true,
+            raid_cases = true,
+            scan_state = true,
+            world_context = true,
+            enforcement = true,
+            evidence_index = true,
+        },
+        write_formats = {
+            json = true,
+            markdown = true,
+            txt = true,
+            tsv = true,
+        },
+    },
+
+
     scanning = {
         full_scan_on_start = true,
         reuse_completed_baseline = true,

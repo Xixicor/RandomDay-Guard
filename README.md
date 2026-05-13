@@ -27,46 +27,37 @@ review_only_mode = true
 auto_ban = false
 write_admin_ini = false
 ```
+
 ---
 
 ## Documentation Map
 
-Use the docs folder as the operator manual. Start with the file that matches the job you are doing.
+Use `docs/` as the operator manual. Start with the file that matches what you are doing.
 
 | Need | Read this |
 |---|---|
 | First install or first boot | `docs/START_HERE.md` |
 | Pick safe config presets | `docs/CONFIG_PROFILES.md` |
 | Understand every config area | `docs/CONFIG_REFERENCE.md` |
+| Quick daily forensic review package | `docs/FORENSIC_DAILY_ROLLUPS.md` |
 | Know where output logs are and what grows | `docs/MEMORY_ECONOMY_AND_OUTPUTS.md` |
 | Understand exact output fields | `docs/OUTPUT_SCHEMA_REFERENCE.md` |
 | Review one player/account | `docs/PLAYER_REVIEW_WORKFLOW.md` |
-| Review crash abuse, bad-actor patterns, and recovery strategy | `docs/BAD_ACTOR_PATTERNS_AND_RESILIENCE.md` |
+| Review crash abuse and recovery strategy | `docs/BAD_ACTOR_PATTERNS_AND_RESILIENCE.md` |
 | Understand each detection signal | `docs/DETECTION_SIGNALS.md` |
-| Understand safe Admin.ini writing | `docs/ADMIN_INI_ENFORCEMENT.md` |
+| Understand safe `Admin.ini` writing | `docs/ADMIN_INI_ENFORCEMENT.md` |
 | Troubleshoot loading, scan, mapping, or validation problems | `docs/TROUBLESHOOTING.md` |
 | See realistic server timelines | `docs/EXAMPLE_RUNS.md` |
 | Validate and build the release ZIP | `docs/VALIDATION_AND_RELEASE.md` |
 | Quick answers | `docs/FAQ.md` |
-| Handle world-folder changes | `docs/WORLD_SAVE_FOLDER_CHANGES.md` |
-| Understand evidence standards | `docs/EVIDENCE_BOUNDARY.md` |
-| Day-to-day admin operations | `docs/OPERATIONS_PLAYBOOK.md` |
 
-Recommended reading order for a new server owner:
+For quick analysis after a real run, zip one folder first:
 
 ```text
-1. START_HERE.md
-2. CONFIG_PROFILES.md
-3. MEMORY_ECONOMY_AND_OUTPUTS.md
-4. PLAYER_REVIEW_WORKFLOW.md
-5. TROUBLESHOOTING.md
-6. ADMIN_INI_ENFORCEMENT.md
-7. BAD_ACTOR_PATTERNS_AND_RESILIENCE.md
-8. FAQ.md
+runtime/forensic_days/YYYY-MM-DD/
 ```
 
-The README stays short on purpose. The detailed explanations live in `docs/` so operators can jump directly to the task they need.
-
+That folder is designed to contain the translated daily summary, player table, ban recommendation table, and evidence index.
 
 ## Fast Install
 
@@ -425,6 +416,57 @@ Never write a display name, URL, reason, comment, or raw suffix into `Admin.ini`
 
 ---
 
+## Daily Forensic Rollups And Final Logs
+
+RandomDayGuard also maintains a quick-review package for each day. This is the folder to upload when you want a fast forensic analysis without manually collecting every raw JSON and JSONL file.
+
+Daily folder:
+
+```text
+runtime/forensic_days/YYYY-MM-DD/
+```
+
+Plain-language final log folder:
+
+```text
+runtime/final_logs/YYYY-MM-DD/
+```
+
+Current-day shortcuts:
+
+```text
+runtime/current/forensic_today.json
+runtime/current/forensic_today.md
+runtime/current/forensic_today.txt
+```
+
+The daily package is updated in place. It is generated from the source evidence files, so it should survive normal server restarts, crashes, and repeated on/off cycles for the same day. It does not replace raw evidence; it translates the gathered evidence into a faster operator summary.
+
+Expected daily files:
+
+| File | Use |
+|---|---|
+| `forensic_day_summary.json` | Machine-readable daily summary. |
+| `forensic_day_summary.md` | Human-readable daily summary. |
+| `final_log.txt` | Plain-language translation for quick review. |
+| `players.tsv` | Player/account table for the day. |
+| `sessions.tsv` | Join/leave/session table. |
+| `ban_recommendations.tsv` | Clean ban candidates and blocked gates. |
+| `crash_reconnects.tsv` | Crash/restart/reconnect context. |
+| `warning_bursts.tsv` | Warning/anomaly context. |
+| `raid_cases.tsv` | Multi-account cluster context. |
+| `world_context.tsv` | Baseline/world scan state. |
+| `enforcement_audit.tsv` | What enforcement did, if enabled. |
+| `evidence_index.json` | Source files used to build the summary. |
+
+For the fastest external review, upload:
+
+```text
+runtime/forensic_days/YYYY-MM-DD.zip
+```
+
+The plain-language translator writes what happened in normal operator terms: who needs review, who is ban-eligible, which gates blocked a ban, what the scan state was, and which files support the conclusion.
+
 ## Memory Economy And Output Logs
 
 RandomDayGuard separates output so it can run for long periods without turning every poll into a new giant file.
@@ -462,19 +504,6 @@ docs/MEMORY_ECONOMY_AND_OUTPUTS.md
 ```
 
 ---
-
-## Related Deep-Dive Docs
-
-For the next layer of detail:
-
-```text
-docs/OUTPUT_SCHEMA_REFERENCE.md        exact fields inside runtime files
-docs/PLAYER_REVIEW_WORKFLOW.md         how to review one suspicious account
-docs/BAD_ACTOR_PATTERNS_AND_RESILIENCE.md  crash abuse, bad-actor patterns, sticky backups
-docs/ADMIN_INI_ENFORCEMENT.md          safe ban writing and rollback
-docs/TROUBLESHOOTING.md                common failure modes
-```
-
 
 ## Evidence Standards
 

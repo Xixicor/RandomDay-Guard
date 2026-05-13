@@ -36,46 +36,37 @@ write_admin_ini = false
 ```
 
 Eso significa: **registra evidencia y recomendaciones, pero no toca `Admin.ini` todavía**.
+
 ---
 
 ## Mapa de documentación
 
-Usa la carpeta `docs/` como manual de operador. Abre el archivo que corresponde al trabajo que quieres hacer.
+Usa `docs/` como manual de operador. Abre el archivo que corresponde a lo que quieres hacer.
 
 | Necesitas... | Lee esto |
 |---|---|
 | Primera instalación o primer arranque | `docs/START_HERE.md` |
-| Elegir perfiles de configuración seguros | `docs/CONFIG_PROFILES.md` |
+| Elegir perfiles seguros de configuración | `docs/CONFIG_PROFILES.md` |
 | Entender cada área de config | `docs/CONFIG_REFERENCE.md` |
-| Saber dónde están los logs/output y qué archivos crecen | `docs/MEMORY_ECONOMY_AND_OUTPUTS.md` |
-| Entender los campos exactos de cada output | `docs/OUTPUT_SCHEMA_REFERENCE.md` |
-| Revisar un jugador/cuenta paso por paso | `docs/PLAYER_REVIEW_WORKFLOW.md` |
-| Revisar crash abuse, patrones de bad actors y recuperación | `docs/BAD_ACTOR_PATTERNS_AND_RESILIENCE.md` |
-| Entender cada señal de detección | `docs/DETECTION_SIGNALS.md` |
+| Paquete diario para análisis forense rápido | `docs/FORENSIC_DAILY_ROLLUPS.md` |
+| Saber dónde están los logs/output y qué crece | `docs/MEMORY_ECONOMY_AND_OUTPUTS.md` |
+| Entender campos exactos de outputs | `docs/OUTPUT_SCHEMA_REFERENCE.md` |
+| Revisar un jugador/cuenta | `docs/PLAYER_REVIEW_WORKFLOW.md` |
+| Revisar crash abuse y recuperación | `docs/BAD_ACTOR_PATTERNS_AND_RESILIENCE.md` |
+| Entender señales de detección | `docs/DETECTION_SIGNALS.md` |
 | Entender escritura segura de `Admin.ini` | `docs/ADMIN_INI_ENFORCEMENT.md` |
 | Resolver problemas de carga, scan, mapping o validación | `docs/TROUBLESHOOTING.md` |
-| Ver ejemplos realistas de corridas del servidor | `docs/EXAMPLE_RUNS.md` |
+| Ver ejemplos de corridas | `docs/EXAMPLE_RUNS.md` |
 | Validar y construir el ZIP de release | `docs/VALIDATION_AND_RELEASE.md` |
 | Respuestas rápidas | `docs/FAQ.md` |
-| Manejar cambios de carpeta de mundo | `docs/WORLD_SAVE_FOLDER_CHANGES.md` |
-| Entender estándar de evidencia | `docs/EVIDENCE_BOUNDARY.md` |
-| Operación diaria del admin | `docs/OPERATIONS_PLAYBOOK.md` |
 
-Orden recomendado para un admin nuevo:
+Para análisis rápido después de una corrida real, sube primero:
 
 ```text
-1. START_HERE.md
-2. CONFIG_PROFILES.md
-3. MEMORY_ECONOMY_AND_OUTPUTS.md
-4. PLAYER_REVIEW_WORKFLOW.md
-5. TROUBLESHOOTING.md
-6. ADMIN_INI_ENFORCEMENT.md
-7. BAD_ACTOR_PATTERNS_AND_RESILIENCE.md
-8. FAQ.md
+runtime/forensic_days/YYYY-MM-DD/
 ```
 
-El README queda corto a propósito. Los detalles viven en `docs/` para que el operador pueda saltar directo al tema que necesita.
-
+Esa carpeta está hecha para contener el resumen diario traducido, tabla de jugadores, recomendaciones de ban y el índice de evidencia.
 
 ## Instalación rápida
 
@@ -330,6 +321,57 @@ No prueba por sí solo que alguien abrió, robó, duplicó o dañó algo.
 
 ---
 
+## Rollups forenses diarios y logs finales
+
+RandomDayGuard mantiene un paquete de revisión rápida por día. Esta es la carpeta que debes subir cuando quieres un análisis forense rápido sin juntar manualmente todos los JSON y JSONL.
+
+Carpeta diaria:
+
+```text
+runtime/forensic_days/YYYY-MM-DD/
+```
+
+Carpeta de log final en lenguaje simple:
+
+```text
+runtime/final_logs/YYYY-MM-DD/
+```
+
+Accesos del día actual:
+
+```text
+runtime/current/forensic_today.json
+runtime/current/forensic_today.md
+runtime/current/forensic_today.txt
+```
+
+El paquete diario se actualiza en el mismo lugar. Se genera desde los archivos de evidencia fuente, así que sirve para reinicios, crashes y ciclos de prender/apagar durante el mismo día. No reemplaza la evidencia cruda; traduce lo recolectado a un resumen rápido para operador.
+
+Archivos diarios esperados:
+
+| Archivo | Uso |
+|---|---|
+| `forensic_day_summary.json` | Resumen diario para herramientas. |
+| `forensic_day_summary.md` | Resumen diario legible. |
+| `final_log.txt` | Traducción en lenguaje simple para revisión rápida. |
+| `players.tsv` | Tabla de jugadores/cuentas del día. |
+| `sessions.tsv` | Tabla de joins/leaves/sesiones. |
+| `ban_recommendations.tsv` | Candidatos limpios y gates bloqueados. |
+| `crash_reconnects.tsv` | Contexto de crash/reinicio/reconexión. |
+| `warning_bursts.tsv` | Contexto de warnings/anomalías. |
+| `raid_cases.tsv` | Contexto de clusters multi-cuenta. |
+| `world_context.tsv` | Estado del scan/baseline. |
+| `enforcement_audit.tsv` | Qué hizo enforcement, si estaba activado. |
+| `evidence_index.json` | Archivos fuente usados para construir el resumen. |
+
+Para revisión externa rápida, sube:
+
+```text
+runtime/forensic_days/YYYY-MM-DD.zip
+```
+
+El traductor en lenguaje simple explica qué pasó: quién requiere revisión, quién es ban-eligible, qué gates bloquearon un ban, estado del scan y qué archivos soportan la conclusión.
+
 ## Archivos de salida importantes
 
 | Archivo | Qué te dice |
@@ -499,19 +541,6 @@ BannedPlayer=ExamplePlayer
 Tampoco pegues el sufijo `_+_|...`.
 
 ---
-
-## Docs de detalle
-
-Para la siguiente capa de explicación:
-
-```text
-docs/OUTPUT_SCHEMA_REFERENCE.md        campos exactos dentro de los archivos runtime
-docs/PLAYER_REVIEW_WORKFLOW.md         cómo revisar una cuenta sospechosa
-docs/BAD_ACTOR_PATTERNS_AND_RESILIENCE.md  crash abuse, patrones de bad actors, sticky backups
-docs/ADMIN_INI_ENFORCEMENT.md          escritura segura de bans y rollback
-docs/TROUBLESHOOTING.md                problemas comunes
-```
-
 
 ## Estándar de evidencia
 

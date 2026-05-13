@@ -28,6 +28,8 @@ local state = {
     last_full_scan_time = 0,
     last_cleanup_time = 0,
     last_weekly_summary_time = 0,
+    last_forensic_rollup_time = 0,
+    forensic_rollup_generation = 0,
     log_registry = {},
     current_generation_id = nil,
     current_epoch = nil,
@@ -273,6 +275,7 @@ local function ensure_dirs()
     for _,d in ipairs({
         "runtime", "runtime/backups", "runtime/baselines", "runtime/evidence", "runtime/logs",
         "runtime/raid_cases", "runtime/warnings", "runtime/current", "runtime/sessions", "runtime/epochs", "runtime/days",
+        "runtime/forensic_days", "runtime/final_logs",
         "runtime/evidence", "runtime/world_state",
         "runtime/world_state/boot", "runtime/world_state/current", "runtime/world_state/sessions"
     }) do mkdir_p(runtime_path(d)) end
@@ -329,6 +332,7 @@ local function load_config()
         scanning={full_scan_on_start=true, reuse_completed_baseline=true, resume_incomplete_scan=true, incremental_refresh_after_baseline=true, force_full_scan=false, partial_output_interval_seconds=30, checkpoint_interval_seconds=15, checkpoint_interval_files=25, baseline_manifest_enabled=true, per_file_entry_cache_enabled=true, changed_file_detection=true, full_scan_max_age_hours=168, aggressive_first_baseline=true, targeted_token_extraction=true, fallback_broad_token_scan=false, deep_backup_scan_enabled=false, incremental_scan_enabled=true, allow_full_find_discovery=true, allow_full_find_discovery_only_in_scan_job=true, recursive_discovery_enabled=true, recursive_discovery_mode="manifest", discovery_files_per_tick=200, discovery_max_runtime_ms=100, startup_scan_files_per_tick=25, startup_scan_max_bytes_per_tick=4194304, startup_scan_max_runtime_ms=100, write_scan_progress=true, max_file_bytes=1048576},
         server_lifecycle={startup_grace_seconds=180, shutdown_grace_seconds=120, post_crash_reconnect_grace_seconds=300, normal_restart_suppression_seconds=300, lifecycle_events_are_context_only=true, close_sessions_on_crash=true, close_sessions_on_graceful_shutdown=true, dedupe_rotated_backup_logs=true},
         retention={detailed_retention_days=7, daily_summary_retention_days=90, weekly_summary_retention_weeks=12, rotate_jsonl_when_bytes_exceed=5242880, max_raw_events_lines=20000, max_low_importance_events_per_day=5000, max_actor_touch_rollups_per_day=10000, max_recent_event_keys=5000, max_warning_reports=30, max_raid_cases=200, compact_json_outputs=true, archive_rotated_runtime_logs=false},
+        forensic_rollup={enabled=true, write_current_today=true, write_daily_folder=true, write_final_log_folder=true, update_interval_seconds=30, rebuild_on_start=true, rebuild_after_crash_recovery=true, rebuild_after_scan_checkpoint=true, rebuild_after_scan_complete=true, rebuild_after_enforcement=true, daily_root="runtime/forensic_days", final_log_root="runtime/final_logs", atomic_write=true, compact_json=true, retention_days=30, include={players=true, sessions=true, crash_reconnects=true, warning_bursts=true, raid_cases=true, scan_state=true, world_context=true, enforcement=true, evidence_index=true}, write_formats={json=true, markdown=true, txt=true, tsv=true}},
         enforcement={auto_ban=false, review_only_mode=true, write_admin_ini=false, request_restart_after_ban=false, require_playerdata_verified=false, require_clean_ban_id=true, preserve_moderators=true, preserve_existing_bans=true, ban_on_threshold=true, trusted_ids={}},
     }
     local ok, cfg = pcall(dofile, join_path(state.mod_root, "config.lua"))
@@ -1497,11 +1501,13 @@ end
 local function write_account_outputs()
     local rows, json_accounts = {}, {}
     for id,a in pairs(state.accounts) do
-        table.insert(rows, {ts=now(), account_id=id, ban_id=a.ban_id, log_name=a.log_name, name=a.name, connect_id_raw=a.connect_id_raw, raw_id=a.raw_id, unique_id=a.unique_id, identity_source=a.identity_source, identity_confidence=a.identity_confidence, playerdata_verified=tostring(a.playerdata_verified), playerdata_file=a.playerdata_file, first_seen=a.first_seen, last_seen=a.last_seen, status=a.status, score=a.score})
+        local warning_count = 0
+        for _,c in pairs(a.warnings or {}) do warning_count = warning_count + (tonumber(c) or 0) end
+        table.insert(rows, {ts=now(), account_id=id, ban_id=a.ban_id, log_name=a.log_name, name=a.name, connect_id_raw=a.connect_id_raw, raw_id=a.raw_id, unique_id=a.unique_id, identity_source=a.identity_source, identity_confidence=a.identity_confidence, playerdata_verified=tostring(a.playerdata_verified), playerdata_file=a.playerdata_file, first_seen=a.first_seen, last_seen=a.last_seen, join_count=a.join_count or 0, leave_count=a.leave_count or 0, warning_count=warning_count, session_count=#(a.sessions or {}), status=a.status, score=a.score})
         json_accounts[id] = a
     end
     table.sort(rows, function(a,b) return a.account_id < b.account_id end)
-    write_tsv(runtime_path("runtime/account_evidence.tsv"), {"ts","account_id","ban_id","log_name","name","connect_id_raw","raw_id","unique_id","identity_source","identity_confidence","playerdata_verified","playerdata_file","first_seen","last_seen","status","score"}, rows)
+    write_tsv(runtime_path("runtime/account_evidence.tsv"), {"ts","account_id","ban_id","log_name","name","connect_id_raw","raw_id","unique_id","identity_source","identity_confidence","playerdata_verified","playerdata_file","first_seen","last_seen","join_count","leave_count","warning_count","session_count","status","score"}, rows)
     write_json(runtime_path("runtime/account_evidence.json"), {ts=now(), accounts=json_accounts})
 end
 
@@ -1521,6 +1527,328 @@ local function write_ban_queue()
         end
     end
     write_json(runtime_path("runtime/ban_queue.json"), {ts=now(), auto_ban=((state.config.enforcement or {}).auto_ban == true), review_only_mode=((state.config.enforcement or {}).review_only_mode ~= false), queued=queued})
+end
+
+
+local function atomic_write_file(path, data)
+    local cfg = ((state.config or {}).forensic_rollup or {})
+    if cfg.atomic_write == false then return write_file(path, data) end
+    local tmp = path .. ".tmp"
+    local ok, err = write_file(tmp, data)
+    if not ok then return false, err end
+    local npath, ntmp = normalize_path(path), normalize_path(tmp)
+    local rok, rerr = os.rename(ntmp, npath)
+    if not rok then rok, rerr = os.rename(tmp:gsub("/", "\\"), path:gsub("/", "\\")) end
+    if not rok then return write_file(path, data) end
+    return true
+end
+
+local function atomic_write_json(path, data)
+    return atomic_write_file(path, to_json(data) .. "\n")
+end
+
+local function atomic_write_tsv(path, header, rows)
+    local out = {table.concat(header, "\t")}
+    for _,row in ipairs(rows or {}) do
+        local vals = {}
+        for _,h in ipairs(header) do
+            table.insert(vals, str(row[h] or ""):gsub("[\r\n\t]+", " "))
+        end
+        table.insert(out, table.concat(vals, "\t"))
+    end
+    return atomic_write_file(path, table.concat(out, "\n") .. "\n")
+end
+
+local function read_tsv_rows(path)
+    local lines = read_lines_tsv(path)
+    local out = {}
+    if #lines == 0 then return out end
+    local header = {}
+    for col in lines[1]:gmatch("([^\t]+)") do table.insert(header, col) end
+    for i=2,#lines do
+        local row, idx = {}, 1
+        for col in (lines[i] .. "\t"):gmatch("([^\t]*)\t") do
+            row[header[idx] or ("col" .. idx)] = col
+            idx = idx + 1
+        end
+        table.insert(out, row)
+    end
+    return out
+end
+
+local function parse_iso_seconds(ts)
+    local y,mo,d,h,mi,se = str(ts):match("^(%d%d%d%d)%-(%d%d)%-(%d%d)T(%d%d):(%d%d):(%d%d)Z")
+    if not y then return nil end
+    return os.time({year=tonumber(y), month=tonumber(mo), day=tonumber(d), hour=tonumber(h), min=tonumber(mi), sec=tonumber(se)})
+end
+
+local function forensic_day_from_ts(ts)
+    local d = str(ts):sub(1, 10)
+    if d:match("^%d%d%d%d%-%d%d%-%d%d$") then return d end
+    return today()
+end
+
+local function count_account_warnings(account)
+    local total = 0
+    for _,c in pairs(account.warnings or {}) do total = total + (tonumber(c) or 0) end
+    return total
+end
+
+local function session_stats_for_account(account)
+    local clean, unclean, lifecycle, post_crash, rapid = 0, 0, 0, 0, 0
+    local last_leave_seconds = nil
+    local sessions = {}
+    for _,sid in ipairs(account.sessions or {}) do
+        local s = state.sessions[sid]
+        if s then table.insert(sessions, s) end
+    end
+    table.sort(sessions, function(a,b) return str(a.join_ts) < str(b.join_ts) end)
+    for _,s in ipairs(sessions) do
+        if s.clean_leave == true then clean = clean + 1 else unclean = unclean + 1 end
+        if s.lifecycle_close == true or str(s.leave_reason):find("crash", 1, true) or str(s.leave_reason):find("server_", 1, true) then lifecycle = lifecycle + 1 end
+        if s.reconnect_after_lifecycle == true then post_crash = post_crash + 1 end
+        local join_seconds = parse_iso_seconds(s.join_ts)
+        if last_leave_seconds and join_seconds and (join_seconds - last_leave_seconds) >= 0 and (join_seconds - last_leave_seconds) <= 300 then rapid = rapid + 1 end
+        last_leave_seconds = parse_iso_seconds(s.leave_ts) or last_leave_seconds
+    end
+    return clean, unclean, lifecycle, post_crash, rapid
+end
+
+local function forensic_action_for_account(account, stats)
+    if account.status == "AUTO-BANNED" then return "already_enforced" end
+    if account.status == "BAN-ELIGIBLE" then return "ban_eligible" end
+    if account.status == "REVIEW" then return "review" end
+    if (stats.crash_overlap_count or 0) > 0 or (stats.post_crash_reconnect_count or 0) > 0 or (stats.warning_overlap_count or 0) > 0 or (stats.rapid_rejoin_count or 0) > 1 then return "watch" end
+    return "info"
+end
+
+local function forensic_plain_reason(account, stats)
+    local parts = {}
+    if account.identity_confidence and account.identity_confidence ~= "unknown" then table.insert(parts, "identity mapped as " .. str(account.identity_confidence)) end
+    if (stats.rapid_rejoin_count or 0) > 0 then table.insert(parts, str(stats.rapid_rejoin_count) .. " rapid reconnect pattern(s)") end
+    if (stats.crash_overlap_count or 0) > 0 then table.insert(parts, str(stats.crash_overlap_count) .. " crash/restart overlap(s)") end
+    if (stats.post_crash_reconnect_count or 0) > 0 then table.insert(parts, str(stats.post_crash_reconnect_count) .. " post-crash return(s)") end
+    if (stats.warning_overlap_count or 0) > 0 then table.insert(parts, str(stats.warning_overlap_count) .. " warning/context event(s)") end
+    if #parts == 0 then return "normal or insufficient review signal in the current rollup" end
+    return table.concat(parts, "; ")
+end
+
+local function collect_forensic_accounts(day)
+    local by_id = {}
+    for _,row in ipairs(read_tsv_rows(runtime_path("runtime/account_evidence.tsv"))) do
+        local id = row.account_id or ""
+        if id ~= "" then by_id[id] = row end
+    end
+    for id,a in pairs(state.accounts or {}) do
+        local clean, unclean, crash_overlap, post_crash, rapid = session_stats_for_account(a)
+        local warning_count = count_account_warnings(a)
+        by_id[id] = {
+            date=day, account_id=id, ban_id=a.ban_id, name=a.name or a.log_name, log_name=a.log_name,
+            identity_confidence=a.identity_confidence, playerdata_verified=tostring(a.playerdata_verified), first_seen=a.first_seen, last_seen=a.last_seen,
+            join_count=a.join_count or 0, leave_count=a.leave_count or 0, clean_leave_count=clean, unclean_disconnect_count=unclean,
+            rapid_rejoin_count=rapid, crash_overlap_count=crash_overlap, post_crash_reconnect_count=post_crash,
+            warning_overlap_count=warning_count, raid_case_count=0, world_context_count=0, score=a.score or 0, status=a.status or "INFO",
+            recommended_action="", ban_eligible=tostring(a.status == "BAN-ELIGIBLE"), already_enforced=tostring(a.status == "AUTO-BANNED"), admin_ini_line="",
+            reason="", evidence_files="runtime/account_evidence.json;runtime/evidence/session_events.jsonl"
+        }
+    end
+    local rows = {}
+    for id,row in pairs(by_id) do
+        local stats = {
+            rapid_rejoin_count=tonumber(row.rapid_rejoin_count) or 0,
+            crash_overlap_count=tonumber(row.crash_overlap_count) or 0,
+            post_crash_reconnect_count=tonumber(row.post_crash_reconnect_count) or 0,
+            warning_overlap_count=tonumber(row.warning_overlap_count or row.warning_count) or 0,
+        }
+        if row.recommended_action == nil or row.recommended_action == "" then row.recommended_action = forensic_action_for_account(row, stats) end
+        if row.reason == nil or row.reason == "" then row.reason = forensic_plain_reason(row, stats) end
+        if is_numeric_id(row.ban_id) and (row.status == "BAN-ELIGIBLE" or row.recommended_action == "ban_eligible") then row.admin_ini_line = "BannedPlayer=" .. row.ban_id end
+        table.insert(rows, row)
+    end
+    table.sort(rows, function(a,b) return str(a.account_id) < str(b.account_id) end)
+    return rows
+end
+
+local function collect_forensic_sessions(day)
+    local rows = {}
+    local seen = {}
+    local function add(row)
+        local key = table.concat({str(row.ts), str(row.event), str(row.session_id), str(row.account_id)}, "|")
+        if seen[key] then return end
+        seen[key] = true
+        table.insert(rows, row)
+    end
+    for _,line in ipairs(read_lines_tsv(runtime_path("runtime/session_events.tsv"))) do
+        local cols = {}
+        for col in (line .. "\t"):gmatch("([^\t]*)\t") do table.insert(cols, col) end
+        if #cols >= 4 and cols[1] ~= "ts" and (cols[1] or ""):sub(1,10) == day then
+            add({date=day, ts=cols[1], event=cols[2], session_id=cols[3], account_id=cols[4], ban_id=cols[5], name=cols[7] ~= "" and cols[7] or cols[6], detail=cols[8]})
+        end
+    end
+    for _,s in pairs(state.sessions or {}) do
+        local d = forensic_day_from_ts(s.join_ts or now())
+        if d == day then
+            add({date=day, ts=s.join_ts, event="SESSION", session_id=s.session_id, account_id=s.account_id, ban_id=s.ban_id, name=s.name, detail="join=" .. str(s.join_ts) .. " leave=" .. str(s.leave_ts or "open") .. " clean_leave=" .. tostring(s.clean_leave) .. " reason=" .. str(s.leave_reason)})
+        end
+    end
+    table.sort(rows, function(a,b) return str(a.ts) < str(b.ts) end)
+    return rows
+end
+
+local function collect_ban_recommendations(day, players)
+    local rows = {}
+    local enf = (state.config or {}).enforcement or {}
+    for _,p in ipairs(players or {}) do
+        if p.status == "BAN-ELIGIBLE" or p.recommended_action == "ban_eligible" then
+            local blockers = {}
+            if enf.auto_ban ~= true then table.insert(blockers, "auto_ban=false") end
+            if enf.write_admin_ini ~= true then table.insert(blockers, "write_admin_ini=false") end
+            if enf.review_only_mode ~= false then table.insert(blockers, "review_only_mode=true") end
+            if not is_numeric_id(p.ban_id) then table.insert(blockers, "ban_id_not_clean_numeric") end
+            table.insert(rows, {date=day, account_id=p.account_id, ban_id=p.ban_id, name=p.name, status=p.status, recommended_action=p.recommended_action, reason=p.reason, admin_ini_line=p.admin_ini_line, gates_passed=tostring(#blockers == 0), blocked_by=table.concat(blockers, ";"), evidence_files=p.evidence_files})
+        end
+    end
+    return rows
+end
+
+local function forensic_scan_state()
+    local job = state.scan_job or {}
+    local scan = state.current_scan or {}
+    return {
+        scan_job_active=job.active == true,
+        scan_complete=(scan.scan_ok == true and job.active ~= true),
+        scan_phase=job.phase or (scan.scan_ok and "complete" or "not_started"),
+        files_done=job.files_done or scan.scanned_files or 0,
+        total_files=job.total_files or 0,
+        files_scanned=job.files_scanned or scan.scanned_files or 0,
+        entries_seen=job.entries_seen or (scan.entries and #scan.entries or 0),
+        readable_files_seen=job.readable_files_seen or scan.readable_files_seen or 0,
+        scan_generation_id=job.scan_generation_id or scan.scan_generation_id,
+    }
+end
+
+local function read_recent_lines(path, max_lines)
+    local lines = read_lines_tsv(path)
+    local out = {}
+    local start_i = math.max(1, #lines - (max_lines or 50) + 1)
+    for i=start_i,#lines do table.insert(out, lines[i]) end
+    return out
+end
+
+local function collect_simple_log_rows(day, path, event_name, max_lines)
+    local rows = {}
+    for _,line in ipairs(read_recent_lines(runtime_path(path), max_lines or 100)) do
+        local ts = line:match('"ts":"([^"]+)"') or line:sub(1, 20)
+        if str(ts):sub(1,10) == day or not str(ts):match("^%d%d%d%d%-%d%d%-%d%d") then
+            table.insert(rows, {date=day, ts=ts, event=event_name, detail=line:sub(1, 500)})
+        end
+    end
+    return rows
+end
+
+local function write_forensic_rollup(reason, force)
+    local cfg = (state.config or {}).forensic_rollup or {}
+    if cfg.enabled == false then return nil end
+    local now_s = os.time()
+    local interval = tonumber(cfg.update_interval_seconds) or 30
+    if not force and (now_s - (state.last_forensic_rollup_time or 0)) < interval then return nil end
+    state.last_forensic_rollup_time = now_s
+    state.forensic_rollup_generation = (state.forensic_rollup_generation or 0) + 1
+    local day = today()
+    local daily_root = cfg.daily_root or "runtime/forensic_days"
+    local final_root = cfg.final_log_root or "runtime/final_logs"
+    local day_dir = runtime_path(join_path(daily_root, day))
+    local final_dir = runtime_path(join_path(final_root, day))
+    mkdir_p(day_dir); mkdir_p(final_dir)
+    local players = collect_forensic_accounts(day)
+    local sessions = collect_forensic_sessions(day)
+    local bans = collect_ban_recommendations(day, players)
+    local warnings = collect_simple_log_rows(day, "runtime/warning_events.jsonl", "warning", 200)
+    local lifecycle = collect_simple_log_rows(day, "runtime/server_lifecycle_events.jsonl", "lifecycle", 200)
+    local raid = collect_simple_log_rows(day, "runtime/raid_cases/index.jsonl", "raid_case", 100)
+    local enforced = collect_simple_log_rows(day, "runtime/enforced_bans.jsonl", "enforcement", 100)
+    local scan_state = forensic_scan_state()
+    local evidence_index = {
+        "runtime/account_evidence.json", "runtime/account_evidence.tsv", "runtime/evidence/session_events.jsonl", "runtime/session_events.tsv",
+        "runtime/server_lifecycle_events.jsonl", "runtime/warning_events.jsonl", "runtime/raid_cases/index.jsonl", "runtime/world_state/current/world_state_latest.json",
+        "runtime/scan_progress.json", "runtime/scan_checkpoint.json", "runtime/enforced_bans.jsonl",
+    }
+    local server_health = {poll_id=state.poll_id or 0, scheduler_status=state.scheduler_status, poll_in_flight=state.poll_in_flight == true, poll_scheduled=state.poll_scheduled == true, epoch_id=state.current_epoch and state.current_epoch.epoch_id or nil, lifecycle_class=state.current_epoch and state.current_epoch.lifecycle_class or nil}
+    local summary = {version=VERSION, date=day, generated_at=now(), generation_count=state.forensic_rollup_generation, reason=reason or "scheduled", boot_id=state.boot_id, epoch_id=state.current_epoch and state.current_epoch.epoch_id or nil, server_health=server_health, scan_state=scan_state, players=players, sessions=sessions, crash_reconnects=lifecycle, warning_bursts=warnings, raid_cases=raid, world_context={{date=day, scan_complete=tostring(scan_state.scan_complete), scan_phase=scan_state.scan_phase, files_done=scan_state.files_done, total_files=scan_state.total_files, entries_seen=scan_state.entries_seen, path="runtime/world_state/current/world_state_latest.json"}}, ban_recommendations=bans, enforcement_audit=enforced, evidence_index=evidence_index, limitations={"Daily forensic summaries are rebuildable indexes; source evidence remains authoritative.", "Context signals are not direct proof unless logs/Saved files expose that fact."}}
+    local md = {}
+    table.insert(md, "# RandomDayGuard Daily Forensic Summary — " .. day)
+    table.insert(md, "")
+    table.insert(md, "Generated: " .. now() .. "  ")
+    table.insert(md, "Reason: " .. str(reason or "scheduled") .. "  ")
+    table.insert(md, "Version: " .. VERSION)
+    table.insert(md, "")
+    table.insert(md, "## Server Health")
+    table.insert(md, "- Watchdog: " .. str(server_health.scheduler_status))
+    table.insert(md, "- Poll ID: " .. str(server_health.poll_id))
+    table.insert(md, "- Poll in flight: " .. tostring(server_health.poll_in_flight))
+    table.insert(md, "- Epoch: " .. str(server_health.epoch_id) .. " / " .. str(server_health.lifecycle_class))
+    table.insert(md, "")
+    table.insert(md, "## Scan / Baseline")
+    table.insert(md, "- Phase: " .. str(scan_state.scan_phase))
+    table.insert(md, "- Complete: " .. tostring(scan_state.scan_complete))
+    table.insert(md, "- Files: " .. str(scan_state.files_done) .. " / " .. str(scan_state.total_files))
+    table.insert(md, "- Entries seen: " .. str(scan_state.entries_seen))
+    table.insert(md, "")
+    table.insert(md, "## Players To Review")
+    table.insert(md, "| Player | Account ID | Ban ID | Status | Action | Why |")
+    table.insert(md, "|---|---:|---:|---|---|---|")
+    local review_count = 0
+    for _,p in ipairs(players) do
+        if p.status ~= "INFO" or p.recommended_action ~= "info" then
+            review_count = review_count + 1
+            table.insert(md, "| " .. str(p.name) .. " | " .. str(p.account_id) .. " | " .. str(p.ban_id) .. " | " .. str(p.status) .. " | " .. str(p.recommended_action) .. " | " .. str(p.reason) .. " |")
+        end
+    end
+    if review_count == 0 then table.insert(md, "| none |  |  | INFO | none | no review signals in current rollup |") end
+    table.insert(md, "")
+    table.insert(md, "## Ban-Eligible Accounts")
+    table.insert(md, "| Admin.ini line | Player | Reason | Gate status |")
+    table.insert(md, "|---|---|---|---|")
+    if #bans == 0 then table.insert(md, "| none |  | no ban-eligible accounts in current rollup |  |") end
+    for _,b in ipairs(bans) do table.insert(md, "| " .. str(b.admin_ini_line) .. " | " .. str(b.name) .. " | " .. str(b.reason) .. " | passed=" .. str(b.gates_passed) .. " blocked_by=" .. str(b.blocked_by) .. " |") end
+    table.insert(md, "")
+    table.insert(md, "## Plain Language Final Log")
+    table.insert(md, "- This file is an auto-updated daily translation of the runtime evidence.")
+    table.insert(md, "- Use it for a quick forensic check. Use source JSON/JSONL/TSV files for final verification.")
+    table.insert(md, "- Zip `runtime/forensic_days/" .. day .. "/` or `runtime/final_logs/" .. day .. "/` for quick review.")
+    table.insert(md, "")
+    table.insert(md, "## Files Used")
+    for _,path in ipairs(evidence_index) do table.insert(md, "- " .. path) end
+    table.insert(md, "")
+    table.insert(md, "## Limits")
+    table.insert(md, "- The daily summary is a rebuildable index, not the only source of truth.")
+    table.insert(md, "- World context and actor save-touch context support review but are not direct proof by themselves.")
+    local markdown = table.concat(md, "\n") .. "\n"
+    local txt = markdown:gsub("#", ""):gsub("|", " ")
+    atomic_write_json(join_path(day_dir, "forensic_day_summary.json"), summary)
+    atomic_write_file(join_path(day_dir, "forensic_day_summary.md"), markdown)
+    atomic_write_file(join_path(day_dir, "final_log.txt"), txt)
+    atomic_write_tsv(join_path(day_dir, "players.tsv"), {"date","account_id","ban_id","name","identity_confidence","playerdata_verified","first_seen","last_seen","join_count","leave_count","clean_leave_count","unclean_disconnect_count","rapid_rejoin_count","crash_overlap_count","post_crash_reconnect_count","warning_overlap_count","raid_case_count","world_context_count","score","status","recommended_action","ban_eligible","already_enforced","admin_ini_line","reason","evidence_files"}, players)
+    atomic_write_tsv(join_path(day_dir, "sessions.tsv"), {"date","ts","event","session_id","account_id","ban_id","name","detail"}, sessions)
+    atomic_write_tsv(join_path(day_dir, "ban_recommendations.tsv"), {"date","account_id","ban_id","name","status","recommended_action","reason","admin_ini_line","gates_passed","blocked_by","evidence_files"}, bans)
+    atomic_write_tsv(join_path(day_dir, "crash_reconnects.tsv"), {"date","ts","event","detail"}, lifecycle)
+    atomic_write_tsv(join_path(day_dir, "warning_bursts.tsv"), {"date","ts","event","detail"}, warnings)
+    atomic_write_tsv(join_path(day_dir, "raid_cases.tsv"), {"date","ts","event","detail"}, raid)
+    atomic_write_tsv(join_path(day_dir, "world_context.tsv"), {"date","scan_complete","scan_phase","files_done","total_files","entries_seen","path"}, summary.world_context)
+    atomic_write_tsv(join_path(day_dir, "enforcement_audit.tsv"), {"date","ts","event","detail"}, enforced)
+    atomic_write_json(join_path(day_dir, "evidence_index.json"), {date=day, generated_at=now(), files=evidence_index})
+    if cfg.write_current_today ~= false then
+        atomic_write_json(runtime_path("runtime/current/forensic_today.json"), summary)
+        atomic_write_file(runtime_path("runtime/current/forensic_today.md"), markdown)
+        atomic_write_file(runtime_path("runtime/current/forensic_today.txt"), txt)
+    end
+    if cfg.write_final_log_folder ~= false then
+        atomic_write_file(join_path(final_dir, "forensic_final_log.txt"), txt)
+        atomic_write_json(join_path(final_dir, "forensic_final_data.json"), summary)
+        atomic_write_tsv(join_path(final_dir, "players.tsv"), {"date","account_id","ban_id","name","identity_confidence","playerdata_verified","first_seen","last_seen","join_count","leave_count","clean_leave_count","unclean_disconnect_count","rapid_rejoin_count","crash_overlap_count","post_crash_reconnect_count","warning_overlap_count","raid_case_count","world_context_count","score","status","recommended_action","ban_eligible","already_enforced","admin_ini_line","reason","evidence_files"}, players)
+        atomic_write_tsv(join_path(final_dir, "ban_recommendations.tsv"), {"date","account_id","ban_id","name","status","recommended_action","reason","admin_ini_line","gates_passed","blocked_by","evidence_files"}, bans)
+    end
+    return summary
 end
 
 local warning_text = {
@@ -2003,6 +2331,7 @@ local function startup_scan(reason)
     local scan = scan_saved(reason or "startup")
     local new_classes, deltas = write_scan_outputs(scan)
     write_world_boot()
+    pcall(function() write_forensic_rollup("scan_complete", true) end)
     log_event({event="SAVED_SCAN_COMPLETE", files=scan.scanned_files, readable_files_seen=scan.readable_files_seen, entries=#scan.entries, new_classes=new_classes, deltas=deltas})
     return scan
 end
@@ -2133,6 +2462,7 @@ local function finish_scan_job()
     write_scan_progress()
     local new_classes, deltas = write_scan_outputs(scan)
     write_world_boot()
+    pcall(function() write_forensic_rollup("scan_complete", true) end)
     log_event({event="SAVED_SCAN_COMPLETE", files=scan.scanned_files, readable_files_seen=scan.readable_files_seen, entries=#scan.entries, new_classes=new_classes, deltas=deltas, scan_generation_id=job.scan_generation_id})
     if job.reason == "startup_deferred" then
         state.startup_scan_pending = false
@@ -2328,7 +2658,7 @@ local function poll_once(reason)
     local ok, events, seen, meta = pcall(function()
         local evs, raw_seen, tail_meta = tail_logs()
         for _,ev in ipairs(evs) do apply_event(ev) end
-        if #evs > 0 then state.state_changed = true; write_account_outputs(); evaluate_enforcement(); write_ban_queue() end
+        if #evs > 0 then state.state_changed = true; write_account_outputs(); evaluate_enforcement(); write_ban_queue(); pcall(function() write_forensic_rollup("events", true) end) end
         return evs, raw_seen, tail_meta
     end)
     if ok then
@@ -2385,6 +2715,7 @@ local function poll_once(reason)
             state.last_weekly_summary_time = now_s
         end
         update_current_state_files()
+        pcall(function() write_forensic_rollup("scheduled", false) end)
         if not deferred_scan_waiting then state.poll_stage = "complete" end
         write_poll_status({poll_id=state.poll_id, scheduler_status=state.scheduler_status, poll_stage=state.poll_stage, scan_pending=state.startup_scan_pending, deferred_scan_waiting=deferred_scan_waiting, deferred_scan_waiting_reason=deferred_scan_waiting_reason, reason=deferred_scan_waiting_reason, startup_scan_gate=startup_scan_gate, log_backlog_pending=state.log_backlog_pending, active_log_caught_up=meta.active_log_caught_up, active_log_unread_bytes=meta.active_log_unread_bytes, active_log_size=meta.active_log_size, active_log_offset=meta.active_log_offset, active_log_key=meta.active_log_key, active_log_unique_count=meta.active_log_unique_count, active_log_duplicate_count=meta.active_log_duplicate_count, tail_files_seen=meta.tail_files_seen, tail_files_unique=meta.tail_files_unique, active_log_read_failed=meta.active_log_read_failed, log_backlog_reason=meta.log_backlog_reason, lines_processed_this_poll=meta.lines_processed or seen or 0, bytes_processed_this_poll=meta.bytes_processed or 0, budget_exhausted=meta.budget_exhausted or false, current_log_file=meta.current_log_file, events_seen=seen or 0, events_applied=#(events or {}), duplicate_lines_suppressed=meta.duplicates or 0, rotations_detected=meta.rotations or 0, truncations_detected=meta.truncations or 0, scan_due=scan_due, report_due=report_due, report_deferred=report_deferred, cleanup_due=cleanup_due, cleanup_deferred=cleanup_deferred, weekly_summary_due=weekly_due, weekly_summary_deferred=weekly_summary_deferred, poll_runtime_seconds=os.time() - poll_started})
         log_event({event="POLL_HEARTBEAT", events_seen=seen or 0, events_applied=#(events or {})})

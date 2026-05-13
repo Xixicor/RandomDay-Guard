@@ -22,18 +22,17 @@ runtime/evidence/session_events.jsonl
 runtime/scan_progress.json
 runtime/world_state/current/world_state_latest.json
 
+Daily quick forensic package:
+runtime/forensic_days/YYYY-MM-DD/
+
+Plain-language final log:
+runtime/final_logs/YYYY-MM-DD/forensic_final_log.txt
+runtime/current/forensic_today.txt
+
 Healthy poll:
 scheduler_status=running
 poll_id increases
 poll_in_flight=false between polls
-
-Player summaries:
-runtime/account_evidence.json
-runtime/account_evidence.tsv
-
-Event history:
-runtime/evidence/session_events.jsonl
-runtime/session_events.tsv
 
 Admin.ini:
 Only clean BannedPlayer=<ID> lines are written, and only when enforcement is explicitly enabled.
