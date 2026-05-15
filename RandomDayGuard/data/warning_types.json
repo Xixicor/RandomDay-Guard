@@ -1,0 +1,13 @@
+{
+  "version": "v0.4.11-alpha",
+  "warning_types": [
+    {"id": "PLAYER_JOIN_STATE", "meaning": "Player joined the server.", "can_contribute_to_ban_eligibility": false},
+    {"id": "PLAYER_LEAVE_STATE", "meaning": "Player left the server.", "can_contribute_to_ban_eligibility": false},
+    {"id": "DEPLOYABLE_WARNING_BURST_CORRELATION", "meaning": "The account was active during DeployableSaveWarning activity.", "does_not_prove": "Object ownership, placement, damage, or duplication.", "can_contribute_to_ban_eligibility": true},
+    {"id": "ACTOR_CHANNEL_FAILURE_CORRELATION", "meaning": "The account was active during actor channel failure activity or appeared on a related log line.", "does_not_prove": "The network failure was caused by that account.", "can_contribute_to_ban_eligibility": true},
+    {"id": "WORLD_ACTOR_SAVE_TOUCH_CONTEXT", "meaning": "The account was active while UpdateActorToWorldSave save-touch context appeared.", "does_not_prove": "The account created, owned, damaged, duplicated, or modified the object.", "can_contribute_to_ban_eligibility": false},
+    {"id": "ACTIVE_BEFORE_SERVER_FAILURE", "meaning": "The account was active before a server failure window.", "does_not_prove": "A single crash is enough for enforcement.", "can_contribute_to_ban_eligibility": true},
+    {"id": "RAID_CASE_ACCOUNT_LINK", "meaning": "The account is linked to a multi-account warning or failure case.", "does_not_prove": "Every account in the case should be banned.", "can_contribute_to_ban_eligibility": true},
+    {"id": "HIGH_RISK_OBJECT_ACCUMULATION", "meaning": "High-risk class growth was correlated with account activity.", "does_not_prove": "Object count alone is an enforcement reason.", "can_contribute_to_ban_eligibility": true}
+  ]
+}

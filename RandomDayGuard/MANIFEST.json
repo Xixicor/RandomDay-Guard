@@ -1,0 +1,6 @@
+{
+  "name": "RandomDayGuard",
+  "version": "v0.4.11-alpha",
+  "runtime": "UE4SS Lua",
+  "install_folder": "RandomDayGuard"
+}
