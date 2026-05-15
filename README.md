@@ -1,5 +1,7 @@
 # RandomDayGuard
 
+<img width="2022" height="778" alt="RandomDayGuardCover_1" src="https://github.com/user-attachments/assets/d25915ec-1120-4620-9865-ebf3b422eaf8" />
+
 The daily rollup is a rebuildable index. Source evidence remains authoritative; the daily folder and final log are fast review packages generated from runtime evidence.
 
 RandomDayGuard is a separately installable guard addon for AMP / Hostinger / Abiotic Factor dedicated servers running the RandomDay Mod.
