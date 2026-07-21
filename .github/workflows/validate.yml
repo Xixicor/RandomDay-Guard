@@ -1,0 +1,22 @@
+name: Validate RandomDayGuard
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+        with:
+          python-version: "3.12"
+      - run: sudo apt-get update && sudo apt-get install -y lua5.4
+      - run: python -B tools/validate_repo.py --require-lua --lua-command luac
+      - run: python -B tools/test_public_pipeline.py
+      - run: python -B -m unittest discover tests
+      - run: python -B tools/build_release_zip.py --check

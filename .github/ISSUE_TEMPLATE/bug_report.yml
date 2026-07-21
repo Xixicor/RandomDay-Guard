@@ -1,0 +1,7 @@
+name: Bug report
+description: Report a reproducible issue
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary

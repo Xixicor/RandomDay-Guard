@@ -1,0 +1,7 @@
+name: Documentation issue
+description: Report documentation problem
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary

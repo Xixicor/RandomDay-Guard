@@ -1,0 +1,22 @@
+# Runtime output
+RandomDayGuard/runtime/*
+!RandomDayGuard/runtime/**/
+!RandomDayGuard/runtime/**/.gitkeep
+
+# Server/private data
+Saved/
+**/Saved/
+**/Admin.ini
+**/*.sav
+**/*.log
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+__pycache__/
+*.pyc
+
+# All generated audit, validation, extraction, and release-candidate outputs.
+.tmp/

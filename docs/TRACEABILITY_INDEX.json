@@ -1,0 +1,4036 @@
+{
+  "entries": [
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#packaged-file-map",
+      "failure_modes": [
+        "Divergence blocks validation and makes installation identity ambiguous."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/BUILD_MARKER.txt"
+      ],
+      "owning_source": "Scripts/main.lua startup identity checks",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/BUILD_MARKER.txt",
+      "public_settings": [
+        "config.version"
+      ],
+      "purpose": "Packaged build identity marker.",
+      "recovery": [
+        "Restore the exact packaged marker matching VERSION and the canonical loader."
+      ],
+      "side_effects": [
+        "Exposes version identity for install/readback checks."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#packaged-file-map",
+      "failure_modes": [
+        "Missing/divergent members block release validation."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/MANIFEST.json"
+      ],
+      "owning_source": "release validator and operator",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/MANIFEST.json",
+      "public_settings": [
+        "config.version"
+      ],
+      "purpose": "Packaged file/version manifest.",
+      "recovery": [
+        "Rebuild only through release tooling from reviewed source bytes."
+      ],
+      "side_effects": [
+        "Enumerates installed members and identity metadata."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#packaged-file-map",
+      "failure_modes": [
+        "Stale guidance can cause unsafe configuration or incorrect proof claims."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/README.txt"
+      ],
+      "owning_source": "operator",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/README.txt",
+      "public_settings": [
+        "none"
+      ],
+      "purpose": "Packaged English operator quick reference.",
+      "recovery": [
+        "Regenerate/review documentation and replace only in a new validated release package."
+      ],
+      "side_effects": [
+        "Provides offline install and safety guidance."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#packaged-file-map",
+      "failure_modes": [
+        "Wrong/unreadable root leaves sources unavailable; a world-only path is rejected operationally."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/SavedRoot.txt"
+      ],
+      "owning_source": "Scripts/main.lua: derive_saved_candidates/find_saved_root",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/SavedRoot.txt",
+      "public_settings": [
+        "config.saved.*"
+      ],
+      "purpose": "Optional explicit Abiotic Factor Saved-root override.",
+      "recovery": [
+        "Point to the server Saved directory or leave empty for discovery, then inspect saved_path_probe.json."
+      ],
+      "side_effects": [
+        "Adds the first operator-supplied Saved candidate."
+      ],
+      "user_editable": true
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#ue4ss-loader-and-watchdog",
+      "failure_modes": [
+        "Startup, scheduler, source, or write failures stay visible and cannot prove completion."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/Scripts/main.lua"
+      ],
+      "owning_source": "UE4SS",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/Scripts/main.lua",
+      "public_settings": [
+        "all runtime-owned config sections"
+      ],
+      "purpose": "Canonical UE4SS independent-watchdog loader/runtime.",
+      "recovery": [
+        "Repair the owning source block, validate Lua, and preserve/replay authoritative evidence."
+      ],
+      "side_effects": [
+        "Reads server-owned evidence and writes bounded local runtime state."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#public-reporting-module",
+      "failure_modes": [
+        "Missing source lineage or any contract write forces route proof to missing."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/Scripts/public_pipeline.lua"
+      ],
+      "owning_source": "Scripts/main.lua: report worker callback",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/Scripts/public_pipeline.lua",
+      "public_settings": [
+        "config.source_accounting.*",
+        "config.reports.*",
+        "config.notification.*"
+      ],
+      "purpose": "Provider-neutral source accounting, report translation, route proof, and local outbox module.",
+      "recovery": [
+        "Repair the named source/write and regenerate the same current cycle before queueing."
+      ],
+      "side_effects": [
+        "Atomically replaces report/proof/status files and may queue local envelopes."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#packaged-file-map",
+      "failure_modes": [
+        "Lua/load/type drift records config_load_error and can fall back or fail later."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/config.lua"
+      ],
+      "owning_source": "Scripts/main.lua: load_config",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/config.lua",
+      "public_settings": [
+        "all `config.*` leaves in CONFIG_FIELD_CATALOG.md"
+      ],
+      "purpose": "Complete public operator configuration table.",
+      "recovery": [
+        "Restore a reviewed backup or shipped table, validate syntax, and restart."
+      ],
+      "side_effects": [
+        "Changes bounded collection, reports, retention, and opt-in actions."
+      ],
+      "user_editable": true
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#packaged-file-map",
+      "failure_modes": [
+        "Malformed or overclaiming definitions block validation or mislabel evidence."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/data/detection_events.json"
+      ],
+      "owning_source": "Scripts/main.lua event normalization",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/data/detection_events.json",
+      "public_settings": [
+        "warning/correlation sections"
+      ],
+      "purpose": "Public detection-event names and evidence limits.",
+      "recovery": [
+        "Restore reviewed public definitions and rerun validation."
+      ],
+      "side_effects": [
+        "Classifies supported log observations without adding private signatures."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#packaged-file-map",
+      "failure_modes": [
+        "Bad categories distort context but never prove player action."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/data/object_categories.json"
+      ],
+      "owning_source": "Scripts/main.lua object registry/categorization",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/data/object_categories.json",
+      "public_settings": [
+        "config.class_categories.*",
+        "config.object_registry.*"
+      ],
+      "purpose": "Public object-category vocabulary.",
+      "recovery": [
+        "Restore public categories and rebuild registry/delta output."
+      ],
+      "side_effects": [
+        "Labels extracted class tokens as review context."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#packaged-file-map",
+      "failure_modes": [
+        "Bad mappings can hide or overstate warning context."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/data/warning_types.json"
+      ],
+      "owning_source": "Scripts/main.lua warning normalization",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/data/warning_types.json",
+      "public_settings": [
+        "config.warning_bursts.*"
+      ],
+      "purpose": "Public warning-type meanings and review boundaries.",
+      "recovery": [
+        "Restore reviewed warning definitions and rebuild affected reports."
+      ],
+      "side_effects": [
+        "Labels warning evidence for reports and operator review."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#packaged-file-map",
+      "failure_modes": [
+        "Missing or disabled marker prevents startup."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/enabled.txt"
+      ],
+      "owning_source": "UE4SS mod discovery",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/enabled.txt",
+      "public_settings": [
+        "none"
+      ],
+      "purpose": "UE4SS addon enable marker.",
+      "recovery": [
+        "Restore the packaged marker and restart UE4SS."
+      ],
+      "side_effects": [
+        "Allows UE4SS to load the addon when present/enabled."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#packaged-file-map",
+      "failure_modes": [
+        "Any non-placeholder runtime member leaks generated/private state and blocks packaging."
+      ],
+      "inputs": [
+        "tracked reviewed source bytes"
+      ],
+      "kind": "packaged source/configuration/data member",
+      "operator_visible_states": [
+        "present and version-aligned",
+        "missing, invalid, or divergent"
+      ],
+      "outputs": [
+        "installed RandomDayGuard/runtime/**/.gitkeep"
+      ],
+      "owning_source": "release builder",
+      "packaged_or_generated": "packaged",
+      "path": "RandomDayGuard/runtime/**/.gitkeep",
+      "public_settings": [
+        "none"
+      ],
+      "purpose": "Empty packaged runtime directory placeholders only.",
+      "recovery": [
+        "Remove candidate runtime data outside source control and rebuild from the allowlist."
+      ],
+      "side_effects": [
+        "Creates writable local output lanes without shipping runtime evidence."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/account_evidence.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/account_evidence.json"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/account_evidence.json",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Current structured account identity, score, status, and cited evidence index.",
+      "recovery": [
+        "For `runtime/account_evidence.json`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/account_evidence.tsv` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/account_evidence.tsv"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/account_evidence.tsv",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Tabular account review export derived from the current account index.",
+      "recovery": [
+        "For `runtime/account_evidence.tsv`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Failure to write/read `runtime/admin_state.json` records or preserves fail-closed state; no successful mutation may be inferred."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/admin_state.json"
+      ],
+      "owning_source": "Scripts/main.lua: Admin.ini parser/evaluate_enforcement/append_ban",
+      "packaged_or_generated": "generated",
+      "path": "runtime/admin_state.json",
+      "public_settings": [
+        "config.enforcement.*",
+        "config.admin_ini.*",
+        "config.whitelist",
+        "config.restart_request.*"
+      ],
+      "purpose": "Parsed Admin.ini moderator/ban snapshot used for review and mutation gates.",
+      "recovery": [
+        "For `runtime/admin_state.json`, return to review-only, verify the Admin.ini backup state, read the recorded reason, and correct that check."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Failure to write/read `runtime/backups/**` records or preserves fail-closed state; no successful mutation may be inferred."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/backups/**"
+      ],
+      "owning_source": "Scripts/main.lua: Admin.ini parser/evaluate_enforcement/append_ban",
+      "packaged_or_generated": "generated",
+      "path": "runtime/backups/**",
+      "public_settings": [
+        "config.enforcement.*",
+        "config.admin_ini.*",
+        "config.whitelist",
+        "config.restart_request.*"
+      ],
+      "purpose": "Dynamic output class containing backups state owned by enforcement.",
+      "recovery": [
+        "For `runtime/backups/**`, return to review-only, verify the Admin.ini backup state, read the recorded reason, and correct that check."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Failure to write/read `runtime/backups/Admin_*.ini` records or preserves fail-closed state; no successful mutation may be inferred."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/backups/Admin_*.ini"
+      ],
+      "owning_source": "Scripts/main.lua: Admin.ini parser/evaluate_enforcement/append_ban",
+      "packaged_or_generated": "generated",
+      "path": "runtime/backups/Admin_*.ini",
+      "public_settings": [
+        "config.enforcement.*",
+        "config.admin_ini.*",
+        "config.whitelist",
+        "config.restart_request.*"
+      ],
+      "purpose": "Local backups/Admin *.ini state owned by enforcement.",
+      "recovery": [
+        "For `runtime/backups/Admin_*.ini`, return to review-only, verify the Admin.ini backup state, read the recorded reason, and correct that check."
+      ],
+      "side_effects": [
+        "Writes a backup or enforcement audit record; Admin.ini mutation occurs only in append_ban after all gates."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Failure to write/read `runtime/ban_queue.json` records or preserves fail-closed state; no successful mutation may be inferred."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/ban_queue.json"
+      ],
+      "owning_source": "Scripts/main.lua: Admin.ini parser/evaluate_enforcement/append_ban",
+      "packaged_or_generated": "generated",
+      "path": "runtime/ban_queue.json",
+      "public_settings": [
+        "config.enforcement.*",
+        "config.admin_ini.*",
+        "config.whitelist",
+        "config.restart_request.*"
+      ],
+      "purpose": "Current recommendation queue with enforcement gate state and eligible accounts.",
+      "recovery": [
+        "For `runtime/ban_queue.json`, return to review-only, verify the Admin.ini backup state, read the recorded reason, and correct that check."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing/stale `runtime/baselines/**` leaves scan coverage partial, deferred, unavailable, or failed; it cannot prove expected-empty."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/baselines/**"
+      ],
+      "owning_source": "Scripts/main.lua: begin/continue/finish scan job",
+      "packaged_or_generated": "generated",
+      "path": "runtime/baselines/**",
+      "public_settings": [
+        "config.saved.*",
+        "config.scanning.*",
+        "config.source_accounting.changed_file_manifest"
+      ],
+      "purpose": "Dynamic output class containing baselines state owned by scan.",
+      "recovery": [
+        "For `runtime/baselines/**`, repair Saved discovery/read/write input and resume the checkpoint or start a reviewed baseline."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing/stale `runtime/baselines/file_manifest.tsv` leaves scan coverage partial, deferred, unavailable, or failed; it cannot prove expected-empty."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/baselines/file_manifest.tsv"
+      ],
+      "owning_source": "Scripts/main.lua: begin/continue/finish scan job",
+      "packaged_or_generated": "generated",
+      "path": "runtime/baselines/file_manifest.tsv",
+      "public_settings": [
+        "config.saved.*",
+        "config.scanning.*",
+        "config.source_accounting.changed_file_manifest"
+      ],
+      "purpose": "Tabular file manifest state/index.",
+      "recovery": [
+        "For `runtime/baselines/file_manifest.tsv`, repair Saved discovery/read/write input and resume the checkpoint or start a reviewed baseline."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing/stale `runtime/baselines/last_completed_baseline.json` leaves scan coverage partial, deferred, unavailable, or failed; it cannot prove expected-empty."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/baselines/last_completed_baseline.json"
+      ],
+      "owning_source": "Scripts/main.lua: begin/continue/finish scan job",
+      "packaged_or_generated": "generated",
+      "path": "runtime/baselines/last_completed_baseline.json",
+      "public_settings": [
+        "config.saved.*",
+        "config.scanning.*",
+        "config.source_accounting.changed_file_manifest"
+      ],
+      "purpose": "Structured last completed baseline state document.",
+      "recovery": [
+        "For `runtime/baselines/last_completed_baseline.json`, repair Saved discovery/read/write input and resume the checkpoint or start a reviewed baseline."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing/stale `runtime/baselines/last_scan.json` leaves scan coverage partial, deferred, unavailable, or failed; it cannot prove expected-empty."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/baselines/last_scan.json"
+      ],
+      "owning_source": "Scripts/main.lua: begin/continue/finish scan job",
+      "packaged_or_generated": "generated",
+      "path": "runtime/baselines/last_scan.json",
+      "public_settings": [
+        "config.saved.*",
+        "config.scanning.*",
+        "config.source_accounting.changed_file_manifest"
+      ],
+      "purpose": "Structured last scan state document.",
+      "recovery": [
+        "For `runtime/baselines/last_scan.json`, repair Saved discovery/read/write input and resume the checkpoint or start a reviewed baseline."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/class_deltas.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/class_deltas.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: scan output and object registry writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/class_deltas.jsonl",
+      "public_settings": [
+        "config.object_registry.*",
+        "config.class_categories.*",
+        "config.high_risk_classes.*",
+        "config.accumulation.*"
+      ],
+      "purpose": "Append-only class deltas ledger.",
+      "recovery": [
+        "For `runtime/class_deltas.jsonl`, repair the scan/pattern input and rebuild partial/final registry outputs."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/config_load_error.txt` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/config_load_error.txt"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/config_load_error.txt",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Startup record of a config.lua load or table-shape failure.",
+      "recovery": [
+        "For `runtime/config_load_error.txt`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current/**"
+      ],
+      "owning_source": "Scripts/main.lua: current poll/session/forensic/context state writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current/**",
+      "public_settings": [
+        "config.runtime.*",
+        "config.forensic_rollup.write_current_today",
+        "config.world_state.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Dynamic output class containing current state owned by runtime state.",
+      "recovery": [
+        "For `runtime/current/**`, repair the owning source/write path and generate a newer owner state."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current/active_accounts.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current/active_accounts.json"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current/active_accounts.json",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Current mapped accounts with live sessions.",
+      "recovery": [
+        "For `runtime/current/active_accounts.json`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current/actor_touch_rollup.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current/actor_touch_rollup.json"
+      ],
+      "owning_source": "Scripts/main.lua: record_actor_touch/write_actor_touch_rollup",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current/actor_touch_rollup.json",
+      "public_settings": [
+        "config.logging.max_actor_touch_events_per_poll",
+        "config.logging.max_actor_touch_events_per_session",
+        "config.logging.escalate_low_to_medium_when_correlated"
+      ],
+      "purpose": "Bounded aggregate of low-importance actor-touch observations.",
+      "recovery": [
+        "For `runtime/current/actor_touch_rollup.json`, repair the owning source/write path and generate a newer owner state."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current/forensic_today.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current/forensic_today.json"
+      ],
+      "owning_source": "Scripts/main.lua: forensic/daily/weekly summary writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current/forensic_today.json",
+      "public_settings": [
+        "config.forensic_rollup.*",
+        "config.retention.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Structured current-day forensic index.",
+      "recovery": [
+        "For `runtime/current/forensic_today.json`, repair retained evidence/output paths and rebuild the affected index window."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current/forensic_today.md` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current/forensic_today.md"
+      ],
+      "owning_source": "Scripts/main.lua: forensic/daily/weekly summary writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current/forensic_today.md",
+      "public_settings": [
+        "config.forensic_rollup.*",
+        "config.retention.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Markdown current-day forensic index for review.",
+      "recovery": [
+        "For `runtime/current/forensic_today.md`, repair retained evidence/output paths and rebuild the affected index window."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current/forensic_today.txt` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current/forensic_today.txt"
+      ],
+      "owning_source": "Scripts/main.lua: forensic/daily/weekly summary writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current/forensic_today.txt",
+      "public_settings": [
+        "config.forensic_rollup.*",
+        "config.retention.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Plain-text current-day forensic index for review.",
+      "recovery": [
+        "For `runtime/current/forensic_today.txt`, repair retained evidence/output paths and rebuild the affected index window."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current/poll_error.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current/poll_error.json"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current/poll_error.json",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Structured current-poll failure tied to boot, epoch, and poll lineage.",
+      "recovery": [
+        "For `runtime/current/poll_error.json`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current/poll_status.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current/poll_status.json"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current/poll_status.json",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Canonical current poll/scheduler/checkpoint status.",
+      "recovery": [
+        "For `runtime/current/poll_status.json`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current/session_state.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current/session_state.json"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current/session_state.json",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Current live and recently closed session state.",
+      "recovery": [
+        "For `runtime/current/session_state.json`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current/spatial_context.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current/spatial_context.json"
+      ],
+      "owning_source": "Scripts/main.lua: target-context/spatial-context writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current/spatial_context.json",
+      "public_settings": [
+        "config.target_context.*",
+        "config.accumulation.require_target_context_for_enforcement"
+      ],
+      "purpose": "Weak relative object/spatial context that does not prove ownership.",
+      "recovery": [
+        "For `runtime/current/spatial_context.json`, repair the owning source/write path and generate a newer owner state."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current/startup_error.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current/startup_error.json"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current/startup_error.json",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Structured current startup failure tied to boot and epoch.",
+      "recovery": [
+        "For `runtime/current/startup_error.json`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/current_server_epoch.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/current_server_epoch.json"
+      ],
+      "owning_source": "Scripts/main.lua: epoch/lifecycle/crash-correlation writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/current_server_epoch.json",
+      "public_settings": [
+        "config.server_lifecycle.*",
+        "config.crash_correlation.*"
+      ],
+      "purpose": "Current server epoch and lifecycle classification.",
+      "recovery": [
+        "For `runtime/current_server_epoch.json`, repair lifecycle source continuity and begin/reconcile the correct server epoch."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/days/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/days/**"
+      ],
+      "owning_source": "Scripts/main.lua: forensic/daily/weekly summary writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/days/**",
+      "public_settings": [
+        "config.forensic_rollup.*",
+        "config.retention.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Dynamic output class containing days state owned by forensic.",
+      "recovery": [
+        "For `runtime/days/**`, repair retained evidence/output paths and rebuild the affected index window."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Failure to write/read `runtime/enforced.txt` records or preserves fail-closed state; no successful mutation may be inferred."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/enforced.txt"
+      ],
+      "owning_source": "Scripts/main.lua: Admin.ini parser/evaluate_enforcement/append_ban",
+      "packaged_or_generated": "generated",
+      "path": "runtime/enforced.txt",
+      "public_settings": [
+        "config.enforcement.*",
+        "config.admin_ini.*",
+        "config.whitelist",
+        "config.restart_request.*"
+      ],
+      "purpose": "Operator-readable ledger of verified Admin.ini ban writes.",
+      "recovery": [
+        "For `runtime/enforced.txt`, return to review-only, verify the Admin.ini backup state, read the recorded reason, and correct that check."
+      ],
+      "side_effects": [
+        "Writes a backup or enforcement audit record; Admin.ini mutation occurs only in append_ban after all gates."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Failure to write/read `runtime/enforced_bans.jsonl` records or preserves fail-closed state; no successful mutation may be inferred."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/enforced_bans.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: Admin.ini parser/evaluate_enforcement/append_ban",
+      "packaged_or_generated": "generated",
+      "path": "runtime/enforced_bans.jsonl",
+      "public_settings": [
+        "config.enforcement.*",
+        "config.admin_ini.*",
+        "config.whitelist",
+        "config.restart_request.*"
+      ],
+      "purpose": "Append-only primary enforcement success/fail-closed ledger.",
+      "recovery": [
+        "For `runtime/enforced_bans.jsonl`, return to review-only, verify the Admin.ini backup state, read the recorded reason, and correct that check."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/epochs/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/epochs/**"
+      ],
+      "owning_source": "Scripts/main.lua: epoch/lifecycle/crash-correlation writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/epochs/**",
+      "public_settings": [
+        "config.server_lifecycle.*",
+        "config.crash_correlation.*"
+      ],
+      "purpose": "Dynamic output class containing epochs state owned by lifecycle.",
+      "recovery": [
+        "For `runtime/epochs/**`, repair lifecycle source continuity and begin/reconcile the correct server epoch."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/evidence/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/evidence/**"
+      ],
+      "owning_source": "Scripts/main.lua: normalized evidence writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/evidence/**",
+      "public_settings": [
+        "config.logging.*",
+        "config.retention.*"
+      ],
+      "purpose": "Dynamic output class containing evidence state owned by evidence.",
+      "recovery": [
+        "For `runtime/evidence/**`, repair the source/write path and replay from authoritative retained evidence."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/evidence/crash_reconnect_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/evidence/crash_reconnect_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: epoch/lifecycle/crash-correlation writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/evidence/crash_reconnect_events.jsonl",
+      "public_settings": [
+        "config.server_lifecycle.*",
+        "config.crash_correlation.*"
+      ],
+      "purpose": "Append-only crash/reconnect correlation evidence.",
+      "recovery": [
+        "For `runtime/evidence/crash_reconnect_events.jsonl`, repair lifecycle source continuity and begin/reconcile the correct server epoch."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/evidence/critical_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/evidence/critical_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: normalized evidence writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/evidence/critical_events.jsonl",
+      "public_settings": [
+        "config.logging.*",
+        "config.retention.*"
+      ],
+      "purpose": "Append-only critical-importance evidence events.",
+      "recovery": [
+        "For `runtime/evidence/critical_events.jsonl`, repair the source/write path and replay from authoritative retained evidence."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Failure to write/read `runtime/evidence/enforced_bans.jsonl` records or preserves fail-closed state; no successful mutation may be inferred."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/evidence/enforced_bans.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: Admin.ini parser/evaluate_enforcement/append_ban",
+      "packaged_or_generated": "generated",
+      "path": "runtime/evidence/enforced_bans.jsonl",
+      "public_settings": [
+        "config.enforcement.*",
+        "config.admin_ini.*",
+        "config.whitelist",
+        "config.restart_request.*"
+      ],
+      "purpose": "Evidence-lane copy of enforcement outcomes.",
+      "recovery": [
+        "For `runtime/evidence/enforced_bans.jsonl`, return to review-only, verify the Admin.ini backup state, read the recorded reason, and correct that check."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Failure to write/read `runtime/evidence/enforcement_failed_*` records or preserves fail-closed state; no successful mutation may be inferred."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/evidence/enforcement_failed_*"
+      ],
+      "owning_source": "Scripts/main.lua: Admin.ini parser/evaluate_enforcement/append_ban",
+      "packaged_or_generated": "generated",
+      "path": "runtime/evidence/enforcement_failed_*",
+      "public_settings": [
+        "config.enforcement.*",
+        "config.admin_ini.*",
+        "config.whitelist",
+        "config.restart_request.*"
+      ],
+      "purpose": "Per-attempt structured fail-closed enforcement evidence class.",
+      "recovery": [
+        "For `runtime/evidence/enforcement_failed_*`, return to review-only, verify the Admin.ini backup state, read the recorded reason, and correct that check."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/evidence/high_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/evidence/high_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: normalized evidence writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/evidence/high_events.jsonl",
+      "public_settings": [
+        "config.logging.*",
+        "config.retention.*"
+      ],
+      "purpose": "Append-only high-importance evidence events.",
+      "recovery": [
+        "For `runtime/evidence/high_events.jsonl`, repair the source/write path and replay from authoritative retained evidence."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/evidence/lifecycle_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/evidence/lifecycle_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: epoch/lifecycle/crash-correlation writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/evidence/lifecycle_events.jsonl",
+      "public_settings": [
+        "config.server_lifecycle.*",
+        "config.crash_correlation.*"
+      ],
+      "purpose": "Append-only server lifecycle context events.",
+      "recovery": [
+        "For `runtime/evidence/lifecycle_events.jsonl`, repair lifecycle source continuity and begin/reconcile the correct server epoch."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/evidence/live_defense_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/evidence/live_defense_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: normalized evidence writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/evidence/live_defense_events.jsonl",
+      "public_settings": [
+        "config.logging.*",
+        "config.retention.*"
+      ],
+      "purpose": "Append-only current live-defense observations.",
+      "recovery": [
+        "For `runtime/evidence/live_defense_events.jsonl`, repair the source/write path and replay from authoritative retained evidence."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/evidence/log_continuity_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/evidence/log_continuity_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: log registry, tail, cursor commit, and continuity writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/evidence/log_continuity_events.jsonl",
+      "public_settings": [
+        "config.log_tail.*",
+        "config.logging.*",
+        "config.runtime.max_*",
+        "config.retention.*"
+      ],
+      "purpose": "Append-only log rotation/truncation/continuity evidence.",
+      "recovery": [
+        "For `runtime/evidence/log_continuity_events.jsonl`, repair the active log/cursor write and replay only from the last durable offset."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/evidence/medium_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/evidence/medium_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: normalized evidence writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/evidence/medium_events.jsonl",
+      "public_settings": [
+        "config.logging.*",
+        "config.retention.*"
+      ],
+      "purpose": "Append-only medium-importance evidence events.",
+      "recovery": [
+        "For `runtime/evidence/medium_events.jsonl`, repair the source/write path and replay from authoritative retained evidence."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/evidence/session_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/evidence/session_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/evidence/session_events.jsonl",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Append-only mapped session evidence events.",
+      "recovery": [
+        "For `runtime/evidence/session_events.jsonl`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/final_logs/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/final_logs/**"
+      ],
+      "owning_source": "Scripts/main.lua: forensic final-log writers; Scripts/public_pipeline.lua: route/accounting writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/**",
+      "public_settings": [
+        "config.forensic_rollup.final_log_root",
+        "config.reports.output_root",
+        "config.source_accounting.*"
+      ],
+      "purpose": "Dynamic output class containing final logs state owned by runtime state.",
+      "recovery": [
+        "For `runtime/final_logs/**`, repair the owning source/write path and generate a newer owner state."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/final_logs/YYYY-MM-DD/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/final_logs/YYYY-MM-DD/**"
+      ],
+      "owning_source": "Scripts/main.lua: forensic/daily/weekly summary writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/YYYY-MM-DD/**",
+      "public_settings": [
+        "config.forensic_rollup.*",
+        "config.retention.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Dynamic output class containing final logs/YYYY-MM-DD state owned by forensic.",
+      "recovery": [
+        "For `runtime/final_logs/YYYY-MM-DD/**`, repair retained evidence/output paths and rebuild the affected index window."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#public-report-routes",
+      "failure_modes": [
+        "Missing, stale, or unpaired `runtime/final_logs/case_review_latest.json` forces that route to missing and blocks notification eligibility."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "route proof: full",
+        "route proof: limited_expected_empty",
+        "route proof: missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/case_review_latest.json"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: route renderer/pair writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/case_review_latest.json",
+      "public_settings": [
+        "config.reports.*",
+        "config.source_accounting.*"
+      ],
+      "purpose": "Latest structured case review route report.",
+      "recovery": [
+        "For `runtime/final_logs/case_review_latest.json`, repair source lineage and both route writes, then regenerate route_proof.json for the same cycle."
+      ],
+      "side_effects": [
+        "Atomically replaces one JSON/TXT route pair; proof is committed separately after all route writes."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#public-report-routes",
+      "failure_modes": [
+        "Missing, stale, or unpaired `runtime/final_logs/case_review_latest.txt` forces that route to missing and blocks notification eligibility."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "route proof: full",
+        "route proof: limited_expected_empty",
+        "route proof: missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/case_review_latest.txt"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: route renderer/pair writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/case_review_latest.txt",
+      "public_settings": [
+        "config.reports.*",
+        "config.source_accounting.*"
+      ],
+      "purpose": "Latest operator-readable translated case review route report.",
+      "recovery": [
+        "For `runtime/final_logs/case_review_latest.txt`, repair source lineage and both route writes, then regenerate route_proof.json for the same cycle."
+      ],
+      "side_effects": [
+        "Atomically replaces one JSON/TXT route pair; proof is committed separately after all route writes."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#public-report-routes",
+      "failure_modes": [
+        "Missing, stale, or unpaired `runtime/final_logs/critical_guard_latest.json` forces that route to missing and blocks notification eligibility."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "route proof: full",
+        "route proof: limited_expected_empty",
+        "route proof: missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/critical_guard_latest.json"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: route renderer/pair writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/critical_guard_latest.json",
+      "public_settings": [
+        "config.reports.*",
+        "config.source_accounting.*"
+      ],
+      "purpose": "Latest structured critical guard route report.",
+      "recovery": [
+        "For `runtime/final_logs/critical_guard_latest.json`, repair source lineage and both route writes, then regenerate route_proof.json for the same cycle."
+      ],
+      "side_effects": [
+        "Atomically replaces one JSON/TXT route pair; proof is committed separately after all route writes."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#public-report-routes",
+      "failure_modes": [
+        "Missing, stale, or unpaired `runtime/final_logs/critical_guard_latest.txt` forces that route to missing and blocks notification eligibility."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "route proof: full",
+        "route proof: limited_expected_empty",
+        "route proof: missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/critical_guard_latest.txt"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: route renderer/pair writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/critical_guard_latest.txt",
+      "public_settings": [
+        "config.reports.*",
+        "config.source_accounting.*"
+      ],
+      "purpose": "Latest operator-readable translated critical guard route report.",
+      "recovery": [
+        "For `runtime/final_logs/critical_guard_latest.txt`, repair source lineage and both route writes, then regenerate route_proof.json for the same cycle."
+      ],
+      "side_effects": [
+        "Atomically replaces one JSON/TXT route pair; proof is committed separately after all route writes."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#public-report-routes",
+      "failure_modes": [
+        "Missing, stale, or unpaired `runtime/final_logs/daily_rollup_latest.json` forces that route to missing and blocks notification eligibility."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "route proof: full",
+        "route proof: limited_expected_empty",
+        "route proof: missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/daily_rollup_latest.json"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: route renderer/pair writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/daily_rollup_latest.json",
+      "public_settings": [
+        "config.reports.*",
+        "config.source_accounting.*"
+      ],
+      "purpose": "Latest structured daily rollup route report.",
+      "recovery": [
+        "For `runtime/final_logs/daily_rollup_latest.json`, repair source lineage and both route writes, then regenerate route_proof.json for the same cycle."
+      ],
+      "side_effects": [
+        "Atomically replaces one JSON/TXT route pair; proof is committed separately after all route writes."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#public-report-routes",
+      "failure_modes": [
+        "Missing, stale, or unpaired `runtime/final_logs/daily_rollup_latest.txt` forces that route to missing and blocks notification eligibility."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "route proof: full",
+        "route proof: limited_expected_empty",
+        "route proof: missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/daily_rollup_latest.txt"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: route renderer/pair writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/daily_rollup_latest.txt",
+      "public_settings": [
+        "config.reports.*",
+        "config.source_accounting.*"
+      ],
+      "purpose": "Latest operator-readable translated daily rollup route report.",
+      "recovery": [
+        "For `runtime/final_logs/daily_rollup_latest.txt`, repair source lineage and both route writes, then regenerate route_proof.json for the same cycle."
+      ],
+      "side_effects": [
+        "Atomically replaces one JSON/TXT route pair; proof is committed separately after all route writes."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#route-proof-schema",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/final_logs/historical_backfill_latest.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "top-level truth: complete/complete_with_gaps/partial/unavailable",
+        "source detail may be deferred/error",
+        "route proof remains full/limited_expected_empty/missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/historical_backfill_latest.json"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: source accounting and route-proof commit",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/historical_backfill_latest.json",
+      "public_settings": [
+        "config.source_accounting.*",
+        "config.reports.*"
+      ],
+      "purpose": "Latest historical source-accounting status, separate from current evidence.",
+      "recovery": [
+        "For `runtime/final_logs/historical_backfill_latest.json`, repair the named source/accounting/proof write and regenerate all current-cycle contract files."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#public-report-routes",
+      "failure_modes": [
+        "Missing, stale, or unpaired `runtime/final_logs/player_activity_latest.json` forces that route to missing and blocks notification eligibility."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "route proof: full",
+        "route proof: limited_expected_empty",
+        "route proof: missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/player_activity_latest.json"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: route renderer/pair writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/player_activity_latest.json",
+      "public_settings": [
+        "config.reports.*",
+        "config.source_accounting.*"
+      ],
+      "purpose": "Latest structured player activity route report.",
+      "recovery": [
+        "For `runtime/final_logs/player_activity_latest.json`, repair source lineage and both route writes, then regenerate route_proof.json for the same cycle."
+      ],
+      "side_effects": [
+        "Atomically replaces one JSON/TXT route pair; proof is committed separately after all route writes."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#public-report-routes",
+      "failure_modes": [
+        "Missing, stale, or unpaired `runtime/final_logs/player_activity_latest.txt` forces that route to missing and blocks notification eligibility."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "route proof: full",
+        "route proof: limited_expected_empty",
+        "route proof: missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/player_activity_latest.txt"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: route renderer/pair writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/player_activity_latest.txt",
+      "public_settings": [
+        "config.reports.*",
+        "config.source_accounting.*"
+      ],
+      "purpose": "Latest operator-readable translated player activity route report.",
+      "recovery": [
+        "For `runtime/final_logs/player_activity_latest.txt`, repair source lineage and both route writes, then regenerate route_proof.json for the same cycle."
+      ],
+      "side_effects": [
+        "Atomically replaces one JSON/TXT route pair; proof is committed separately after all route writes."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#route-proof-schema",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/final_logs/route_proof.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "top-level truth: complete/complete_with_gaps/partial/unavailable",
+        "source detail may be deferred/error",
+        "route proof remains full/limited_expected_empty/missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/route_proof.json"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: source accounting and route-proof commit",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/route_proof.json",
+      "public_settings": [
+        "config.source_accounting.*",
+        "config.reports.*"
+      ],
+      "purpose": "Current-cycle proof ledger for all five report routes.",
+      "recovery": [
+        "For `runtime/final_logs/route_proof.json`, repair the named source/accounting/proof write and regenerate all current-cycle contract files."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#public-report-routes",
+      "failure_modes": [
+        "Missing, stale, or unpaired `runtime/final_logs/server_status_latest.json` forces that route to missing and blocks notification eligibility."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "route proof: full",
+        "route proof: limited_expected_empty",
+        "route proof: missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/server_status_latest.json"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: route renderer/pair writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/server_status_latest.json",
+      "public_settings": [
+        "config.reports.*",
+        "config.source_accounting.*"
+      ],
+      "purpose": "Latest structured server status route report.",
+      "recovery": [
+        "For `runtime/final_logs/server_status_latest.json`, repair source lineage and both route writes, then regenerate route_proof.json for the same cycle."
+      ],
+      "side_effects": [
+        "Atomically replaces one JSON/TXT route pair; proof is committed separately after all route writes."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#public-report-routes",
+      "failure_modes": [
+        "Missing, stale, or unpaired `runtime/final_logs/server_status_latest.txt` forces that route to missing and blocks notification eligibility."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "route proof: full",
+        "route proof: limited_expected_empty",
+        "route proof: missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/server_status_latest.txt"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: route renderer/pair writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/server_status_latest.txt",
+      "public_settings": [
+        "config.reports.*",
+        "config.source_accounting.*"
+      ],
+      "purpose": "Latest operator-readable translated server status route report.",
+      "recovery": [
+        "For `runtime/final_logs/server_status_latest.txt`, repair source lineage and both route writes, then regenerate route_proof.json for the same cycle."
+      ],
+      "side_effects": [
+        "Atomically replaces one JSON/TXT route pair; proof is committed separately after all route writes."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#route-proof-schema",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/final_logs/source_accounting_latest.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "top-level truth: complete/complete_with_gaps/partial/unavailable",
+        "source detail may be deferred/error",
+        "route proof remains full/limited_expected_empty/missing"
+      ],
+      "outputs": [
+        "runtime/final_logs/source_accounting_latest.json"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: source accounting and route-proof commit",
+      "packaged_or_generated": "generated",
+      "path": "runtime/final_logs/source_accounting_latest.json",
+      "public_settings": [
+        "config.source_accounting.*",
+        "config.reports.*"
+      ],
+      "purpose": "Latest source-level availability and top-level truth accounting.",
+      "recovery": [
+        "For `runtime/final_logs/source_accounting_latest.json`, repair the named source/accounting/proof write and regenerate all current-cycle contract files."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/forensic_days/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/forensic_days/**"
+      ],
+      "owning_source": "Scripts/main.lua: forensic/daily/weekly summary writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/forensic_days/**",
+      "public_settings": [
+        "config.forensic_rollup.*",
+        "config.retention.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Dynamic output class containing forensic days state owned by forensic.",
+      "recovery": [
+        "For `runtime/forensic_days/**`, repair retained evidence/output paths and rebuild the affected index window."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/forensic_days/YYYY-MM-DD/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/forensic_days/YYYY-MM-DD/**"
+      ],
+      "owning_source": "Scripts/main.lua: forensic/daily/weekly summary writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/forensic_days/YYYY-MM-DD/**",
+      "public_settings": [
+        "config.forensic_rollup.*",
+        "config.retention.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Dynamic output class containing forensic days/YYYY-MM-DD state owned by forensic.",
+      "recovery": [
+        "For `runtime/forensic_days/YYYY-MM-DD/**`, repair retained evidence/output paths and rebuild the affected index window."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/history` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/history"
+      ],
+      "owning_source": "Scripts/main.lua: owning runtime state writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/history",
+      "public_settings": [
+        "owning `config.*` section in CONFIG_FIELD_CATALOG.md"
+      ],
+      "purpose": "Local history state owned by runtime state.",
+      "recovery": [
+        "For `runtime/history`, repair the owning source/write path and generate a newer owner state."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/history/public_accounts.tsv` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/history/public_accounts.tsv"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/history/public_accounts.tsv",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Durable bounded public account continuity ledger used by historical reports.",
+      "recovery": [
+        "For `runtime/history/public_accounts.tsv`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/loader_probe.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/loader_probe.json"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/loader_probe.json",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Structured evidence that the Lua loader reached bootstrap with recorded capabilities.",
+      "recovery": [
+        "For `runtime/loader_probe.json`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/loader_probe.txt` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/loader_probe.txt"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/loader_probe.txt",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Plain-text loader bootstrap probe.",
+      "recovery": [
+        "For `runtime/loader_probe.txt`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/log_continuity_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/log_continuity_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: log registry, tail, cursor commit, and continuity writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/log_continuity_events.jsonl",
+      "public_settings": [
+        "config.log_tail.*",
+        "config.logging.*",
+        "config.runtime.max_*",
+        "config.retention.*"
+      ],
+      "purpose": "Primary append-only log continuity ledger.",
+      "recovery": [
+        "For `runtime/log_continuity_events.jsonl`, repair the active log/cursor write and replay only from the last durable offset."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/log_offsets.tsv` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/log_offsets.tsv"
+      ],
+      "owning_source": "Scripts/main.lua: log registry, tail, cursor commit, and continuity writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/log_offsets.tsv",
+      "public_settings": [
+        "config.log_tail.*",
+        "config.logging.*",
+        "config.runtime.max_*",
+        "config.retention.*"
+      ],
+      "purpose": "Durable per-log committed cursors used to prevent replay or skipped bytes.",
+      "recovery": [
+        "For `runtime/log_offsets.tsv`, repair the active log/cursor write and replay only from the last durable offset."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/log_registry.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/log_registry.json"
+      ],
+      "owning_source": "Scripts/main.lua: log registry, tail, cursor commit, and continuity writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/log_registry.json",
+      "public_settings": [
+        "config.log_tail.*",
+        "config.logging.*",
+        "config.runtime.max_*",
+        "config.retention.*"
+      ],
+      "purpose": "Known active/backup log generations and continuity metadata.",
+      "recovery": [
+        "For `runtime/log_registry.json`, repair the active log/cursor write and replay only from the last durable offset."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/logs/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/logs/**"
+      ],
+      "owning_source": "Scripts/main.lua: log registry, tail, cursor commit, and continuity writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/logs/**",
+      "public_settings": [
+        "config.log_tail.*",
+        "config.logging.*",
+        "config.runtime.max_*",
+        "config.retention.*"
+      ],
+      "purpose": "Dynamic output class containing logs state owned by log tail.",
+      "recovery": [
+        "For `runtime/logs/**`, repair the active log/cursor write and replay only from the last durable offset."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/logs/current.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/logs/current.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: log registry, tail, cursor commit, and continuity writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/logs/current.jsonl",
+      "public_settings": [
+        "config.log_tail.*",
+        "config.logging.*",
+        "config.runtime.max_*",
+        "config.retention.*"
+      ],
+      "purpose": "Append-only operational event log for the current Guard runtime.",
+      "recovery": [
+        "For `runtime/logs/current.jsonl`, repair the active log/cursor write and replay only from the last durable offset."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/new_classes_detected.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/new_classes_detected.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: scan output and object registry writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/new_classes_detected.jsonl",
+      "public_settings": [
+        "config.object_registry.*",
+        "config.class_categories.*",
+        "config.high_risk_classes.*",
+        "config.accumulation.*"
+      ],
+      "purpose": "Append-only newly observed class-token review records.",
+      "recovery": [
+        "For `runtime/new_classes_detected.jsonl`, repair the scan/pattern input and rebuild partial/final registry outputs."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#notification-schemas",
+      "failure_modes": [
+        "A failed `runtime/notifications/**` write proves no local queue completion and never proves external delivery."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "top-level truth: complete/complete_with_gaps/partial/unavailable",
+        "source detail may be deferred/error",
+        "route proof remains full/limited_expected_empty/missing"
+      ],
+      "outputs": [
+        "runtime/notifications/**"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: local outbox writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/notifications/**",
+      "public_settings": [
+        "config.notification.*",
+        "config.reports.routes.*"
+      ],
+      "purpose": "Dynamic output class containing notifications state owned by notification.",
+      "recovery": [
+        "For `runtime/notifications/**`, repair the local outbox path and regenerate only from a proven current route."
+      ],
+      "side_effects": [
+        "Atomically replaces local outbox/status JSON only; no provider send or network action exists."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#notification-schemas",
+      "failure_modes": [
+        "A failed `runtime/notifications/notification_status.json` write proves no local queue completion and never proves external delivery."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "top-level truth: complete/complete_with_gaps/partial/unavailable",
+        "source detail may be deferred/error",
+        "route proof remains full/limited_expected_empty/missing"
+      ],
+      "outputs": [
+        "runtime/notifications/notification_status.json"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: local outbox writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/notifications/notification_status.json",
+      "public_settings": [
+        "config.notification.*",
+        "config.reports.routes.*"
+      ],
+      "purpose": "Latest local outbox eligibility/write outcome by route.",
+      "recovery": [
+        "For `runtime/notifications/notification_status.json`, repair the local outbox path and regenerate only from a proven current route."
+      ],
+      "side_effects": [
+        "Atomically replaces local outbox/status JSON only; no provider send or network action exists."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#notification-schemas",
+      "failure_modes": [
+        "A failed `runtime/notifications/pending/**` write proves no local queue completion and never proves external delivery."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "top-level truth: complete/complete_with_gaps/partial/unavailable",
+        "source detail may be deferred/error",
+        "route proof remains full/limited_expected_empty/missing"
+      ],
+      "outputs": [
+        "runtime/notifications/pending/**"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: local outbox writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/notifications/pending/**",
+      "public_settings": [
+        "config.notification.*",
+        "config.reports.routes.*"
+      ],
+      "purpose": "Dynamic output class containing notifications/pending state owned by notification.",
+      "recovery": [
+        "For `runtime/notifications/pending/**`, repair the local outbox path and regenerate only from a proven current route."
+      ],
+      "side_effects": [
+        "Atomically replaces local outbox/status JSON only; no provider send or network action exists."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#notification-schemas",
+      "failure_modes": [
+        "A failed `runtime/notifications/pending/*_latest.json` write proves no local queue completion and never proves external delivery."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "top-level truth: complete/complete_with_gaps/partial/unavailable",
+        "source detail may be deferred/error",
+        "route proof remains full/limited_expected_empty/missing"
+      ],
+      "outputs": [
+        "runtime/notifications/pending/*_latest.json"
+      ],
+      "owning_source": "Scripts/public_pipeline.lua: local outbox writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/notifications/pending/*_latest.json",
+      "public_settings": [
+        "config.notification.*",
+        "config.reports.routes.*"
+      ],
+      "purpose": "Dynamic latest local-outbox envelope class, one file per configured proven route.",
+      "recovery": [
+        "For `runtime/notifications/pending/*_latest.json`, repair the local outbox path and regenerate only from a proven current route."
+      ],
+      "side_effects": [
+        "Atomically replaces local outbox/status JSON only; no provider send or network action exists."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/object_registry.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/object_registry.json"
+      ],
+      "owning_source": "Scripts/main.lua: scan output and object registry writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/object_registry.json",
+      "public_settings": [
+        "config.object_registry.*",
+        "config.class_categories.*",
+        "config.high_risk_classes.*",
+        "config.accumulation.*"
+      ],
+      "purpose": "Completed object/class token registry for the latest scan.",
+      "recovery": [
+        "For `runtime/object_registry.json`, repair the scan/pattern input and rebuild partial/final registry outputs."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/object_registry_counts.tsv` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/object_registry_counts.tsv"
+      ],
+      "owning_source": "Scripts/main.lua: scan output and object registry writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/object_registry_counts.tsv",
+      "public_settings": [
+        "config.object_registry.*",
+        "config.class_categories.*",
+        "config.high_risk_classes.*",
+        "config.accumulation.*"
+      ],
+      "purpose": "Completed tabular object/class counts for the latest scan.",
+      "recovery": [
+        "For `runtime/object_registry_counts.tsv`, repair the scan/pattern input and rebuild partial/final registry outputs."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/object_registry_counts_partial.tsv` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/object_registry_counts_partial.tsv"
+      ],
+      "owning_source": "Scripts/main.lua: scan output and object registry writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/object_registry_counts_partial.tsv",
+      "public_settings": [
+        "config.object_registry.*",
+        "config.class_categories.*",
+        "config.high_risk_classes.*",
+        "config.accumulation.*"
+      ],
+      "purpose": "Partial tabular object/class counts while a bounded scan is incomplete.",
+      "recovery": [
+        "For `runtime/object_registry_counts_partial.tsv`, repair the scan/pattern input and rebuild partial/final registry outputs."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/object_registry_partial.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/object_registry_partial.json"
+      ],
+      "owning_source": "Scripts/main.lua: scan output and object registry writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/object_registry_partial.json",
+      "public_settings": [
+        "config.object_registry.*",
+        "config.class_categories.*",
+        "config.high_risk_classes.*",
+        "config.accumulation.*"
+      ],
+      "purpose": "Partial structured object/class registry while scanning continues.",
+      "recovery": [
+        "For `runtime/object_registry_partial.json`, repair the scan/pattern input and rebuild partial/final registry outputs."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/playerdata_index.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/playerdata_index.json"
+      ],
+      "owning_source": "Scripts/main.lua: Saved scan and PlayerData identity-index writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/playerdata_index.json",
+      "public_settings": [
+        "config.saved.scan_player_data",
+        "config.scanning.*",
+        "config.enforcement.require_playerdata_verified"
+      ],
+      "purpose": "Current PlayerData filename identity index from readable Saved evidence.",
+      "recovery": [
+        "For `runtime/playerdata_index.json`, repair the owning source/write path and generate a newer owner state."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/poll_error.txt` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/poll_error.txt"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/poll_error.txt",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Plain-text latest poll failure for operator diagnosis.",
+      "recovery": [
+        "For `runtime/poll_error.txt`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/poll_status.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/poll_status.json"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/poll_status.json",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Compatibility copy of current poll/scheduler status.",
+      "recovery": [
+        "For `runtime/poll_status.json`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/SOURCE_MODULE_REFERENCE.md#public-reporting-module",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/public_pipeline_status.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/public_pipeline_status.json"
+      ],
+      "owning_source": "Scripts/main.lua: run_public_report_opportunity",
+      "packaged_or_generated": "generated",
+      "path": "runtime/public_pipeline_status.json",
+      "public_settings": [
+        "config.runtime.report_refresh_interval_seconds",
+        "config.reports.*"
+      ],
+      "purpose": "Main-loader report-worker opportunity and last error state.",
+      "recovery": [
+        "For `runtime/public_pipeline_status.json`, repair the recorded report worker error and allow the next bounded between-polls opportunity."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/raid_cases/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/raid_cases/**"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/raid_cases/**",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Dynamic output class containing raid cases state owned by account review.",
+      "recovery": [
+        "For `runtime/raid_cases/**`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/raid_cases/index.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/raid_cases/index.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/raid_cases/index.jsonl",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Append-only index of multi-account review cases.",
+      "recovery": [
+        "For `runtime/raid_cases/index.jsonl`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/raw_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/raw_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: log registry, tail, cursor commit, and continuity writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/raw_events.jsonl",
+      "public_settings": [
+        "config.log_tail.*",
+        "config.logging.*",
+        "config.runtime.max_*",
+        "config.retention.*"
+      ],
+      "purpose": "Append-only normalized source events retained under logging/retention policy.",
+      "recovery": [
+        "For `runtime/raw_events.jsonl`, repair the active log/cursor write and replay only from the last durable offset."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/request_restart.flag` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/request_restart.flag"
+      ],
+      "owning_source": "Scripts/main.lua: verified-ban restart marker writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/request_restart.flag",
+      "public_settings": [
+        "config.restart_request.*",
+        "config.enforcement.request_restart_after_ban"
+      ],
+      "purpose": "Optional local marker requesting operator-owned restart handling.",
+      "recovery": [
+        "For `runtime/request_restart.flag`, verify the ban first, repair the local marker path, and verify any external consumer separately."
+      ],
+      "side_effects": [
+        "Creates/replaces a local marker only; it does not restart, kill, deploy, or call a provider."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/restart_reason.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/restart_reason.json"
+      ],
+      "owning_source": "Scripts/main.lua: verified-ban restart marker writer",
+      "packaged_or_generated": "generated",
+      "path": "runtime/restart_reason.json",
+      "public_settings": [
+        "config.restart_request.*",
+        "config.enforcement.request_restart_after_ban"
+      ],
+      "purpose": "Structured reason paired with the optional restart marker.",
+      "recovery": [
+        "For `runtime/restart_reason.json`, verify the ban first, repair the local marker path, and verify any external consumer separately."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/runtime_capabilities.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/runtime_capabilities.json"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/runtime_capabilities.json",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Startup snapshot of available Lua/OS/runtime capabilities.",
+      "recovery": [
+        "For `runtime/runtime_capabilities.json`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/runtime_version.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/runtime_version.json"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/runtime_version.json",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Current runtime version identity record.",
+      "recovery": [
+        "For `runtime/runtime_version.json`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/saved_path_probe.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/saved_path_probe.json"
+      ],
+      "owning_source": "Scripts/main.lua: derive_saved_candidates/find_saved_root",
+      "packaged_or_generated": "generated",
+      "path": "runtime/saved_path_probe.json",
+      "public_settings": [
+        "config.saved.*",
+        "RandomDayGuard/SavedRoot.txt"
+      ],
+      "purpose": "Ranked Saved-root probe results and selected readable candidate.",
+      "recovery": [
+        "For `runtime/saved_path_probe.json`, correct SavedRoot/candidates and rerun the readable-file probe."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing/stale `runtime/scan_checkpoint.json` leaves scan coverage partial, deferred, unavailable, or failed; it cannot prove expected-empty."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/scan_checkpoint.json"
+      ],
+      "owning_source": "Scripts/main.lua: begin/continue/finish scan job",
+      "packaged_or_generated": "generated",
+      "path": "runtime/scan_checkpoint.json",
+      "public_settings": [
+        "config.saved.*",
+        "config.scanning.*",
+        "config.source_accounting.changed_file_manifest"
+      ],
+      "purpose": "Resumable bounded scan cursor and accumulated state.",
+      "recovery": [
+        "For `runtime/scan_checkpoint.json`, repair Saved discovery/read/write input and resume the checkpoint or start a reviewed baseline."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing/stale `runtime/scan_complete.json` leaves scan coverage partial, deferred, unavailable, or failed; it cannot prove expected-empty."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/scan_complete.json"
+      ],
+      "owning_source": "Scripts/main.lua: begin/continue/finish scan job",
+      "packaged_or_generated": "generated",
+      "path": "runtime/scan_complete.json",
+      "public_settings": [
+        "config.saved.*",
+        "config.scanning.*",
+        "config.source_accounting.changed_file_manifest"
+      ],
+      "purpose": "Terminal successful scan summary and baseline lineage.",
+      "recovery": [
+        "For `runtime/scan_complete.json`, repair Saved discovery/read/write input and resume the checkpoint or start a reviewed baseline."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing/stale `runtime/scan_error.txt` leaves scan coverage partial, deferred, unavailable, or failed; it cannot prove expected-empty."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/scan_error.txt"
+      ],
+      "owning_source": "Scripts/main.lua: begin/continue/finish scan job",
+      "packaged_or_generated": "generated",
+      "path": "runtime/scan_error.txt",
+      "public_settings": [
+        "config.saved.*",
+        "config.scanning.*",
+        "config.source_accounting.changed_file_manifest"
+      ],
+      "purpose": "Terminal scan failure reason.",
+      "recovery": [
+        "For `runtime/scan_error.txt`, repair Saved discovery/read/write input and resume the checkpoint or start a reviewed baseline."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing/stale `runtime/scan_progress.json` leaves scan coverage partial, deferred, unavailable, or failed; it cannot prove expected-empty."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/scan_progress.json"
+      ],
+      "owning_source": "Scripts/main.lua: begin/continue/finish scan job",
+      "packaged_or_generated": "generated",
+      "path": "runtime/scan_progress.json",
+      "public_settings": [
+        "config.saved.*",
+        "config.scanning.*",
+        "config.source_accounting.changed_file_manifest"
+      ],
+      "purpose": "Current bounded discovery/scan progress and budget state.",
+      "recovery": [
+        "For `runtime/scan_progress.json`, repair Saved discovery/read/write input and resume the checkpoint or start a reviewed baseline."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing/stale `runtime/scan_started.json` leaves scan coverage partial, deferred, unavailable, or failed; it cannot prove expected-empty."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "source-level available/expected_empty/partial/deferred/unavailable",
+        "source-level malformed/permission_denied/error",
+        "never implicit route success"
+      ],
+      "outputs": [
+        "runtime/scan_started.json"
+      ],
+      "owning_source": "Scripts/main.lua: begin/continue/finish scan job",
+      "packaged_or_generated": "generated",
+      "path": "runtime/scan_started.json",
+      "public_settings": [
+        "config.saved.*",
+        "config.scanning.*",
+        "config.source_accounting.changed_file_manifest"
+      ],
+      "purpose": "Scan generation start record tied to boot and epoch.",
+      "recovery": [
+        "For `runtime/scan_started.json`, repair Saved discovery/read/write input and resume the checkpoint or start a reviewed baseline."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/server_epochs.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/server_epochs.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: epoch/lifecycle/crash-correlation writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/server_epochs.jsonl",
+      "public_settings": [
+        "config.server_lifecycle.*",
+        "config.crash_correlation.*"
+      ],
+      "purpose": "Append-only server epoch history.",
+      "recovery": [
+        "For `runtime/server_epochs.jsonl`, repair lifecycle source continuity and begin/reconcile the correct server epoch."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/server_lifecycle_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/server_lifecycle_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: epoch/lifecycle/crash-correlation writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/server_lifecycle_events.jsonl",
+      "public_settings": [
+        "config.server_lifecycle.*",
+        "config.crash_correlation.*"
+      ],
+      "purpose": "Append-only lifecycle classification history.",
+      "recovery": [
+        "For `runtime/server_lifecycle_events.jsonl`, repair lifecycle source continuity and begin/reconcile the correct server epoch."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/session_events.tsv` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/session_events.tsv"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/session_events.tsv",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Tabular mapped join/leave/session event ledger.",
+      "recovery": [
+        "For `runtime/session_events.tsv`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/sessions/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/sessions/**"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/sessions/**",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Dynamic output class containing sessions state owned by account review.",
+      "recovery": [
+        "For `runtime/sessions/**`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/startup_error.txt` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/startup_error.txt"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/startup_error.txt",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Plain-text latest startup failure.",
+      "recovery": [
+        "For `runtime/startup_error.txt`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/startup_status.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/startup_status.json"
+      ],
+      "owning_source": "Scripts/main.lua: bootstrap, startup, poll, and scheduler status writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/startup_status.json",
+      "public_settings": [
+        "config.enabled",
+        "config.runtime.*"
+      ],
+      "purpose": "Current startup phase, Saved root, scan gate, and scheduler state.",
+      "recovery": [
+        "For `runtime/startup_status.json`, repair the recorded startup/poll owner and generate a newer current status."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/warning_events.jsonl` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/warning_events.jsonl"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/warning_events.jsonl",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Append-only normalized warning/correlation events.",
+      "recovery": [
+        "For `runtime/warning_events.jsonl`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Appends one bounded structured record; retention/rotation may archive rebuildable history."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/warnings/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/warnings/**"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/warnings/**",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Dynamic output class containing warnings state owned by account review.",
+      "recovery": [
+        "For `runtime/warnings/**`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/warnings/warning_*` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/warnings/warning_*"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/warnings/warning_*",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Rotated per-period/per-player warning report class.",
+      "recovery": [
+        "For `runtime/warnings/warning_*`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/warnings/warning_*.txt` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/warnings/warning_*.txt"
+      ],
+      "owning_source": "Scripts/main.lua: account/session/warning/case writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/warnings/warning_*.txt",
+      "public_settings": [
+        "config.warning_bursts.*",
+        "config.join_leave.*",
+        "config.raid_detection.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Rotated per-period/per-player warning report class.",
+      "recovery": [
+        "For `runtime/warnings/warning_*.txt`, repair mapped source/session evidence and rebuild the affected account/case report."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/weeks/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/weeks/**"
+      ],
+      "owning_source": "Scripts/main.lua: forensic/daily/weekly summary writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/weeks/**",
+      "public_settings": [
+        "config.forensic_rollup.*",
+        "config.retention.*",
+        "config.warning_report.*"
+      ],
+      "purpose": "Dynamic output class containing weeks state owned by forensic.",
+      "recovery": [
+        "For `runtime/weeks/**`, repair retained evidence/output paths and rebuild the affected index window."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/world_state/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/world_state/**"
+      ],
+      "owning_source": "Scripts/main.lua: world-state snapshot writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/world_state/**",
+      "public_settings": [
+        "config.world_state.*",
+        "config.scanning.*"
+      ],
+      "purpose": "Dynamic output class containing world state state owned by world state.",
+      "recovery": [
+        "For `runtime/world_state/**`, repair scan/write input and regenerate the relevant snapshot without claiming ownership."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/world_state/boot/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/world_state/boot/**"
+      ],
+      "owning_source": "Scripts/main.lua: world-state snapshot writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/world_state/boot/**",
+      "public_settings": [
+        "config.world_state.*",
+        "config.scanning.*"
+      ],
+      "purpose": "Dynamic output class containing world state/boot state owned by world state.",
+      "recovery": [
+        "For `runtime/world_state/boot/**`, repair scan/write input and regenerate the relevant snapshot without claiming ownership."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/world_state/boot/world_state_boot_*.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/world_state/boot/world_state_boot_*.json"
+      ],
+      "owning_source": "Scripts/main.lua: world-state snapshot writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/world_state/boot/world_state_boot_*.json",
+      "public_settings": [
+        "config.world_state.*",
+        "config.scanning.*"
+      ],
+      "purpose": "Per-boot world-state context snapshot class.",
+      "recovery": [
+        "For `runtime/world_state/boot/world_state_boot_*.json`, repair scan/write input and regenerate the relevant snapshot without claiming ownership."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/world_state/current/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/world_state/current/**"
+      ],
+      "owning_source": "Scripts/main.lua: world-state snapshot writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/world_state/current/**",
+      "public_settings": [
+        "config.world_state.*",
+        "config.scanning.*"
+      ],
+      "purpose": "Dynamic output class containing world state/current state owned by world state.",
+      "recovery": [
+        "For `runtime/world_state/current/**`, repair scan/write input and regenerate the relevant snapshot without claiming ownership."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/world_state/current/world_state_latest.json` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/world_state/current/world_state_latest.json"
+      ],
+      "owning_source": "Scripts/main.lua: world-state snapshot writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/world_state/current/world_state_latest.json",
+      "public_settings": [
+        "config.world_state.*",
+        "config.scanning.*"
+      ],
+      "purpose": "Latest bounded world-state context snapshot.",
+      "recovery": [
+        "For `runtime/world_state/current/world_state_latest.json`, repair scan/write input and regenerate the relevant snapshot without claiming ownership."
+      ],
+      "side_effects": [
+        "Atomically replaces or writes this local runtime state through the owning source block."
+      ],
+      "user_editable": false
+    },
+    {
+      "canonical_document": "docs/OUTPUT_SCHEMA_REFERENCE.md#runtime-output-inventory",
+      "failure_modes": [
+        "Missing, stale, malformed, or failed `runtime/world_state/sessions/**` cannot prove its owner completed or its evidence is current."
+      ],
+      "inputs": [
+        "current owner state and explicitly cited server-owned/local evidence"
+      ],
+      "kind": "generated local output or dynamic path class",
+      "operator_visible_states": [
+        "present and current",
+        "present with an explicit owner error/incomplete state",
+        "missing or stale"
+      ],
+      "outputs": [
+        "runtime/world_state/sessions/**"
+      ],
+      "owning_source": "Scripts/main.lua: world-state snapshot writers",
+      "packaged_or_generated": "generated",
+      "path": "runtime/world_state/sessions/**",
+      "public_settings": [
+        "config.world_state.*",
+        "config.scanning.*"
+      ],
+      "purpose": "Dynamic output class containing world state/sessions state owned by world state.",
+      "recovery": [
+        "For `runtime/world_state/sessions/**`, repair scan/write input and regenerate the relevant snapshot without claiming ownership."
+      ],
+      "side_effects": [
+        "Creates owner-specific files below this runtime directory class; no packaged evidence is modified."
+      ],
+      "user_editable": false
+    }
+  ],
+  "generator": "tools/generate_documentation_audit.py",
+  "schema": "randomdayguard.traceability/v2"
+}
