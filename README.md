@@ -14,7 +14,7 @@ review paths are tested, while compatibility, historical coverage, and report
 quality continue to be improved. Keep normal server backups and review the
 current report coverage before relying on a conclusion.
 
-**Languages:** [Choose one of 27 reading paths](docs/locales/README.md)
+**Languages:** [Choose one of 27 reading paths](docs/locales/LANGUAGES.md)
 
 ## What the five reports answer
 

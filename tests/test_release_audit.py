@@ -21,7 +21,7 @@ class ReleaseBuilderTests(unittest.TestCase):
 
     def test_only_current_release_and_mexican_label(self):
         self.assertEqual([BUILDER.VERSION], sorted(path.name for path in (ROOT / "releases").iterdir() if path.is_dir()))
-        self.assertIn("Mexican (MX)", (ROOT / "docs/locales/README.md").read_text(encoding="utf-8"))
-        self.assertIn("Mexican (MX)", (ROOT / "docs/locales/es-MX/README.md").read_text(encoding="utf-8"))
+        self.assertIn("Mexican (MX)", (ROOT / "docs/locales/LANGUAGES.md").read_text(encoding="utf-8"))
+        self.assertIn("Mexican (MX)", (ROOT / "docs/locales/es-MX/LÉEME.md").read_text(encoding="utf-8"))
 
 if __name__ == "__main__": unittest.main()

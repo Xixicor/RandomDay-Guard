@@ -44,6 +44,6 @@ sessions, review cases, and Guard failures.
 
 ## Languages
 
-[Choose one of 27 localized entry pages](locales/README.md). Exact field names,
+[Choose one of 27 localized entry pages](locales/LANGUAGES.md). Exact field names,
 paths, report states, and error codes remain unchanged so readers can match
 them to the program and technical reference.
