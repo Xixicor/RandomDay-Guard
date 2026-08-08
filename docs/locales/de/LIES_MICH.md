@@ -1,5 +1,31 @@
 # RandomDayGuard auf Deutsch
 
+> [!IMPORTANT]
+> ## Projektstatus — RandomDay-Testphase abgeschlossen
+>
+> Der RandomDay-Testbetrieb ist abgeschlossen; der öffentliche Testserver wird demnächst geschlossen.
+>
+> Während dieses Betriebs liefen RandomDay und RandomDayGuard gemeinsam durch wiederholte Profilwechsel, normale und unterbrochene Serverneustarts, Wiederherstellungs- und Rollback-Prüfungen, die Einbindung erweiterter Mods, die Sammlung von Servernachweisen und die Prüfung der Betreiberberichte.
+>
+> Damit haben wir das angestrebte Wissen gewonnen: wie sich wechselnde Sandbox-Profile über reale Lebenszyklen eines dedizierten Servers verhalten, wie RandomDay mit unterstützten erweiterten Mods zusammenspielt und in welchem Umfang RandomDayGuard die vom Server geschriebenen Nachweise in eine nützliche, vorsichtige Überwachung umwandeln kann, ohne Lücken oder Vermutungen als Tatsachen darzustellen.
+>
+> **Verwendeter Testserver-Stack:**
+>
+> - RandomDay private Entwicklungsversion `v0.41.76`
+> - RandomDayGuard private Entwicklungsversion `v0.46.130`
+> - Chaotic Spawn Engine / DynamicSpawns `0.8.5 Hotfix 1`
+> - Lethal Lasers `1.0 UE4SS`
+> - ANTE Up `0.26`
+> - Encounter Director integration — eine RandomDay-eigene DynamicSpawns-Erweiterung, keine separat vertriebene Mod
+> - UE4SS `v3.0.1 Beta #0` (Git `01e0a584`; Nexus `v3.0.1-940-g01e0a584`)
+> - dedizierter Abiotic-Factor-Server `1.4.0.27939`
+>
+> Die derzeit veröffentlichten Pakete bleiben RandomDay `v0.3.16-alpha` und RandomDayGuard `v0.4.12-alpha`.
+>
+> Die Entwicklung beider Projekte ist vorerst pausiert. Die bestehenden Releases und Dokumentationen bleiben verfügbar; möglicherweise kehren wir zurück, wenn wir wieder den Wunsch verspüren, die Arbeit fortzusetzen.
+>
+> Dieser Stack dokumentiert, was während des Betriebs eingesetzt wurde; er ist weder eine Mindestversionsanforderung noch eine Kompatibilitätsgarantie für spätere Spiel-, Loader- oder Mod-Versionen. Der letzte formell dokumentierte Zyklus verwendete Abiotic Factor `1.4.0.27939`.
+
 **v0.4.12-alpha**
 
 RandomDayGuard wandelt begrenzte Belege eines Abiotic-Factor-Dedicated-Servers

@@ -1,5 +1,31 @@
 # Mwongozo wa RandomDayGuard kwa Kiswahili
 
+> [!IMPORTANT]
+> ## Hali ya mradi — majaribio ya RandomDay yamekamilika
+>
+> Operesheni ya majaribio ya RandomDay imekamilika, na seva ya majaribio ya umma itafungwa hivi karibuni.
+>
+> Wakati wa operesheni hii, RandomDay na RandomDayGuard ziliendeshwa pamoja kupitia mizunguko ya mara kwa mara ya wasifu, uanzishaji upya wa seva wa kawaida na uliokatizwa, ukaguzi wa urejeshaji na kurudisha nyuma, ujumuishaji wa mod zilizopanuliwa, ukusanyaji wa ushahidi wa seva na mapitio ya ripoti za mwendeshaji.
+>
+> Hili limetupa maarifa tuliyolenga kupata: jinsi wasifu wa sandbox unaozunguka unavyofanya kazi katika mizunguko halisi ya maisha ya seva maalumu; jinsi RandomDay inavyoshirikiana na mod zilizopanuliwa zinazotumika; na kiwango ambacho RandomDayGuard inaweza kubadili ushahidi ulioandikwa na seva kuwa ufuatiliaji wenye manufaa na tahadhari bila kuonyesha mapengo au makisio kama ukweli.
+>
+> **Muundo uliotumika kwenye seva ya majaribio:**
+>
+> - RandomDay build ya maendeleo ya faragha `v0.41.76`
+> - RandomDayGuard build ya maendeleo ya faragha `v0.46.130`
+> - Chaotic Spawn Engine / DynamicSpawns `0.8.5 Hotfix 1`
+> - Lethal Lasers `1.0 UE4SS`
+> - ANTE Up `0.26`
+> - Encounter Director integration — kiendelezi cha DynamicSpawns kinachomilikiwa na RandomDay, si mod inayosambazwa kando
+> - UE4SS `v3.0.1 Beta #0` (Git `01e0a584`; Nexus `v3.0.1-940-g01e0a584`)
+> - seva maalumu ya Abiotic Factor `1.4.0.27939`
+>
+> Vifurushi vilivyochapishwa sasa vinaendelea kuwa RandomDay `v0.3.16-alpha` na RandomDayGuard `v0.4.12-alpha`.
+>
+> Maendeleo ya miradi yote miwili yamesitishwa kwa sasa. Matoleo na nyaraka zilizopo zitaendelea kupatikana, na tunaweza kurudi tutakapohisi tena hamu ya kuendelea na kazi.
+>
+> Muundo huu unaandika kilichotumika wakati wa operesheni; si hitaji la toleo la chini wala dhamana ya utangamano na matoleo ya baadaye ya mchezo, loader au mod. Mzunguko wa mwisho uliorekodiwa rasmi ulitumia Abiotic Factor `1.4.0.27939`.
+
 **v0.4.12-alpha**
 
 RandomDayGuard hubadilisha ushahidi uliowekewa mipaka kutoka seva maalum ya

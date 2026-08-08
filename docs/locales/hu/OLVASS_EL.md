@@ -1,5 +1,31 @@
 # RandomDayGuard magyarul
 
+> [!IMPORTANT]
+> ## Projektállapot — a RandomDay tesztelése lezárult
+>
+> A RandomDay tesztüzeme befejeződött, a nyilvános tesztszerver pedig hamarosan bezár.
+>
+> A művelet során a RandomDay és a RandomDayGuard együtt futott ismételt profilváltásokon, normál és megszakított szerver-újraindításokon, helyreállítási és visszaállítási ellenőrzéseken, kibővített modintegráción, szerverbizonyíték-gyűjtésen és üzemeltetői jelentések felülvizsgálatán keresztül.
+>
+> Ezzel megszereztük a kívánt ismereteket: hogyan viselkednek a váltakozó sandboxprofilok valós dedikáltszerver-életciklusokban; hogyan működik együtt a RandomDay a támogatott kibővített modokkal; és milyen mértékben tudja a RandomDayGuard a szerver által rögzített bizonyítékokat hasznos, óvatos megfigyeléssé alakítani anélkül, hogy a hiányokat vagy feltételezéseket tényként mutatná be.
+>
+> **A tesztszerveren használt összeállítás:**
+>
+> - RandomDay privát fejlesztői build `v0.41.76`
+> - RandomDayGuard privát fejlesztői build `v0.46.130`
+> - Chaotic Spawn Engine / DynamicSpawns `0.8.5 Hotfix 1`
+> - Lethal Lasers `1.0 UE4SS`
+> - ANTE Up `0.26`
+> - Encounter Director integration — a RandomDay saját DynamicSpawns-bővítménye, nem külön terjesztett mod
+> - UE4SS `v3.0.1 Beta #0` (Git `01e0a584`; Nexus `v3.0.1-940-g01e0a584`)
+> - Abiotic Factor dedikált szerver `1.4.0.27939`
+>
+> A jelenleg közzétett csomagok továbbra is a RandomDay `v0.3.16-alpha` és a RandomDayGuard `v0.4.12-alpha`.
+>
+> Mindkét projekt fejlesztése egyelőre szünetel. A meglévő kiadások és dokumentációk elérhetők maradnak, és visszatérhetünk, amikor ismét kedvet érzünk a munka folytatásához.
+>
+> Ez az összeállítás a művelet során használt elemeket dokumentálja; nem minimumverzió-követelmény, és nem garantál kompatibilitást a játék, a betöltő vagy a modok későbbi verzióival. Az utolsó hivatalosan rögzített ciklus az Abiotic Factor `1.4.0.27939` verzióját használta.
+
 **v0.4.12-alpha**
 
 A RandomDayGuard az Abiotic Factor dedikált szerverének körülhatárolt

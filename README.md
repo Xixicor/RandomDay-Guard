@@ -1,5 +1,31 @@
 # RandomDayGuard
 
+> [!IMPORTANT]
+> ## Project status — RandomDay testing concluded
+>
+> The RandomDay test operation is complete, and the public test server will close soon.
+>
+> During this operation, RandomDay and RandomDayGuard ran together through repeated profile rotations, normal and interrupted server restarts, recovery and rollback checks, extended-mod integration, server-evidence collection, and operator-report review.
+>
+> This gave us the knowledge we set out to gain: how rotating sandbox profiles behave throughout real dedicated-server lifecycles; how RandomDay interacts with supported extended mods; and how far RandomDayGuard can turn the evidence written by the server into useful, cautious monitoring without presenting gaps or guesses as facts.
+>
+> **Test-server stack used:**
+>
+> - RandomDay private development build `v0.41.76`
+> - RandomDayGuard private development build `v0.46.130`
+> - Chaotic Spawn Engine / DynamicSpawns `0.8.5 Hotfix 1`
+> - Lethal Lasers `1.0 UE4SS`
+> - ANTE Up `0.26`
+> - Encounter Director integration — a RandomDay-owned DynamicSpawns extension, not a separately distributed mod
+> - UE4SS `v3.0.1 Beta #0` (Git `01e0a584`; Nexus `v3.0.1-940-g01e0a584`)
+> - Abiotic Factor dedicated server `1.4.0.27939`
+>
+> The currently published packages remain RandomDay `v0.3.16-alpha` and RandomDayGuard `v0.4.12-alpha`.
+>
+> Development of both projects is now paused. The existing releases and documentation will remain available, and we may return when we once again feel the pull to continue the work.
+>
+> This stack documents what was used during the operation; it is not a minimum-version requirement or a guarantee of compatibility with later game, loader, or mod versions. The final formally recorded cycle used Abiotic Factor `1.4.0.27939`.
+
 <img width="2022" height="778" alt="RandomDayGuard cover" src="https://github.com/user-attachments/assets/d25915ec-1120-4620-9865-ebf3b422eaf8" />
 
 RandomDayGuard reads records already produced by an Abiotic Factor dedicated

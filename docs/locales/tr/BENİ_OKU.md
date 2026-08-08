@@ -1,5 +1,31 @@
 # Türkçe RandomDayGuard rehberi
 
+> [!IMPORTANT]
+> ## Proje durumu — RandomDay testleri tamamlandı
+>
+> RandomDay test çalışması tamamlandı ve herkese açık test sunucusu yakında kapatılacak.
+>
+> Bu çalışma sırasında RandomDay ve RandomDayGuard; tekrarlanan profil dönüşümleri, normal ve kesintiye uğramış sunucu yeniden başlatmaları, kurtarma ve geri alma kontrolleri, genişletilmiş mod entegrasyonu, sunucu kanıtlarının toplanması ve operatör raporlarının incelenmesi boyunca birlikte çalıştırıldı.
+>
+> Böylece hedeflediğimiz bilgiyi edindik: dönüşümlü sandbox profillerinin gerçek ayrılmış sunucu yaşam döngülerindeki davranışı; RandomDay’in desteklenen genişletilmiş modlarla etkileşimi; ve RandomDayGuard’ın boşlukları veya tahminleri gerçekmiş gibi sunmadan sunucunun yazdığı kanıtları ne ölçüde yararlı ve temkinli bir izlemeye dönüştürebildiği.
+>
+> **Test sunucusunda kullanılan bileşenler:**
+>
+> - RandomDay özel geliştirme yapısı `v0.41.76`
+> - RandomDayGuard özel geliştirme yapısı `v0.46.130`
+> - Chaotic Spawn Engine / DynamicSpawns `0.8.5 Hotfix 1`
+> - Lethal Lasers `1.0 UE4SS`
+> - ANTE Up `0.26`
+> - Encounter Director integration — RandomDay’e ait bir DynamicSpawns uzantısıdır, ayrı dağıtılan bir mod değildir
+> - UE4SS `v3.0.1 Beta #0` (Git `01e0a584`; Nexus `v3.0.1-940-g01e0a584`)
+> - Abiotic Factor ayrılmış sunucusu `1.4.0.27939`
+>
+> Şu anda yayımlanan paketler RandomDay `v0.3.16-alpha` ve RandomDayGuard `v0.4.12-alpha` olarak kalmaktadır.
+>
+> Her iki projenin geliştirilmesi şimdilik duraklatıldı. Mevcut sürümler ve belgeler erişilebilir kalacak; çalışmayı yeniden sürdürme isteği duyduğumuzda geri dönebiliriz.
+>
+> Bu bileşen listesi çalışma sırasında kullanılanları belgeler; asgari sürüm şartı veya oyunun, loader’ın ya da modların sonraki sürümleriyle uyumluluk garantisi değildir. Resmî olarak kaydedilen son döngüde Abiotic Factor `1.4.0.27939` kullanıldı.
+
 **v0.4.12-alpha**
 
 RandomDayGuard, Abiotic Factor adanmış sunucusundan toplanan sınırlı kanıtları

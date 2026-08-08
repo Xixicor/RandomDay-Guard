@@ -6,9 +6,9 @@
       "documents": [
         {
           "localized": "docs/locales/ar/اقرأني.md",
-          "localized_sha256": "1bfd4fd15b7a0498865a844f8b79b1ce032c763b786d16302311eabc3ede5944",
+          "localized_sha256": "9f6ec3059bbc45431890509172792e7efaad79ade9d804d398a2e4ef9f87c1cd",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/ar/سجل_التغيير.md",
@@ -210,9 +210,9 @@
       "documents": [
         {
           "localized": "docs/locales/binary/01010010_01000101_01000001_01000100_01001101_01000101.md",
-          "localized_sha256": "eb23eff5057d3305a4b8f6823fab92545e2de08646a96c2dbe1cc9c51cf9fee6",
+          "localized_sha256": "5f6177352337710e7e933ce1d5720745698fc70332a2f8639cbd480d84657738",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/binary/00000001.md",
@@ -414,9 +414,9 @@
       "documents": [
         {
           "localized": "docs/locales/bn/আমাকে-পড়ুন.md",
-          "localized_sha256": "c6f6208f16361b1f4800392474fb60dc413cc59733d789944099ecc22e44ddab",
+          "localized_sha256": "169ac97647a25f58abac9521145a74ccbf719f3fd96d3da96403f58f351dc50a",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/bn/লগ_পরিবর্তন_করুন.md",
@@ -618,9 +618,9 @@
       "documents": [
         {
           "localized": "docs/locales/bo/ཀློག་རོགས།.md",
-          "localized_sha256": "c1bc839fa1b036c5b5f670213042f907a1ccab416b48bc25307205c870726f32",
+          "localized_sha256": "7d8d81c0f7ff2b7d11ab71008c2dfe8003c73037405fe6281fed6e8166ecb385",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/bo/བསྒྱུར་བཅོས་དྲན་ཐོ་.md",
@@ -822,9 +822,9 @@
       "documents": [
         {
           "localized": "docs/locales/de/LIES_MICH.md",
-          "localized_sha256": "c10d287134b33efcf5ee9acd7a22fcbb7ccafffdbf486dc5d0b79a55beb2177b",
+          "localized_sha256": "4e01ca202fac4fdfbd2f55577a896b476727801b051ab03f7a84999a4f827374",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/de/ÄNDERUNGSPROTOKOLL.md",
@@ -1026,9 +1026,9 @@
       "documents": [
         {
           "localized": "docs/locales/el/ΔΙΑΒΑΣΕ_ΜΕ.md",
-          "localized_sha256": "d3cccf4f23bbb659c7f6248a3e8af4dc0ca9ba46caddb804a997ac3507eb56b8",
+          "localized_sha256": "71bf4602252b80790c1133367ccc7d3edbef28dc4495eafa1aaebbac04700be7",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/el/ΑΡΧΕΊΟ_ΚΑΤΑΓΡΑΦΉΣ_ΑΛΛΑΓΏΝ.md",
@@ -1230,9 +1230,9 @@
       "documents": [
         {
           "localized": "docs/locales/es-MX/LÉEME.md",
-          "localized_sha256": "57ec42151773f0bfb93a81aebf4c39d3bc0ed181eccb25089e0726f9dc2df3ed",
+          "localized_sha256": "5dc5c76315cf78049051d978268e39756de33736e08e00a17188484162e759fd",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/es-MX/REGISTRO_DE_CAMBIOS.md",
@@ -1434,9 +1434,9 @@
       "documents": [
         {
           "localized": "docs/locales/fa/مرا_بخوان.md",
-          "localized_sha256": "d05b58bace648ebe8afdbb3880c80fdae4d02ed3fd65222a9723238e2f8d5cbe",
+          "localized_sha256": "e7b9d16e80bfc78e13c1811a037647061f9e315b1f21ac634661baeea469ea86",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/fa/تغییر_گزارش.md",
@@ -1638,9 +1638,9 @@
       "documents": [
         {
           "localized": "docs/locales/fr/LISEZ_MOI.md",
-          "localized_sha256": "d23f986cb7c7550f155f7e11333daffcee64ba69e2999d364d9eb613f643e244",
+          "localized_sha256": "60b0b420c0aa1b28bd75ee077dced408c2023e3c61fdd02c6979ab99b829eb87",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/fr/JOURNAL_DES_MODIFICATIONS.md",
@@ -1842,9 +1842,9 @@
       "documents": [
         {
           "localized": "docs/locales/hi/मुझे-पढ़ें.md",
-          "localized_sha256": "7feed54f85ca6c9a5223acd946d1d8ed1ba8e8c939c132dffd8aa72e3e4dd1a6",
+          "localized_sha256": "2393581738e5b8f7379c21888562842d3ce9afa7e0423b7204678828e1d440d9",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/hi/लॉग_बदलें.md",
@@ -2046,9 +2046,9 @@
       "documents": [
         {
           "localized": "docs/locales/hu/OLVASS_EL.md",
-          "localized_sha256": "4afd6a8e744fc076c26fdacc6ba1f3a48b26bfc91688e3e2b4904138024659e4",
+          "localized_sha256": "00ebc5eecc834f506d10e89fd529bb3afc7321bfe49d2da85bc2f9c18a968a81",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/hu/VÁLTOZÁSNAPLÓ.md",
@@ -2250,9 +2250,9 @@
       "documents": [
         {
           "localized": "docs/locales/hy/ԿԱՐԴԱ_ԻՆՁ.md",
-          "localized_sha256": "62efcacba00ca8465f72f2ad980ce851669ea2f4570d830ab2685e1c84b94d18",
+          "localized_sha256": "b42cb64c3a549f55d4aa616a5ba7b2f0dad6a6ea2421c754f2490931ca362b68",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/hy/ՓՈՓՈԽՈՒԹՅԱՆ_ՄԱՏՅԱՆ.md",
@@ -2454,9 +2454,9 @@
       "documents": [
         {
           "localized": "docs/locales/id/BACA_SAYA.md",
-          "localized_sha256": "4cee283d3a096b5eb8735fb5bb340ff1d10c1a6b9bd76803603135a1e775db39",
+          "localized_sha256": "3745e01080b9a5607d86a0c83f0ed0554c409e08a6774ece45a0d804a6c8dcfe",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/id/PERUBAHAN_LOG.md",
@@ -2658,9 +2658,9 @@
       "documents": [
         {
           "localized": "docs/locales/ja/お読みください.md",
-          "localized_sha256": "dd21e5e1a66273564c3d43a0a68ae67f7e8042b4c69471b0743609be70b41e0e",
+          "localized_sha256": "027cfd713054f3dcdee85d8a2de28ce54b0def317607cc5a0364c2779e89b1c7",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/ja/変更ログ.md",
@@ -2862,9 +2862,9 @@
       "documents": [
         {
           "localized": "docs/locales/ka/წამიკითხე.md",
-          "localized_sha256": "8805bbe49c454cafacd48ca0f79f62b1cdf8f868a6aed1def48707e4e4c0dc05",
+          "localized_sha256": "50b0197a6c0871a52c60460e4d2238705e23909aa3289e8cbc5b7e2a365c148e",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/ka/ᲟᲣᲠᲜᲐᲚᲘᲡ_ᲨᲔᲪᲕᲚᲐ.md",
@@ -3066,9 +3066,9 @@
       "documents": [
         {
           "localized": "docs/locales/ko/읽어주세요.md",
-          "localized_sha256": "52b54795f18bca7aab910c2f0a28c22eadde94d1b5bfac2009cff661a2ee5ff2",
+          "localized_sha256": "463b0108ce859ed1740b1d9092890a7458f6da1a4fdb47265a1c5c9fb8f62d50",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/ko/변경_로그.md",
@@ -3270,9 +3270,9 @@
       "documents": [
         {
           "localized": "docs/locales/la/LEGE_ME.md",
-          "localized_sha256": "3f36a1f6bdf4e93b5c0bec2a309c2646ca2c44c87ebf44a989057817c501dcf9",
+          "localized_sha256": "30976679aa94efb7847fc3a7b194180b4bd817d9a719ddb5110c100b706dada2",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/la/LOGAMENTUM_MUTA.md",
@@ -3474,9 +3474,9 @@
       "documents": [
         {
           "localized": "docs/locales/mn/НАМАЙГ_УНШ.md",
-          "localized_sha256": "576443420b79c7595c55d347e2b738c5b77b9c363ad8890d7d11610b7652454b",
+          "localized_sha256": "6157704a9213d02c007c610a0def3a48052f7d28a63177e2fbddf5671754e263",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/mn/ӨӨРЧЛӨЛТИЙН_БҮРТГЭЛ.md",
@@ -3678,9 +3678,9 @@
       "documents": [
         {
           "localized": "docs/locales/pt-BR/LEIA-ME.md",
-          "localized_sha256": "c49f083469279d98cfe6472d49fef3727be4595df4d016ef03c86a2b067a4662",
+          "localized_sha256": "455830b4145f9738da7706bcef4178040cb6b2574cd86c064a74a7f17d5926ef",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/pt-BR/REGISTRO_DE_ALTERAÇÕES.md",
@@ -3882,9 +3882,9 @@
       "documents": [
         {
           "localized": "docs/locales/ru/ПРОЧТИ_МЕНЯ.md",
-          "localized_sha256": "e24c4dbf1c3ab7b7dfba7dd8fd98895be4d617a7ab40797e491f026e5c547d64",
+          "localized_sha256": "a22b3a71f37d2eed5d593268da4546fdd9cd9c3138bab1ab4bed2db50363220e",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/ru/ЖУРНАЛ_ИЗМЕНЕНИЙ.md",
@@ -4086,9 +4086,9 @@
       "documents": [
         {
           "localized": "docs/locales/sw/NISOME.md",
-          "localized_sha256": "25ba83f11379340b8278afb1e07bd0564e905bdb2dde408886d6e1afa64ece7a",
+          "localized_sha256": "d11a53655b5ab28d14000de7c20f490b4a3cde379a4d3648deb4ffa33f873433",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/sw/BADILISHA_KUMBUKUMBU.md",
@@ -4290,9 +4290,9 @@
       "documents": [
         {
           "localized": "docs/locales/ta/என்னைப்_படியுங்கள்.md",
-          "localized_sha256": "38ed8b96df161d3116a27885c5744a798798f9c37cf56147681edc640058d449",
+          "localized_sha256": "199dd8bbc37538b4f2d9241fa13fd79b29a5de144a780ce9682bcefee535b19f",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/ta/பதிவை_மாற்று.md",
@@ -4494,9 +4494,9 @@
       "documents": [
         {
           "localized": "docs/locales/th/โปรดอ่าน.md",
-          "localized_sha256": "d53a91d7f48430f3620b778d56bcb17ef9b48e3824c500dae26fc691108bd725",
+          "localized_sha256": "bc9afe91d09ae8d98fc1440f8051c0fb3b9bc1c96f340b4536792693a5bc71dc",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/th/บันทึกการเปลี่ยนแปลง.md",
@@ -4698,9 +4698,9 @@
       "documents": [
         {
           "localized": "docs/locales/tr/BENİ_OKU.md",
-          "localized_sha256": "fc122cfc9f099ce3d478b62b4d1a0fddc2fb4e3acbfc816687fd5d81360714c1",
+          "localized_sha256": "a340b57147e61ce4ff4619345b1664a6246de93d845c944181b9ba96dbccd581",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/tr/DEĞIŞIKLIK_GÜNLÜĞÜ.md",
@@ -4902,9 +4902,9 @@
       "documents": [
         {
           "localized": "docs/locales/ur/مجھے_پڑھیں.md",
-          "localized_sha256": "1307857bf57f84d7098fb8f21d55485460730912f4ed20e2d4387e9de1b47192",
+          "localized_sha256": "4b0e4cc73467c2ec927215144378683398936fce4f82818b34e975bc2b6cc908",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/ur/لاگ_تبدیل_کریں.md",
@@ -5106,9 +5106,9 @@
       "documents": [
         {
           "localized": "docs/locales/vi/ĐỌC_TÔI.md",
-          "localized_sha256": "f43ad0cae91a468a9e4fc336fd1d95c35f5a2d477e92ab15cf8a4d80b1943a73",
+          "localized_sha256": "04209d3085d688d8ae488495e2558d70d37a057681c20ed5786534ee52504158",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/vi/NHẬT_KÝ_THAY_ĐỔI.md",
@@ -5310,9 +5310,9 @@
       "documents": [
         {
           "localized": "docs/locales/zh-CN/请读我.md",
-          "localized_sha256": "333e0f180ca5580cb028400f7bdd6b34911ee2f876526ed8296ba56c5080a75f",
+          "localized_sha256": "fd49a89eedd38d49a344b594370d5dc274b79a7def9863a6ef9b9b56dc4717c0",
           "source": "README.md",
-          "source_sha256": "3e2f149fbf837a013a20721ce418fb3a4a4e2cc5169cdb011fa13aba501809a1"
+          "source_sha256": "3fde9bb083fc94467b1112f300c99fea98b10598dd32189b5b6806f24f88594e"
         },
         {
           "localized": "docs/locales/zh-CN/更改日志.md",

@@ -1,5 +1,31 @@
 # Hướng dẫn RandomDayGuard bằng tiếng Việt
 
+> [!IMPORTANT]
+> ## Trạng thái dự án — đã kết thúc thử nghiệm RandomDay
+>
+> Hoạt động thử nghiệm RandomDay đã hoàn tất và máy chủ thử nghiệm công khai sẽ sớm đóng cửa.
+>
+> Trong hoạt động này, RandomDay và RandomDayGuard đã chạy cùng nhau qua nhiều lần luân phiên hồ sơ, khởi động lại máy chủ bình thường và bị gián đoạn, kiểm tra khôi phục và rollback, tích hợp mod mở rộng, thu thập bằng chứng máy chủ và xem xét báo cáo của người vận hành.
+>
+> Nhờ đó, chúng tôi đã có được kiến thức mong muốn: cách các hồ sơ sandbox luân phiên hoạt động trong những vòng đời thực của máy chủ chuyên dụng; cách RandomDay tương tác với các mod mở rộng được hỗ trợ; và mức độ RandomDayGuard có thể chuyển bằng chứng do máy chủ ghi lại thành hoạt động giám sát hữu ích, thận trọng mà không trình bày khoảng trống hoặc phỏng đoán như sự thật.
+>
+> **Bộ thành phần đã dùng trên máy chủ thử nghiệm:**
+>
+> - RandomDay bản dựng phát triển riêng tư `v0.41.76`
+> - RandomDayGuard bản dựng phát triển riêng tư `v0.46.130`
+> - Chaotic Spawn Engine / DynamicSpawns `0.8.5 Hotfix 1`
+> - Lethal Lasers `1.0 UE4SS`
+> - ANTE Up `0.26`
+> - Encounter Director integration — tiện ích DynamicSpawns thuộc sở hữu của RandomDay, không phải mod được phân phối riêng
+> - UE4SS `v3.0.1 Beta #0` (Git `01e0a584`; Nexus `v3.0.1-940-g01e0a584`)
+> - máy chủ chuyên dụng Abiotic Factor `1.4.0.27939`
+>
+> Các gói hiện được phát hành vẫn là RandomDay `v0.3.16-alpha` và RandomDayGuard `v0.4.12-alpha`.
+>
+> Việc phát triển cả hai dự án hiện tạm dừng. Các bản phát hành và tài liệu hiện có sẽ vẫn được cung cấp, và chúng tôi có thể quay lại khi một lần nữa muốn tiếp tục công việc.
+>
+> Bộ thành phần này ghi lại những gì đã được sử dụng trong hoạt động; đây không phải yêu cầu phiên bản tối thiểu hay bảo đảm tương thích với các phiên bản trò chơi, loader hoặc mod về sau. Vòng cuối cùng được ghi nhận chính thức đã dùng Abiotic Factor `1.4.0.27939`.
+
 **v0.4.12-alpha**
 
 RandomDayGuard chuyển bằng chứng có giới hạn từ máy chủ chuyên dụng Abiotic
