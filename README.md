@@ -131,7 +131,7 @@ records why.
 
 **Studio and media**
 
-- [Olmteka Studio](https://studio.speclang.pro/)
+- [Olmteka Studio](https://studio.olmteka.com/)
 - [Featured project video](https://www.youtube.com/watch?v=1HsnSpSSl80)
 
 **Project policies and credits**
