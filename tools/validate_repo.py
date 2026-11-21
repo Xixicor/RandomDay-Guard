@@ -49,7 +49,7 @@ EXPECTED_ENTRIES = {
     'zh-CN': '请读我.md',
 }
 LINK = re.compile(r"(?<!!)\[[^\]]+\]\(([^)]+)\)")
-SECRET_PATTERNS = {
+LEAK_PATTERNS = {
     "delivery_url": re.compile(r"https?://[^\s\"'<>]+/(?:api/)?webhooks?/", re.I),
     "private_key": re.compile(r"-----BEGIN (?:OPENSSH |RSA |EC )?PRIVATE KEY-----"),
     "credential": re.compile(r"(?:password|api[_-]?key|access[_-]?token|client[_-]?secret)\s*[:=]\s*[\"'][^\"']{8,}[\"']", re.I),
@@ -313,7 +313,7 @@ def locale_errors() -> list[str]:
             errors.append(f"obsolete es-MX label remains: {forbidden}")
     return errors
 
-def secret_errors() -> list[str]:
+def leak_scan_errors() -> list[str]:
     errors = []
     suffixes = {".md", ".txt", ".json", ".lua", ".py", ".yml", ".yaml"}
     for path in ROOT.rglob("*"):
@@ -322,9 +322,10 @@ def secret_errors() -> list[str]:
         if any(part in {".git", ".tmp", "releases"} for part in path.parts):
             continue
         text = path.read_text(encoding="utf-8", errors="replace")
-        for label, pattern in SECRET_PATTERNS.items():
+        for pattern in LEAK_PATTERNS.values():
             if pattern.search(text):
-                errors.append(f"{label}: {path.relative_to(ROOT).as_posix()}")
+                errors.append(f"sensitive pattern found: {path.relative_to(ROOT).as_posix()}")
+                break
     return errors
 
 def run_release_check() -> list[str]:
@@ -401,7 +402,7 @@ def validate_scheduler_offset_contract(main: str, errors: list[str]) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(); parser.add_argument("--lua-command"); parser.add_argument("--require-lua", action="store_true"); args = parser.parse_args()
-    errors = product_errors() + locale_errors() + local_links() + secret_errors() + run_release_check()
+    errors = product_errors() + locale_errors() + local_links() + leak_scan_errors() + run_release_check()
     validate_scheduler_offset_contract((ROOT / "RandomDayGuard/Scripts/main.lua").read_text(encoding="utf-8"), errors)
     if args.require_lua and not args.lua_command:
         errors.append("--require-lua needs --lua-command")
